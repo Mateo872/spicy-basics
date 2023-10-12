@@ -13,6 +13,10 @@
   min-height: 100vh;
 }
 
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/hero_img.jpg") fixed center/cover;
+}
+
 main {
   flex-grow: 1;
 }
@@ -24,12 +28,12 @@ header {
 }
 
 nav {
-  padding: 0.8rem;
+  padding: 0 1rem;
   background-color: var(--color-primary);
 }
 
 article {
-  padding: 0.8rem;
+  padding: 0 1rem;
 }
 
 .container_register {
@@ -51,6 +55,7 @@ article {
   font-size: .8rem;
   color: var(--color-tertiary);
   margin: 0;
+  font-weight: 300;
 }
 
 .container_register a {
@@ -60,6 +65,7 @@ article {
 }
 
 .container_menu {
+  margin-top: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -74,6 +80,16 @@ article {
 .icon_menu {
   font-size: 1.2rem;
   color: var(--color-tertiary);
+}
+
+.container_logo {
+  color: var(--color-tertiary);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.container_logo span {
+  color: var(--color-primary);
 }
 
 .menu_overlay {
@@ -129,7 +145,7 @@ nav ul li a::after {
   content: "";
   display: block;
   width: 0;
-  height: 2px;
+  height: 1.5px;
   background: var(--color-tertiary);
   transition: 0.3s;
 }
@@ -145,7 +161,7 @@ nav ul li a:hover::after {
 
 @media (min-width: 768px) {
   nav {
-    padding: 0 2rem;
+    padding: 1rem 2rem;
   }
 
   .container_register {
@@ -167,6 +183,7 @@ nav ul li a:hover::after {
     margin-bottom: 0;
     font-size: 0.8rem;
     font-weight: 300;
+    background-color: transparent;
   }
 
   .container_menu {
@@ -175,8 +192,7 @@ nav ul li a:hover::after {
 
   .user_register {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    gap: .5rem;
   }
 
   .user_register a {
@@ -193,7 +209,7 @@ nav ul li a:hover::after {
     content: "";
     display: block;
     width: 0;
-    height: 2px;
+    height: 1.5px;
     background: var(--color-tertiary);
     transition: 0.3s;
   }
@@ -210,6 +226,8 @@ nav ul li a:hover::after {
   .user_register h4 {
     color: var(--color-tertiary);
     font-size: 0.8rem;
+    font-weight: 300;
+    margin: 0;
   }
 
   .icon_close {
@@ -228,15 +246,11 @@ nav ul li a:hover::after {
 
 @media (min-width: 988px) {
   nav {
-    padding: 0 3rem;
+    padding: 1rem 3rem;
   }
 
   header .menu_overlay ul {
     font-size: 1rem;
-  }
-
-  .user_register {
-    gap: 2rem;
   }
 
   .user_register a {
