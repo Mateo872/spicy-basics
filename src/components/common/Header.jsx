@@ -29,7 +29,7 @@ const Header = () => {
         <a href="">Registrarse</a>
       </div>
       <nav
-        className={`nav_container ${scroll ? "mt-0" : "margin"} ${
+        className={`nav_container ${!scroll && "margin"} ${
           location.pathname !== "/" && "mt-0"
         }`}
         style={{

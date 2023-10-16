@@ -2,7 +2,7 @@
 
 :root {
   --color-primary: #1E1E1E;
-  --color-secondary: #9486FC;
+  --color-secondary: #FF5D5D;
   --color-tertiary: #FFF;
 }
 
@@ -11,10 +11,6 @@
   flex-direction: column;
   font-family: "Quicksand", sans-serif;
   min-height: 100vh;
-}
-
-body {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../src/assets/images/hero_img.jpg") fixed center/cover;
 }
 
 main {
@@ -30,6 +26,7 @@ header {
 nav {
   padding: 0 1rem;
   background-color: var(--color-primary);
+  transition: .3s;
 }
 
 article {
@@ -159,6 +156,86 @@ nav ul li a:hover::after {
   display: none;
 }
 
+section {
+  padding-top: 5rem;
+}
+
+.container_hero {
+  height: 15rem;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../src/assets/images/hero_img.jpg") fixed center/cover;
+  text-align: center;
+}
+
+.container_input {
+  margin: .6rem auto 0;
+  width: 70%;
+  display: flex;
+  padding: 0.3rem;
+  border-radius: .4rem;
+  background-color: var(--color-tertiary);
+  position: relative;
+}
+
+.container_input input,
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: .8rem;
+  padding: 0.3rem;
+}
+
+.container_input input {
+  width: 100%;
+  padding-right: 1.9rem;
+}
+
+.container_input button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.6rem;
+  transform: rotate(90deg);
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: .3rem;
+  border-radius: .3rem;
+  padding: 0.4rem;
+}
+
+.container_hero,
+h2,
+h4,
+h6 {
+  margin: 0;
+  color: var(--color-tertiary);
+}
+
+.container_hero h4 {
+  margin-top: 2rem;
+  font-size: 0.7rem;
+  opacity: .7;
+}
+
+.container_hero span {
+  color: var(--color-secondary);
+}
+
+.container_hero h2 {
+  font-size: 1.8rem;
+}
+
+.container_hero h6 {
+  margin: .3rem auto 0;
+  width: 75%;
+  font-size: .9rem;
+  font-weight: 400;
+}
+
+
 @media (min-width: 768px) {
   nav {
     padding: 1rem 2rem;
@@ -214,10 +291,6 @@ nav ul li a:hover::after {
     transition: 0.3s;
   }
 
-  .margin {
-    margin-top: 1.3rem;
-  }
-
   .user_register a:hover::after {
     width: 100%;
     transition: 0.3s;
@@ -240,6 +313,21 @@ nav ul li a:hover::after {
 
   article {
     padding: 0 2rem;
+  }
+
+  .container_hero {
+    height: 18rem;
+    padding-top: 8rem;
+  }
+
+  .container_input {
+    width: 30%;
+  }
+
+  .container_hero h6 {
+    margin: .3rem auto 0;
+    width: 35%;
+    font-size: .9rem;
   }
 }
 
@@ -268,7 +356,48 @@ nav ul li a:hover::after {
     font-size: 1rem;
   }
 
+  /* .margin {
+    margin: 0;
+  } */
+
   article {
     padding: 0 3rem;
+  }
+
+  .container_hero {
+    height: 26rem;
+    padding-top: 12rem;
+  }
+
+  .container_input {
+    width: 23%;
+  }
+
+  .container_input input,
+  button {
+    font-size: 1rem;
+  }
+
+  .container_input input {
+    padding-right: 2.5rem;
+  }
+
+  .container_input button {
+    font-size: .8rem;
+    right: .3rem;
+    cursor: pointer;
+  }
+
+  .container_hero h4 {
+    font-size: 0.9rem;
+  }
+
+  .container_hero h2 {
+    font-size: 2.5rem;
+  }
+
+  .container_hero h6 {
+    width: 20%;
+    font-size: 1.2rem;
   }
 }
