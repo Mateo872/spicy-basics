@@ -167,10 +167,8 @@ section {
 }
 
 .container_input {
-  margin: .6rem auto 0;
-  width: 70%;
+  width: 100%;
   display: flex;
-  padding: 0.3rem;
   border-radius: .4rem;
   background-color: var(--color-tertiary);
   position: relative;
@@ -187,23 +185,21 @@ button {
 
 .container_input input {
   width: 100%;
-  padding-right: 1.9rem;
+  padding-right: 1.3rem;
 }
 
-.container_input button {
+.container_input svg {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.6rem;
   transform: rotate(90deg);
-  background-color: var(--color-secondary);
-  color: var(--color-tertiary);
+  color: var(--color-primary);
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: .3rem;
+  top: 68%;
+  transform: translateY(-68%);
+  right: .5rem;
   border-radius: .3rem;
-  padding: 0.4rem;
 }
 
 .container_hero,
@@ -235,6 +231,68 @@ h6 {
   font-weight: 400;
 }
 
+.container_products {
+  display: flex;
+  padding: 0;
+}
+
+.container_products article {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.container_filters {
+  margin-top: .5rem;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: space-between;
+}
+
+.filter {
+  border: 2px solid var(--color-primary);
+  background-color: transparent;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: bold;
+  font-size: 0.6rem;
+  padding: 0.4rem;
+  border-radius: .4rem;
+  text-align: center;
+  flex: 1;
+  margin: 0;
+}
+
+.filter:hover {
+  background-color: var(--color-primary);
+  color: var(--color-tertiary);
+  cursor: pointer;
+  transition: .2s;
+}
+
+.filter_active {
+  background-color: var(--color-primary);
+  color: var(--color-tertiary);
+}
+
+.container_products input {
+  margin-top: .5rem;
+  border-radius: .4rem;
+  border: 2px solid var(--color-primary);
+  outline: none;
+  font-size: 0.7rem;
+  position: relative;
+}
+
+.container_products input::placeholder {
+  font-size: 0.7rem;
+}
+
+.container_products svg {
+  font-size: 0.7rem;
+}
 
 @media (min-width: 768px) {
   nav {
@@ -316,18 +374,48 @@ h6 {
   }
 
   .container_hero {
-    height: 18rem;
+    height: 14em;
     padding-top: 8rem;
-  }
-
-  .container_input {
-    width: 30%;
   }
 
   .container_hero h6 {
     margin: .3rem auto 0;
-    width: 35%;
+    width: 30%;
     font-size: .9rem;
+  }
+
+  .container_products article {
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .container_filters {
+    display: flex;
+  }
+
+  .filter {
+    font-size: 0.8rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .container_products input {
+    margin-top: 0;
+    font-size: 0.8rem;
+    padding: .6rem;
+    padding-right: 1.5rem;
+  }
+
+  .container_input svg {
+    top: 53%;
+    transform: translateY(-53%);
+  }
+
+  .container_products input::placeholder {
+    font-size: 0.7rem;
+  }
+
+  .container_products svg {
+    font-size: 0.7rem;
   }
 }
 
@@ -355,10 +443,6 @@ h6 {
     color: var(--color-tertiary);
     font-size: 1rem;
   }
-
-  /* .margin {
-    margin: 0;
-  } */
 
   article {
     padding: 0 3rem;
@@ -399,5 +483,67 @@ h6 {
   .container_hero h6 {
     width: 20%;
     font-size: 1.2rem;
+  }
+
+  .container_products article {
+    margin-top: 2rem;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .container_filters {
+    margin-top: 0;
+    display: flex;
+  }
+
+  .filter {
+    font-size: 0.8rem;
+    padding: 0.6rem 1.5rem;
+  }
+
+  .container_products input {
+    margin-top: 0;
+    font-size: 0.8rem;
+    padding: .6rem;
+    padding-right: 1.5rem;
+  }
+
+  .container_products input::placeholder {
+    font-size: 0.8rem;
+  }
+
+  .container_products svg {
+    font-size: 0.8rem;
+  }
+}
+
+@media(min-width:1400px) {
+  .container_hero {
+    height: 26rem;
+    padding-top: 15rem;
+  }
+
+  .container_input {
+    width: 15%;
+  }
+
+  .container_input input,
+  button {
+    font-size: 1rem;
+  }
+
+  .container_input input {
+    padding-right: 2.5rem;
+  }
+
+  .container_input button {
+    font-size: .8rem;
+    right: .3rem;
+    cursor: pointer;
+  }
+
+  .container_hero h6 {
+    width: 15%;
   }
 }

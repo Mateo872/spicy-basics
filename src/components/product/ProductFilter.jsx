@@ -1,7 +1,7 @@
-const ProductFilter = () => {
+const ProductFilter = ({ title, isActive }) => {
   return (
     <>
-      <p className="filter">Todos</p>
+      <p className={`filter ${isActive && "filter_active"}`}>{title}</p>
     </>
   );
 };
