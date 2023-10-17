@@ -1,10 +1,11 @@
 import ProductFilter from "./ProductFilter";
 import { BsSearch } from "react-icons/bs";
+import Product from "./Product";
 
 const ContainerProducts = () => {
   return (
     <section className="container_products">
-      <article>
+      <article className="filters">
         <div className="container_filters">
           <ProductFilter title={"Todos"} isActive={true} />
           <ProductFilter title={"Conjuntos"} isActive={false} />
@@ -18,6 +19,16 @@ const ContainerProducts = () => {
           <input type="text" placeholder="Buscá tu producto" />
           <BsSearch />
         </div>
+      </article>
+      <article className="products">
+        <Product />
+        <Product />
+        <Product />
+        <Product />
+        <Product />
+        <Product />
+        <Product />
+        <Product />
       </article>
     </section>
   );
