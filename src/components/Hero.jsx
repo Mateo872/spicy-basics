@@ -1,4 +1,4 @@
-import { BsArrowDown, BsSearch } from "react-icons/bs";
+import { BsArrowDown } from "react-icons/bs";
 
 const Hero = () => {
   return (
@@ -9,12 +9,9 @@ const Hero = () => {
           Mantenete <span>SPICY</span>
         </h2>
         <h6>Descubrí la colección más ardiente de la temporada</h6>
-        {/* <div className="container_input">
-          <input type="text" placeholder="Buscá tu producto" />
-          <button>
-            <BsSearch />
-          </button>
-        </div> */}
+        <div className="container_arrow">
+          <BsArrowDown />
+        </div>
       </article>
     </section>
   );
