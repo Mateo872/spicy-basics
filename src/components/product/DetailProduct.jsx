@@ -1,4 +1,6 @@
 import image from "../../assets/images/imagen_card.png";
+import Product from "./Product";
+
 const DetailProduct = () => {
   return (
     <section className="container_detail">
@@ -56,6 +58,16 @@ const DetailProduct = () => {
               <input id="quantity" type="number" placeholder="0" />
             </div>
             <button className="btn_add">Agregar al carrito</button>
+          </div>
+        </div>
+      </article>
+      <article className="container_similar">
+        <h3>Productos similares</h3>
+        <div className="slider_products">
+          <div className="products">
+            <Product />
+            <Product />
+            <Product />
           </div>
         </div>
       </article>
