@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import image from "../../assets/images/imagen_card.png";
 const Product = () => {
   return (
@@ -8,7 +9,7 @@ const Product = () => {
       <div className="product_features">
         <h3 className="product_title">Vestido de gasa con escote en V</h3>
         <h3 className="product_price">$2000</h3>
-        <button>Ver más</button>
+        <Link to={"/producto-detalle/name/2"}>Ver más</Link>
       </div>
     </div>
   );
