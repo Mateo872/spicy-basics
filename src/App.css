@@ -417,6 +417,20 @@ h6 {
   width: 100%;
 }
 
+.detail_image {
+  position: relative;
+}
+
+.detail_image svg {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  z-index: 2;
+  color: var(--color-tertiary);
+  cursor: pointer;
+}
+
 .container_features,
 h2,
 h4,
@@ -518,7 +532,6 @@ p {
   transition: .2s;
 }
 
-
 .container_color .color {
   display: flex;
   gap: 1rem;
@@ -535,6 +548,18 @@ p {
   margin: 1rem 0;
 }
 
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .slider_products {
   overflow-x: scroll;
 }
@@ -547,6 +572,22 @@ p {
 
 .slider_products .products .product {
   margin-top: 0;
+}
+
+.mySwiper .swiper-button-next {
+  color: var(--color-tertiary);
+}
+
+.mySwiper .swiper-button-next::after {
+  font-size: 1.5rem;
+}
+
+.mySwiper .swiper-button-prev {
+  color: var(--color-tertiary);
+}
+
+.mySwiper .swiper-button-prev::after {
+  font-size: 1.5rem;
 }
 
 @media (min-width: 768px) {
@@ -660,6 +701,11 @@ p {
     padding-right: 1.5rem;
   }
 
+  .detail_image {
+    height: 100%;
+    width: 46%;
+  }
+
   .container_input svg {
     top: 53%;
     transform: translateY(-53%);
@@ -761,8 +807,8 @@ p {
   .color_item {
     width: 2.5rem;
     height: 2.5rem;
-    border: 2px solid var(--color-primary);
-    background-color: var(--color-primary);
+    border: 2px solid #e69e04;
+    background-color: #e69e04;
     cursor: pointer;
   }
 }
@@ -905,6 +951,17 @@ p {
 
   .detail_image {
     width: 60%;
+    cursor: grab;
+  }
+
+  .detail_image svg {
+    top: 2rem;
+    right: 2rem;
+    font-size: 2.2rem;
+  }
+
+  .detail_image:active {
+    cursor: grabbing;
   }
 
   .product_features a {

@@ -1,5 +1,10 @@
 import image from "../../assets/images/imagen_card.png";
 import Product from "./Product";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation } from "swiper/modules";
+import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 
 const DetailProduct = () => {
   return (
@@ -15,7 +20,25 @@ const DetailProduct = () => {
         <h6>Stock - 30</h6>
         <div className="detail_product">
           <div className="detail_image">
-            <img src={image} alt="" />
+            <BsHeart />
+            <Swiper
+              navigation={true}
+              modules={[Navigation]}
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <img src={image} alt="" />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={image} alt="" />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={image} alt="" />
+              </SwiperSlide>
+              <SwiperSlide>
+                <img src={image} alt="" />
+              </SwiperSlide>
+            </Swiper>
           </div>
           <div className="container_features">
             <div>
