@@ -1,5 +1,6 @@
 import { BiMenu, BiX } from "react-icons/bi";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -24,9 +25,9 @@ const Header = () => {
   return (
     <header>
       <div className="container_register">
-        <a href="">Iniciar sesión</a>
+        <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
         <h4>|</h4>
-        <a href="">Registrarse</a>
+        <Link to={"/usuario/registrarse"}>Registrarse</Link>
       </div>
       <nav
         className={`nav_container ${scroll ? "mt-0" : "margen"} ${
@@ -64,9 +65,9 @@ const Header = () => {
         </div>
         <BiMenu className="icon_menu" onClick={menuVisible} />
         <div className="user_register">
-          <a href="">Iniciar sesión</a>
+          <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
           <h4>|</h4>
-          <a href="">Registrarse</a>
+          <Link to={"/usuario/registrarse"}>Registrarse</Link>
         </div>
       </nav>
     </header>

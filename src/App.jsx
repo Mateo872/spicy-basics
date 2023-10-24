@@ -26,6 +26,7 @@ function App() {
             element={<DetailProduct />}
           />
           <Route path="/usuario/iniciar-sesion" element={<User />} />
+          <Route path="/usuario/registrarse" element={<User />} />
         </Routes>
       </main>
     </HashRouter>

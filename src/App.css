@@ -650,6 +650,7 @@ p {
   top: 25%;
   right: .5rem;
   transform: translateY(-25%);
+  cursor: pointer;
 }
 
 .container_user .user form button {
@@ -670,10 +671,6 @@ p {
   color: var(--color-secondary);
   cursor: pointer;
   transition: .3s;
-}
-
-body {
-  background-color: #ececec;
 }
 
 .user_create {
@@ -1142,9 +1139,9 @@ body {
   .container_password svg {
     position: absolute;
     font-size: 0.8rem;
-    top: 25%;
+    top: 28%;
     right: .5rem;
-    transform: translateY(-25%);
+    transform: translateY(-28%);
   }
 
   .container_user .user form button {
@@ -1216,5 +1213,10 @@ body {
 
   .container_user .user {
     width: 20%;
+  }
+
+  .container_password svg {
+    top: 30%;
+    transform: translateY(-30%);
   }
 }
