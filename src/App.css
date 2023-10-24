@@ -590,6 +590,106 @@ p {
   font-size: 1.5rem;
 }
 
+.container_user {
+  margin-top: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container_user .user {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 4px 5px -2px rgba(0, 0, 0, 0.75);
+  padding: 1.3rem;
+  background-color: var(--color-tertiary);
+  border-radius: .3rem;
+}
+
+.container_user .user form {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container_user .user form label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.container_user .user form input {
+  padding: 0.4rem;
+  border: 1px solid var(--color-primary);
+  border-radius: .2rem;
+  font-size: 0.8rem;
+}
+
+.container_user .user form input {
+  margin-bottom: 1rem;
+}
+
+.container_password {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.container_user .user .container_password input {
+  padding-right: 1.55rem;
+}
+
+.container_password svg {
+  position: absolute;
+  font-size: 0.8rem;
+  top: 25%;
+  right: .5rem;
+  transform: translateY(-25%);
+}
+
+.container_user .user form button {
+  width: 100%;
+  display: block;
+  font-size: 0.8rem;
+  padding: 0.4rem;
+  border: 2px solid var(--color-secondary);
+  border-radius: .2rem;
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+  border-radius: .4rem;
+  font-weight: bold;
+}
+
+.container_user .user form button:hover {
+  background-color: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: .3s;
+}
+
+body {
+  background-color: #ececec;
+}
+
+.user_create {
+  margin-top: .5rem;
+}
+
+.user_create p {
+  font-size: 0.8rem;
+}
+
+.user_create p a {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--color-secondary);
+}
+
 @media (min-width: 768px) {
   nav {
     padding: 1rem 2rem;
@@ -811,6 +911,10 @@ p {
     background-color: #e69e04;
     cursor: pointer;
   }
+
+  .container_user .user {
+    width: 40%;
+  }
 }
 
 @media (min-width: 988px) {
@@ -1009,6 +1113,50 @@ p {
   .container_similar .slider_products::-webkit-scrollbar {
     width: 0;
   }
+
+  .container_user {
+    height: 80vh;
+  }
+
+  .container_user .user {
+    width: 25%;
+    padding: .8rem 1.7rem .8rem;
+  }
+
+  .container_user .user form {
+    width: 20rem;
+  }
+
+  .container_user .user form input {
+    padding: 0.6rem;
+  }
+
+  .container_user .user form input {
+    margin-bottom: 1rem;
+  }
+
+  .container_user .user .container_password input {
+    padding-right: 1.55rem;
+  }
+
+  .container_password svg {
+    position: absolute;
+    font-size: 0.8rem;
+    top: 25%;
+    right: .5rem;
+    transform: translateY(-25%);
+  }
+
+  .container_user .user form button {
+    font-size: 0.8rem;
+    padding: 0.6rem;
+  }
+
+  .user_create {
+    margin-top: .8rem;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 @media(min-width:1400px) {
@@ -1064,5 +1212,9 @@ p {
 
   .container_features {
     width: 25%;
+  }
+
+  .container_user .user {
+    width: 20%;
   }
 }

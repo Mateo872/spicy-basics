@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import Header from "./components/common/Header";
 import ContainerProducts from "./components/product/ContainerProducts";
 import DetailProduct from "./components/product/DetailProduct";
+import User from "./components/auth/User";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             path="/producto-detalle/:name/:id"
             element={<DetailProduct />}
           />
+          <Route path="/usuario/iniciar-sesion" element={<User />} />
         </Routes>
       </main>
     </HashRouter>
