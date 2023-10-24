@@ -1040,11 +1040,11 @@ p {
 
   .container_detail {
     margin: 0 auto;
-    width: 90%;
+    width: 70%;
   }
 
   .detail_product {
-    height: 32rem;
+    height: 30rem;
   }
 
   .product_features .product_title {
@@ -1057,7 +1057,7 @@ p {
   }
 
   .detail_image {
-    width: 60%;
+    width: 56%;
     cursor: grab;
   }
 
@@ -1188,7 +1188,7 @@ p {
 
   .container_detail {
     margin: 0 auto;
-    width: 80%;
+    width: 51%;
   }
 
   .products {
@@ -1200,16 +1200,16 @@ p {
   }
 
   .detail_product {
-    height: 40rem;
+    height: 33rem;
     justify-content: space-between;
   }
 
   .detail_image {
-    width: 63%;
+    width: 53%;
   }
 
   .container_features {
-    width: 25%;
+    width: 35%;
   }
 
   .container_user .user {
