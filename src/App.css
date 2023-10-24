@@ -261,7 +261,7 @@ h6 {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem;
+  gap: 1rem;
   justify-content: space-between;
 }
 
@@ -292,7 +292,7 @@ h6 {
 }
 
 .container_products input {
-  margin-top: .5rem;
+  margin-top: 1rem;
   border-radius: .4rem;
   border: 2px solid var(--color-primary);
   outline: none;
@@ -323,12 +323,12 @@ h6 {
 
 .product:first-child,
 .product:nth-child(2) {
-  margin-top: 0rem;
+  margin-top: 1.5rem;
 }
 
 .product {
-  margin-top: 0.5rem;
-  width: 8.7rem;
+  margin-top: 2rem;
+  width: 7.7rem;
 }
 
 .product_image img {
@@ -356,7 +356,6 @@ h6 {
 
 .product_features a {
   margin-top: 0.3rem;
-  width: 100%;
   display: block;
   background-color: var(--color-primary);
   border: 2px solid var(--color-primary);
@@ -817,7 +816,14 @@ p {
   }
 
   .products {
-    row-gap: .5rem;
+    margin-top: 3.5rem;
+    gap: 1.5rem;
+    row-gap: 3.5rem;
+  }
+
+  .product:first-child,
+  .product:nth-child(2) {
+    margin-top: 0rem;
   }
 
   .product {
@@ -1166,13 +1172,8 @@ p {
     width: 15%;
   }
 
-  .container_input input,
-  button {
-    font-size: 1rem;
-  }
-
   .container_input input {
-    padding-right: 2.5rem;
+    padding-right: 1.8rem;
   }
 
   .container_input button {
