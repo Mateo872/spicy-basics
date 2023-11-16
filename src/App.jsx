@@ -22,7 +22,7 @@ function App() {
             }
           />
           <Route
-            path="/producto-detalle/:name/:id"
+            path="/producto-detalle/name/:id"
             element={<DetailProduct />}
           />
           <Route path="/usuario/iniciar-sesion" element={<User />} />

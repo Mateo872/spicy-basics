@@ -598,6 +598,10 @@ p {
   font-size: 1.5rem;
 }
 
+.section_user {
+  padding: 0;
+}
+
 .container_user {
   margin-top: 0;
   height: 100vh;
@@ -690,9 +694,12 @@ p {
 }
 
 .user_create p a {
-  text-decoration: none;
   font-weight: bold;
   color: var(--color-secondary);
+}
+
+.container_user .user form .input_image {
+  padding: 0.41rem;
 }
 
 @media (min-width: 768px) {
@@ -919,7 +926,6 @@ p {
   .color_item {
     width: 2.5rem;
     height: 2.5rem;
-    border: 2px solid #e69e04;
     background-color: #e69e04;
     cursor: pointer;
   }
@@ -1166,6 +1172,14 @@ p {
   .container_user .user form button {
     font-size: 0.8rem;
     padding: 0.6rem;
+  }
+
+  .section_user {
+    padding-top: 6rem;
+  }
+
+  .section_userCreate {
+    padding: 8rem 0 4rem;
   }
 
   .user_create {

@@ -11,7 +11,11 @@ const User = () => {
   document.body.style.background = "#ececec";
 
   return (
-    <section>
+    <section
+      className={`section_user ${
+        location.pathname === "/usuario/registrarse" && "section_userCreate"
+      }`}
+    >
       <article className="container_user">
         <div className="user">
           <h4>SPICYBASICS</h4>
@@ -29,6 +33,12 @@ const User = () => {
             )}
             <label htmlFor="email">Correo electrónico</label>
             <input type="email" placeholder="Tu correo" id="email" />
+            {location.pathname === "/usuario/registrarse" && (
+              <>
+                <label htmlFor="image">Imágen</label>
+                <input className="input_image" type="file" id="image" />
+              </>
+            )}
             <label htmlFor="password">Contraseña</label>
             <div className="container_password">
               <input
@@ -78,12 +88,16 @@ const User = () => {
               {location.pathname === "/usuario/iniciar-sesion" ? (
                 <p>
                   ¿No tenés cuenta?{" "}
-                  <Link to={"/usuario/registrarse"}>Registrate</Link>
+                  <Link className="user_link" to={"/usuario/registrarse"}>
+                    Registrate
+                  </Link>
                 </p>
               ) : (
                 <p>
                   ¿Ya tenés cuenta?{" "}
-                  <Link to={"/usuario/iniciar-sesion"}>Inicia sesión</Link>
+                  <Link className="user_link" to={"/usuario/iniciar-sesion"}>
+                    Inicia sesión
+                  </Link>
                 </p>
               )}
             </div>

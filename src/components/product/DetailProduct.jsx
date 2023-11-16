@@ -5,8 +5,23 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 const DetailProduct = () => {
+  let [favorites, setFavorites] = useState([]);
+  const location = useLocation();
+  const { id } = useParams();
+
+  const getFavorites = () => {
+    if (!favorites.includes(id)) {
+      setFavorites([...id]);
+    } else {
+      favorites = favorites.filter((fav) => fav != id);
+      setFavorites([...favorites]);
+    }
+  };
+
   return (
     <section className="container_detail">
       <article>
@@ -20,7 +35,13 @@ const DetailProduct = () => {
         <h6>Stock - 30</h6>
         <div className="detail_product">
           <div className="detail_image">
-            <BsHeart />
+            <div className="container_heart" onClick={getFavorites}>
+              {favorites.filter((fav) => fav === id).length > 0 ? (
+                <BsFillHeartFill />
+              ) : (
+                <BsHeart />
+              )}
+            </div>
             <Swiper
               navigation={true}
               modules={[Navigation]}
