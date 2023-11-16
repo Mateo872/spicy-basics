@@ -50,7 +50,7 @@ const User = () => {
                 <div className="container_password">
                   <input
                     type={!showConfirmPassword ? "password" : "text"}
-                    placeholder="Tu contraseña"
+                    placeholder="Confirma tu contraseña"
                     id="confirmPassword"
                   />
                   {showConfirmPassword ? (

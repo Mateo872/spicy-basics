@@ -1,10 +1,11 @@
 import { BiMenu, BiX } from "react-icons/bi";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scroll, setScroll] = useState(false);
+  const location = useLocation();
 
   const menuVisible = () => {
     setShowMenu(!showMenu);
@@ -23,7 +24,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header>
+    <header style={{ backgroundColor: location.pathname !== "/" && "#1e1e1e" }}>
       <div className="container_register">
         <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
         <h4>|</h4>
