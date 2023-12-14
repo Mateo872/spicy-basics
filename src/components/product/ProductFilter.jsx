@@ -1,8 +1,11 @@
-const ProductFilter = ({ title, isActive }) => {
+const ProductFilter = ({ title, isActive, handleFilterClick }) => {
   return (
-    <>
-      <p className={`filter ${isActive && "filter_active"}`}>{title}</p>
-    </>
+    <p
+      className={`filter ${isActive && "filter_active"}`}
+      onClick={() => handleFilterClick(title)}
+    >
+      {title}
+    </p>
   );
 };
 
