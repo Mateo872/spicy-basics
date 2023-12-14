@@ -831,6 +831,12 @@ p {
   gap: 1rem;
 }
 
+.feature_quantity {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 @media (min-width: 768px) {
   nav {
     padding: 1rem 2rem;

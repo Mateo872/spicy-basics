@@ -1,4 +1,3 @@
-import image from "../../assets/images/imagen_card.png";
 import Product from "./Product";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -6,21 +5,31 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const DetailProduct = () => {
   let [favorites, setFavorites] = useState([]);
-  const location = useLocation();
   const { id } = useParams();
+  const [selectedSize, setSelectedSize] = useState(null);
   const productsState = useSelector((state) => state.products.products);
   const product = productsState.filter((product) => product.id === id);
 
-  console.log(product);
+  useEffect(() => {
+    if (product?.[0]?.sizes.length > 0) {
+      setSelectedSize(product[0].sizes[0]);
+    }
+  }, []);
+
+  const handleSizeClick = (size) => {
+    if (product?.[0]?.sizes.includes(size)) {
+      setSelectedSize(size);
+    }
+  };
 
   const getFavorites = () => {
     if (!favorites.includes(id)) {
-      setFavorites([...id]);
+      setFavorites([id]);
     } else {
       favorites = favorites.filter((fav) => fav != id);
       setFavorites([...favorites]);
@@ -37,7 +46,7 @@ const DetailProduct = () => {
             <span> {product?.[0]?.name}</span>
           </h4>
         </div>
-        <h6>Stock - 30</h6>
+        <h6>Stock - {product?.[0]?.stock}</h6>
         <div className="detail_product">
           <div className="detail_image">
             <div className="container_heart" onClick={getFavorites}>
@@ -92,11 +101,12 @@ const DetailProduct = () => {
                       key={size}
                       className={`size ${
                         product?.[0]?.sizes.includes(size)
-                          ? product?.[0]?.sizes.indexOf(size) === 0
+                          ? selectedSize === size
                             ? "size_active"
                             : ""
                           : "size_disable"
                       }`}
+                      onClick={() => handleSizeClick(size)}
                     >
                       <p>{size}</p>
                     </div>
@@ -110,12 +120,14 @@ const DetailProduct = () => {
                 <div className="color_item"></div>
               </div>
             </div> */}
+            </div>
+            <div className="feature_quantity">
               <div className="quantity">
                 <label htmlFor="quantity">Cantidad</label>
                 <input id="quantity" type="number" placeholder="0" />
               </div>
+              <button className="btn_add">Agregar al carrito</button>
             </div>
-            <button className="btn_add">Agregar al carrito</button>
           </div>
         </div>
       </article>
