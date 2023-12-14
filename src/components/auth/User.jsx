@@ -58,13 +58,19 @@ const User = () => {
           });
         } else {
           if (user.password === data.password) {
+            const userLogin = {
+              name: user.name,
+              image: user.image,
+              role: "admin",
+            };
+            sessionStorage.setItem("user", JSON.stringify(userLogin));
+            dispatch(addUser(user));
             Swal.fire({
               icon: "success",
               title: "Bienvenido, " + user.name + "!",
               text: "Iniciaste sesión correctamente",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(addUser(user));
                 navigate("/");
                 reset();
               }
