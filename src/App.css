@@ -702,6 +702,24 @@ p {
   padding: 0.41rem;
 }
 
+.text_error {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.icon_eye {
+  margin-top: .2rem;
+}
+
+.icon_eye-login {
+  margin-top: .3rem;
+}
+
+.icon_eye-confirm {
+  margin-top: .25rem;
+}
+
 @media (min-width: 768px) {
   nav {
     padding: 1rem 2rem;
@@ -1151,10 +1169,6 @@ p {
 
   .container_user .user form input {
     padding: 0.6rem;
-  }
-
-  .container_user .user form input {
-    margin-bottom: 1rem;
   }
 
   .container_user .user .container_password input {

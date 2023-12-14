@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { BsEye, BsEyeSlashFill } from "react-icons/bs";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -9,6 +11,45 @@ const User = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   document.body.style.background = "#ececec";
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    getValues,
+    reset,
+  } = useForm();
+
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result.split(",")[1]);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const submit = async (data) => {
+    try {
+      const image = await convertBase64(data.image[0]);
+      const body = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        image,
+      };
+      console.log(body);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const usersState = useSelector((state) => state.users.users);
 
   return (
     <section
@@ -24,20 +65,69 @@ const User = () => {
               ? "Iniciar sesión"
               : "Registrarse"}
           </h2>
-          <form>
+          <form onSubmit={handleSubmit(submit)}>
             {location.pathname === "/usuario/registrarse" && (
               <>
                 <label htmlFor="name">Nombre</label>
-                <input type="text" placeholder="Tu nombre" id="name" />
+                <input
+                  type="text"
+                  placeholder="Tu nombre"
+                  id="name"
+                  style={{ marginBottom: errors.name && ".3rem" }}
+                  {...register("name", {
+                    required: { value: true, message: "Campo requerido" },
+                    minLength: {
+                      value: 3,
+                      message: "Mínimo 3 caracteres",
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: "Máximo 20 caracteres",
+                    },
+                    pattern: {
+                      value: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+                      message: "Solo letras",
+                    },
+                  })}
+                />
               </>
             )}
+            {errors.name && (
+              <span className="text_error">{errors.name.message}</span>
+            )}
             <label htmlFor="email">Correo electrónico</label>
-            <input type="email" placeholder="Tu correo" id="email" />
+            <input
+              type="email"
+              placeholder="Tu correo"
+              id="email"
+              style={{ marginBottom: errors.email && ".3rem" }}
+              {...register("email", {
+                required: { value: true, message: "Campo requerido" },
+                pattern: {
+                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                  message: "Correo inválido",
+                },
+              })}
+            />
+            {errors.email && (
+              <span className="text_error">{errors.email.message}</span>
+            )}
             {location.pathname === "/usuario/registrarse" && (
               <>
                 <label htmlFor="image">Imágen</label>
-                <input className="input_image" type="file" id="image" />
+                <input
+                  className="input_image"
+                  type="file"
+                  id="image"
+                  style={{ marginBottom: errors.image && ".3rem" }}
+                  {...register("image", {
+                    required: { value: true, message: "Campo requerido" },
+                  })}
+                />
               </>
+            )}
+            {errors.image && (
+              <span className="text_error">{errors.image.message}</span>
             )}
             <label htmlFor="password">Contraseña</label>
             <div className="container_password">
@@ -45,15 +135,39 @@ const User = () => {
                 type={!showPassword ? "password" : "text"}
                 placeholder="Tu contraseña"
                 id="password"
+                style={{ marginBottom: errors.password && ".3rem" }}
+                {...register("password", {
+                  required: { value: true, message: "Campo requerido" },
+                  minLength: {
+                    value: 8,
+                    message: "Mínimo 8 caracteres",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Máximo 20 caracteres",
+                  },
+                  pattern: {
+                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                    message:
+                      "Debe contener al menos una mayúscula, una minúscula y un número",
+                  },
+                })}
               />
               {showPassword ? (
-                <BsEye onClick={() => setShowPassword(!showPassword)} />
+                <BsEye
+                  className={errors?.password && "icon_eye"}
+                  onClick={() => setShowPassword(!showPassword)}
+                />
               ) : (
                 <BsEyeSlashFill
+                  className={errors?.password && "icon_eye"}
                   onClick={() => setShowPassword(!showPassword)}
                 />
               )}
             </div>
+            {errors.password && (
+              <span className="text_error">{errors.password.message}</span>
+            )}
             {location.pathname === "/usuario/registrarse" && (
               <>
                 <label htmlFor="confirmPassword">Confirmar contraseña</label>
@@ -62,21 +176,40 @@ const User = () => {
                     type={!showConfirmPassword ? "password" : "text"}
                     placeholder="Confirma tu contraseña"
                     id="confirmPassword"
+                    style={{ marginBottom: errors.confirmPassword && ".3rem" }}
+                    {...register("confirmPassword", {
+                      required: { value: true, message: "Campo requerido" },
+                      validate: {
+                        matchesPreviousPassword: (value) => {
+                          const { password } = getValues();
+                          return (
+                            password === value || "Las contraseñas no coinciden"
+                          );
+                        },
+                      },
+                    })}
                   />
                   {showConfirmPassword ? (
                     <BsEye
+                      className={errors?.confirmPassword && "icon_eye-confirm"}
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
                     />
                   ) : (
                     <BsEyeSlashFill
+                      className={errors?.confirmPassword && "icon_eye-confirm"}
                       onClick={() =>
                         setShowConfirmPassword(!showConfirmPassword)
                       }
                     />
                   )}
                 </div>
+                {errors.confirmPassword && (
+                  <span className="text_error">
+                    {errors.confirmPassword.message}
+                  </span>
+                )}
               </>
             )}
             <button>
