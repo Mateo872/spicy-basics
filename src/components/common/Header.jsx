@@ -77,7 +77,9 @@ const Header = () => {
                 </picture>
                 {userState?.user?.role === "admin" && (
                   <li>
-                    <Link to={"/admin"}>Admin</Link>
+                    <Link to={"/usuario/administrador/agregar-producto"}>
+                      Admin
+                    </Link>
                   </li>
                 )}
               </>
@@ -94,7 +96,9 @@ const Header = () => {
             <>
               {userState?.user?.role === "admin" && (
                 <>
-                  <Link to={"/admin"}>Admin</Link>
+                  <Link to={"/usuario/administrador/agregar-producto"}>
+                    Admin
+                  </Link>
                   <h4>|</h4>
                 </>
               )}
