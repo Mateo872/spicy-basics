@@ -8,6 +8,7 @@ const Header = () => {
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
   const userState = useSelector((state) => state.users);
+  const user = JSON.parse(sessionStorage.getItem("user")) || null;
 
   const menuVisible = () => {
     setShowMenu(!showMenu);
@@ -27,15 +28,16 @@ const Header = () => {
 
   return (
     <header style={{ backgroundColor: location.pathname !== "/" && "#1e1e1e" }}>
-      {!userState?.user?.name && (
-        <div className="container_register">
-          <>
-            <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
-            <h4>|</h4>
-            <Link to={"/usuario/registrarse"}>Registrarse</Link>
-          </>
-        </div>
-      )}
+      {!userState?.user?.name ||
+        (!user?.name && (
+          <div className="container_register">
+            <>
+              <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
+              <h4>|</h4>
+              <Link to={"/usuario/registrarse"}>Registrarse</Link>
+            </>
+          </div>
+        ))}
       <nav
         className={`nav_container ${scroll ? "mt-0" : "margen"} ${
           location.pathname !== "/" && "mt-0"
@@ -68,34 +70,37 @@ const Header = () => {
             <li>
               <Link>Contacto</Link>
             </li>
-            {userState?.user?.name && window.innerWidth < 700 && (
-              <>
-                <picture className="container_image-user">
-                  <img
-                    src={userState?.user?.image}
-                    alt={userState?.user?.name}
-                  />
-                </picture>
-                {userState?.user?.role === "admin" && (
-                  <li>
-                    <Link to={"/usuario/administrador/agregar-producto"}>
-                      Admin
-                    </Link>
-                  </li>
-                )}
-              </>
-            )}
+            {(userState?.user?.name || user?.name) &&
+              window.innerWidth < 700 && (
+                <>
+                  <picture className="container_image-user">
+                    <img
+                      src={userState?.user?.image || user?.image}
+                      alt={userState?.user?.name || user?.name}
+                    />
+                  </picture>
+                  {(userState?.user?.role === "admin" ||
+                    user?.role === "admin") && (
+                    <li>
+                      <Link to={"/usuario/administrador/agregar-producto"}>
+                        Admin
+                      </Link>
+                    </li>
+                  )}
+                </>
+              )}
           </ul>
         </div>
         <BiMenu className="icon_menu" onClick={menuVisible} />
         <div
           className={`user_register ${
-            userState?.user?.name && "user_register_active"
+            (userState?.user?.name || user?.name) && "user_register_active"
           }`}
         >
-          {userState?.user?.name ? (
+          {userState?.user?.name || user?.name ? (
             <>
-              {userState?.user?.role === "admin" && (
+              {(userState?.user?.role === "admin" ||
+                user?.role === "admin") && (
                 <>
                   <Link to={"/usuario/administrador/agregar-producto"}>
                     Admin
@@ -104,7 +109,10 @@ const Header = () => {
                 </>
               )}
               <picture className="container_image-user">
-                <img src={userState?.user?.image} alt={userState?.user?.name} />
+                <img
+                  src={userState?.user?.image || user?.image}
+                  alt={userState?.user?.name || user?.name}
+                />
               </picture>
             </>
           ) : (
