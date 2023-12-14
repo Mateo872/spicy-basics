@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { addUser, users } from "../../features/auth/usersSlice";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useConvertBlobToBase64 from "../../hooks/useConvertBase64";
 
 const User = () => {
   const location = useLocation();
@@ -29,21 +30,10 @@ const User = () => {
     reset();
   }, [location.pathname]);
 
-  const convertBlobToBase64 = (blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = reject;
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.readAsDataURL(blob);
-    });
-  };
-
   const submit = async (data) => {
     try {
       if (location.pathname === "/usuario/registrarse") {
-        const image = await convertBlobToBase64(data.image[0]);
+        const image = await useConvertBlobToBase64(data.image[0]);
         const body = {
           name: data.name,
           email: data.email,
