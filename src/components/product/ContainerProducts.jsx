@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const ContainerProducts = () => {
   const productsState = useSelector((state) => state.products.products);
-
+  const [inputValue, setInputValue] = useState("");
   const [filterState, setFilterState] = useState({
     Todos: true,
     Conjuntos: false,
@@ -42,6 +42,16 @@ const ContainerProducts = () => {
     });
   };
 
+  const productsFiltered = productsState.filter((product) =>
+    product.name.toLowerCase().startsWith(inputValue.toLowerCase())
+  );
+
+  const productsEmpty =
+    (productsState.length === 0 && productsFiltered.length === 0) ||
+    productsFiltered.filter(
+      (product) => filterState.Todos || filterState[product.category]
+    ).length === 0;
+
   return (
     <section className="container_products">
       <article className="filters">
@@ -56,27 +66,45 @@ const ContainerProducts = () => {
           ))}
         </div>
         <div className="container_input">
-          <input type="text" placeholder="Buscá tu producto" />
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Buscá tu producto"
+          />
           <BsSearch />
         </div>
       </article>
-      <article className="products">
+      <article
+        className={`products ${productsEmpty && "products_filtered"}`}
+        style={{
+          justifyContent: productsEmpty && "center",
+        }}
+      >
         {productsState.length > 0 ? (
-          (() => {
-            const filteredProducts = productsState.filter(
-              (product) => filterState.Todos || filterState[product.category]
-            );
+          productsFiltered.length > 0 ? (
+            (() => {
+              const filteredProducts = productsFiltered.filter(
+                (product) => filterState.Todos || filterState[product.category]
+              );
 
-            return filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <Product key={product.id} id={product.id} product={product} />
-              ))
-            ) : (
-              <p>No hay productos que coincidan con los filtros</p>
-            );
-          })()
+              return filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <Product key={product.id} id={product.id} product={product} />
+                ))
+              ) : (
+                <p>
+                  No hay productos disponibles que coincidan con los filtros
+                </p>
+              );
+            })()
+          ) : (
+            productsState.length > 0 && (
+              <p>No hay productos disponibles con ese nombre</p>
+            )
+          )
         ) : (
-          <p>No hay productos</p>
+          <p>No hay productos disponibles</p>
         )}
       </article>
     </section>
