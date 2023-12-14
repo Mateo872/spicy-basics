@@ -32,6 +32,10 @@ function App() {
             path="/usuario/administrador/agregar-producto"
             element={<AddProducts />}
           />
+          <Route
+            path="/usuario/administrador/editar-producto/:id"
+            element={<AddProducts />}
+          />
         </Routes>
       </main>
     </HashRouter>

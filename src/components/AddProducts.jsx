@@ -1,20 +1,53 @@
 import { useForm } from "react-hook-form";
 import useConvertBlobToBase64 from "../hooks/useConvertBase64";
-import { useDispatch } from "react-redux";
-import { addProduct } from "../features/products/productsSlice";
-import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct, editProduct } from "../features/products/productsSlice";
+import { useLocation, useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
 
 const AddProducts = () => {
+  const productsState = useSelector((state) => state.products.products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [urlsEdit, setUrlsEdit] = useState({
+    image1: "",
+    image2: "",
+    image3: "",
+  });
+  const { id } = useParams();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
+    setValue,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    if (id) {
+      const product = productsState.find((product) => product?.id === id);
+      if (product.length !== 0) {
+        setValue("id", product?.id);
+        setValue("name", product?.name);
+        setValue("price", product?.price);
+        setValue("imageOne", product?.imageOne);
+        setValue("imageTwo", product?.imageTwo);
+        setValue("imageThree", product?.imageThree);
+        setUrlsEdit({
+          image1: product?.imageOne,
+          image2: product?.imageTwo,
+          image3: product?.imageThree,
+        });
+        setValue("description", product?.description);
+        setValue("category", product?.category);
+        setValue("stock", product?.stock);
+        setValue("sizes", product?.sizes);
+      }
+    }
+  }, []);
 
   const onSubmit = async (data) => {
     const imageOne = await useConvertBlobToBase64(data.imageOne[0]);
@@ -33,13 +66,46 @@ const AddProducts = () => {
         stock: data.stock,
         sizes: data.sizes,
       };
-      dispatch(
-        addProduct({
-          ...body,
-          id: new Date().getTime().toString(),
-        })
-      );
-      reset();
+      if (!id) {
+        dispatch(
+          addProduct({
+            ...body,
+            id: new Date().getTime().toString(),
+          })
+        );
+        reset();
+      } else {
+        const images = [];
+        if (imageOne) {
+          images.push(urlsEdit.image1);
+        } else {
+          images.push(getValues("imageOne"));
+        }
+        if (imageTwo) {
+          images.push(urlsEdit.image2);
+        } else {
+          images.push(getValues("imageTwo"));
+        }
+        if (imageThree) {
+          images.push(urlsEdit.image3);
+        } else {
+          images.push(getValues("imageThree"));
+        }
+
+        const body = {
+          id: data.id,
+          name: data.name,
+          price: data.price,
+          imageOne: images[0],
+          imageTwo: images[1],
+          imageThree: images[2],
+          description: data.description,
+          category: data.category,
+          stock: data.stock,
+          sizes: data.sizes,
+        };
+        dispatch(editProduct(body));
+      }
       navigate("/");
     } catch (error) {
       console.error(error);
@@ -96,6 +162,17 @@ const AddProducts = () => {
             <span className="text_error">{errors.price.message}</span>
           )}
           <label htmlFor="imageOne">Imágen principal</label>
+          {id && getValues("imageOne") && (
+            <img
+              src={getValues("imageOne")}
+              alt="Imágen principal"
+              style={{
+                maxWidth: "100px",
+                maxHeight: "100px",
+                objectFit: "cover",
+              }}
+            />
+          )}
           <input
             type="file"
             name="imageOne"
@@ -113,6 +190,17 @@ const AddProducts = () => {
             <span className="text_error">{errors.imageOne.message}</span>
           )}
           <label htmlFor="imageTwo">Imágen secundaria</label>
+          {id && getValues("imageTwo") && (
+            <img
+              src={getValues("imageTwo")}
+              alt="Imágen secundaria"
+              style={{
+                maxWidth: "100px",
+                maxHeight: "100px",
+                objectFit: "cover",
+              }}
+            />
+          )}
           <input
             type="file"
             name="imageTwo"
@@ -130,6 +218,17 @@ const AddProducts = () => {
             <span className="text_error">{errors.imageTwo.message}</span>
           )}
           <label htmlFor="imageThree">Imágen secundaria</label>
+          {id && getValues("imageThree") && (
+            <img
+              src={getValues("imageThree")}
+              alt="Imágen terciaria"
+              style={{
+                maxWidth: "100px",
+                maxHeight: "100px",
+                objectFit: "cover",
+              }}
+            />
+          )}
           <input
             type="file"
             name="imageThree"
