@@ -11,7 +11,9 @@ const Product = ({ product }) => {
       </div>
       <div className="product_features">
         <h3 className="product_title">{product?.name}</h3>
-        <h3 className="product_price">${product?.price}</h3>
+        <h3 className="product_price">
+          ${parseInt(product?.price).toLocaleString("es-AR")}
+        </h3>
         <Link
           to={`/producto-detalle/name/${product?.id}`}
           onClick={handleLinkClick}
