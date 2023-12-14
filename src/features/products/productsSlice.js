@@ -23,13 +23,30 @@ export const productsSlice = createSlice({
       state.products.push(action.payload);
     },
     editProduct: (state, action) => {
-      const { id, updatedProduct } = action.payload;
-      state.products = state.products.map((product) => {
-        if (product.id === id) {
-          return { ...product, ...updatedProduct };
-        }
-        return product;
-      });
+      const {
+        id,
+        name,
+        price,
+        imageOne,
+        imageTwo,
+        imageThree,
+        description,
+        category,
+        stock,
+        sizes,
+      } = action.payload;
+      const foundProduct = state.products.find((product) => product.id === id);
+      if (foundProduct) {
+        foundProduct.name = name;
+        foundProduct.price = price;
+        foundProduct.imageOne = imageOne;
+        foundProduct.imageTwo = imageTwo;
+        foundProduct.imageThree = imageThree;
+        foundProduct.description = description;
+        foundProduct.category = category;
+        foundProduct.stock = stock;
+        foundProduct.sizes = sizes;
+      }
     },
   },
 });
