@@ -837,6 +837,10 @@ p {
   gap: 1rem;
 }
 
+.products_filtered {
+  padding: 4rem 0;
+}
+
 @media (min-width: 768px) {
   nav {
     padding: 1rem 2rem;
@@ -1081,6 +1085,10 @@ p {
 
   .user_register_active a {
     width: auto;
+  }
+
+  .products_filtered {
+    padding: 4rem 0 7rem;
   }
 }
 
