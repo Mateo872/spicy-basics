@@ -738,6 +738,74 @@ p {
   object-fit: cover;
 }
 
+.container_form-product {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1.4rem;
+}
+
+.container_addProduct {
+  max-width: 20rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1rem;
+  border: 1px solid var(--color-primary);
+  padding: 2rem;
+}
+
+.container_addProduct input,
+.container_addProduct select {
+  padding: 0.4rem;
+}
+
+.container_addProduct input[type="file"] {
+  padding: 0;
+}
+
+.container_addProduct button {
+  padding: 0.6rem;
+  border: 2px solid var(--color-secondary);
+  border-radius: .2rem;
+  background-color: var(--color-secondary);
+  color: var(--color-tertiary);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.container_addProduct button:hover {
+  background-color: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: .3s;
+}
+
+.container_addProduct .container_check {
+  display: flex;
+  gap: 1rem;
+}
+
+.container_addProduct .container_check input {
+  order: 1;
+}
+
+.container_addProduct .label_check {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.container_addProduct .label_check input {
+  cursor: pointer;
+}
+
+.container_addProduct .text_error {
+  margin-bottom: .5rem;
+}
+
 @media (min-width: 768px) {
   nav {
     padding: 1rem 2rem;
@@ -817,11 +885,6 @@ p {
   article {
     padding: 0 2rem;
   }
-
-  /* .container_hero {
-    height: 14em;
-    padding-top: 8rem;
-  } */
 
   .container_hero h6 {
     margin: .3rem auto 0;
@@ -974,6 +1037,10 @@ p {
   .container_image-user {
     height: 2.5rem;
     width: 2.5rem;
+  }
+
+  .user_register_active a {
+    width: auto;
   }
 }
 
@@ -1225,6 +1292,15 @@ p {
     display: flex;
     justify-content: center;
   }
+
+  .user_register_active a {
+    width: auto;
+  }
+
+  .container_addProduct {
+    max-width: 24rem;
+  }
+
 }
 
 @media(min-width:1400px) {

@@ -49,6 +49,7 @@ const User = () => {
           email: data.email,
           password: data.password,
           image,
+          role: "admin",
         };
         dispatch(
           users({

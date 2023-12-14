@@ -67,10 +67,22 @@ const Header = () => {
             <li>
               <Link>Contacto</Link>
             </li>
-            {window.innerWidth < 700 && (
-              <picture className="container_image-user">
-                <img src={userState?.user?.image} alt={userState?.user?.name} />
-              </picture>
+            {userState?.user?.name && window.innerWidth < 700 && (
+              <>
+                <picture className="container_image-user">
+                  <img
+                    src={userState?.user?.image}
+                    alt={userState?.user?.name}
+                  />
+                </picture>
+                {userState?.user?.role === "admin" && (
+                  <li>
+                    <Link to={"/usuario/administrador/agregar-producto"}>
+                      Admin
+                    </Link>
+                  </li>
+                )}
+              </>
             )}
           </ul>
         </div>
@@ -81,9 +93,19 @@ const Header = () => {
           }`}
         >
           {userState?.user?.name ? (
-            <picture className="container_image-user">
-              <img src={userState?.user?.image} alt={userState?.user?.name} />
-            </picture>
+            <>
+              {userState?.user?.role === "admin" && (
+                <>
+                  <Link to={"/usuario/administrador/agregar-producto"}>
+                    Admin
+                  </Link>
+                  <h4>|</h4>
+                </>
+              )}
+              <picture className="container_image-user">
+                <img src={userState?.user?.image} alt={userState?.user?.name} />
+              </picture>
+            </>
           ) : (
             <>
               <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
