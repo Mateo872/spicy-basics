@@ -1,8 +1,11 @@
 import ProductFilter from "./ProductFilter";
 import { BsSearch } from "react-icons/bs";
 import Product from "./Product";
+import { useSelector } from "react-redux";
 
 const ContainerProducts = () => {
+  const productsState = useSelector((state) => state.products.products);
+
   return (
     <section className="container_products">
       <article className="filters">
@@ -21,14 +24,9 @@ const ContainerProducts = () => {
         </div>
       </article>
       <article className="products">
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
-        <Product />
+        {productsState.map((product) => (
+          <Product key={product.id} id={product.id} product={product} />
+        ))}
       </article>
     </section>
   );

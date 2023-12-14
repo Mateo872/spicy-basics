@@ -8,6 +8,7 @@ const Header = () => {
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
   const userState = useSelector((state) => state.users);
+
   const menuVisible = () => {
     setShowMenu(!showMenu);
   };

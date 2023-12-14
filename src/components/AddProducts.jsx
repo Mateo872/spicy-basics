@@ -1,6 +1,11 @@
 import { useForm } from "react-hook-form";
+import useConvertBlobToBase64 from "../hooks/useConvertBase64";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../features/products/productsSlice";
 
 const AddProducts = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -9,8 +14,32 @@ const AddProducts = () => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const imageOne = await useConvertBlobToBase64(data.imageOne[0]);
+    const imageTwo = await useConvertBlobToBase64(data.imageTwo[0]);
+    const imageThree = await useConvertBlobToBase64(data.imageThree[0]);
+
+    try {
+      const body = {
+        name: data.name,
+        price: data.price,
+        imageOne,
+        imageTwo,
+        imageThree,
+        description: data.description,
+        category: data.category,
+        stock: data.stock,
+        sizes: data.sizes,
+      };
+      dispatch(
+        addProduct({
+          ...body,
+          id: new Date().getTime().toString(),
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
