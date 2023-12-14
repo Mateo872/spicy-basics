@@ -7,6 +7,8 @@ const initialState = {
     email: "",
     image: "",
     password: "",
+    role: "",
+    state: "",
   },
 };
 

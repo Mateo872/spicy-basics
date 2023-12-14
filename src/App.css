@@ -818,11 +818,6 @@ p {
     padding: 0 2rem;
   }
 
-  /* .container_hero {
-    height: 14em;
-    padding-top: 8rem;
-  } */
-
   .container_hero h6 {
     margin: .3rem auto 0;
     width: 30%;
@@ -974,6 +969,10 @@ p {
   .container_image-user {
     height: 2.5rem;
     width: 2.5rem;
+  }
+
+  .user_register_active a {
+    width: auto;
   }
 }
 
@@ -1224,6 +1223,10 @@ p {
     margin-top: .8rem;
     display: flex;
     justify-content: center;
+  }
+
+  .user_register_active a {
+    width: auto;
   }
 }
 
