@@ -2,9 +2,11 @@ import { useForm } from "react-hook-form";
 import useConvertBlobToBase64 from "../hooks/useConvertBase64";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../features/products/productsSlice";
+import { useNavigate } from "react-router";
 
 const AddProducts = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -37,6 +39,8 @@ const AddProducts = () => {
           id: new Date().getTime().toString(),
         })
       );
+      reset();
+      navigate("/");
     } catch (error) {
       console.error(error);
     }

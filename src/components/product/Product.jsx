@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import image from "../../assets/images/imagen_card.png";
 const Product = ({ product }) => {
   const handleLinkClick = () => {
     window.scrollTo(0, 0);

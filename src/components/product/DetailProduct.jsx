@@ -7,11 +7,16 @@ import { Navigation } from "swiper/modules";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const DetailProduct = () => {
   let [favorites, setFavorites] = useState([]);
   const location = useLocation();
   const { id } = useParams();
+  const productsState = useSelector((state) => state.products.products);
+  const product = productsState.filter((product) => product.id === id);
+
+  console.log(product);
 
   const getFavorites = () => {
     if (!favorites.includes(id)) {
@@ -27,9 +32,9 @@ const DetailProduct = () => {
       <article>
         <div className="container_pagination">
           <a href="#">inicio /</a>
-          <h4>tops /</h4>
+          <h4>{product?.[0]?.category} /</h4>
           <h4>
-            <span> top black</span>
+            <span> {product?.[0]?.name}</span>
           </h4>
         </div>
         <h6>Stock - 30</h6>
@@ -46,60 +51,69 @@ const DetailProduct = () => {
               navigation={true}
               modules={[Navigation]}
               className="mySwiper"
+              id="swiper"
             >
               <SwiperSlide>
-                <img src={image} alt="" />
+                <img
+                  src={product?.[0]?.imageOne}
+                  alt="Imágen principal del producto"
+                />
               </SwiperSlide>
               <SwiperSlide>
-                <img src={image} alt="" />
+                <img
+                  src={product?.[0]?.imageTwo}
+                  alt="Imágen secundaria del producto"
+                />
               </SwiperSlide>
               <SwiperSlide>
-                <img src={image} alt="" />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img src={image} alt="" />
+                <img
+                  src={product?.[0]?.imageThree}
+                  alt="Imágen terciaria del producto"
+                />
               </SwiperSlide>
             </Swiper>
           </div>
           <div className="container_features">
-            <div>
-              <h2 className="detail_title">TOP BLACK</h2>
-              <h2>$20.000</h2>
-            </div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-              voluptates, voluptatem, quidem, quos quas voluptatum.
-            </p>
-            <div>
-              <h3>Tamaño</h3>
-              <div className="container_size">
-                <div className="size size_active">
-                  <p>XS</p>
-                </div>
-                <div className="size">
-                  <p>S</p>
-                </div>
-                <div className="size">
-                  <p>M</p>
-                </div>
-                <div className="size">
-                  <p>L</p>
-                </div>
-                <div className="size">
-                  <p>XL</p>
+            <div className="features-product">
+              <div>
+                <h2 className="detail_title">
+                  {product?.[0]?.name.toUpperCase()}
+                </h2>
+                <h2>
+                  ${parseInt(product?.[0]?.price).toLocaleString("es-AR")}
+                </h2>
+              </div>
+              <p>{product?.[0]?.description}</p>
+              <div>
+                <h3>Tamaño</h3>
+                <div className="container_size">
+                  {["XS", "S", "M", "L", "XL"].map((size) => (
+                    <div
+                      key={size}
+                      className={`size ${
+                        product?.[0]?.sizes.includes(size)
+                          ? product?.[0]?.sizes.indexOf(size) === 0
+                            ? "size_active"
+                            : ""
+                          : "size_disable"
+                      }`}
+                    >
+                      <p>{size}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-            <div className="container_color">
+              {/* <div className="container_color">
               <h3>Color</h3>
               <div className="color">
                 <div className="color_item"></div>
                 <div className="color_item"></div>
               </div>
-            </div>
-            <div className="quantity">
-              <label htmlFor="quantity">Cantidad</label>
-              <input id="quantity" type="number" placeholder="0" />
+            </div> */}
+              <div className="quantity">
+                <label htmlFor="quantity">Cantidad</label>
+                <input id="quantity" type="number" placeholder="0" />
+              </div>
             </div>
             <button className="btn_add">Agregar al carrito</button>
           </div>
