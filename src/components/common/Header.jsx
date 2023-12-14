@@ -7,7 +7,7 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
-  const userState = useSelector((state) => state.users.users);
+  const userState = useSelector((state) => state.users);
   const menuVisible = () => {
     setShowMenu(!showMenu);
   };
@@ -26,7 +26,7 @@ const Header = () => {
 
   return (
     <header style={{ backgroundColor: location.pathname !== "/" && "#1e1e1e" }}>
-      {!userState?.name && (
+      {!userState?.user?.name && (
         <div className="container_register">
           <>
             <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
@@ -69,7 +69,7 @@ const Header = () => {
             </li>
             {window.innerWidth < 700 && (
               <picture className="container_image-user">
-                <img src={userState?.image} alt={userState?.name} />
+                <img src={userState?.user?.image} alt={userState?.user?.name} />
               </picture>
             )}
           </ul>
@@ -77,12 +77,12 @@ const Header = () => {
         <BiMenu className="icon_menu" onClick={menuVisible} />
         <div
           className={`user_register ${
-            userState?.name && "user_register_active"
+            userState?.user?.name && "user_register_active"
           }`}
         >
-          {userState?.name ? (
+          {userState?.user?.name ? (
             <picture className="container_image-user">
-              <img src={userState?.image} alt={userState?.name} />
+              <img src={userState?.user?.image} alt={userState?.user?.name} />
             </picture>
           ) : (
             <>

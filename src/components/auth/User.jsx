@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEye, BsEyeSlashFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { addUser } from "../../features/auth/usersSlice";
+import { addUser, users } from "../../features/auth/usersSlice";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const User = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const userState = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +24,10 @@ const User = () => {
     getValues,
     reset,
   } = useForm();
+
+  useEffect(() => {
+    reset();
+  }, [location.pathname]);
 
   const convertBlobToBase64 = (blob) => {
     return new Promise((resolve, reject) => {
@@ -36,20 +42,52 @@ const User = () => {
 
   const submit = async (data) => {
     try {
-      const image = await convertBlobToBase64(data.image[0]);
-      const body = {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        image,
-      };
-      dispatch(
-        addUser({
-          ...body,
-          id: new Date().getTime().toString(),
-        })
-      );
-      navigate("/");
+      if (location.pathname === "/usuario/registrarse") {
+        const image = await convertBlobToBase64(data.image[0]);
+        const body = {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          image,
+        };
+        dispatch(
+          users({
+            ...body,
+            id: new Date().getTime().toString(),
+          })
+        );
+        navigate("/usuario/iniciar-sesion");
+        reset();
+      } else {
+        const user = userState.users.find((user) => user.email === data.email);
+        if (!user) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "El usuario no existe",
+          });
+        } else {
+          if (user.password === data.password) {
+            Swal.fire({
+              icon: "success",
+              title: "Bienvenido, " + user.name + "!",
+              text: "Iniciaste sesión correctamente",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(addUser(user));
+                navigate("/");
+                reset();
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Contraseña incorrecta",
+            });
+          }
+        }
+      }
       scrollTo(0, 0);
     } catch (error) {
       console.error(error);
