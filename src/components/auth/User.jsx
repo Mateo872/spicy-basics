@@ -21,7 +21,6 @@ const User = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     getValues,
     reset,
   } = useForm();
