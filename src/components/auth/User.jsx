@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEye, BsEyeSlashFill } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { addUser } from "../../features/auth/usersSlice";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  document.body.style.background = "#ececec";
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -21,35 +23,38 @@ const User = () => {
     reset,
   } = useForm();
 
-  const convertBase64 = (file) => {
+  const convertBlobToBase64 = (blob) => {
     return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        resolve(fileReader.result.split(",")[1]);
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        resolve(reader.result);
       };
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
+      reader.readAsDataURL(blob);
     });
   };
 
   const submit = async (data) => {
     try {
-      const image = await convertBase64(data.image[0]);
+      const image = await convertBlobToBase64(data.image[0]);
       const body = {
         name: data.name,
         email: data.email,
         password: data.password,
         image,
       };
-      console.log(body);
+      dispatch(
+        addUser({
+          ...body,
+          id: new Date().getTime().toString(),
+        })
+      );
+      navigate("/");
+      scrollTo(0, 0);
     } catch (error) {
       console.error(error);
     }
   };
-
-  const usersState = useSelector((state) => state.users.users);
 
   return (
     <section
