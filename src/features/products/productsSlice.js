@@ -48,8 +48,18 @@ export const productsSlice = createSlice({
         foundProduct.sizes = sizes;
       }
     },
+    deleteProduct: (state, action) => {
+      const foundProduct = state.products.find(
+        (product) => product.id === action.payload
+      );
+      if (foundProduct) {
+        state.products = state.products.filter(
+          (product) => product.id !== action.payload
+        );
+      }
+    },
   },
 });
 
-export const { addProduct, editProduct } = productsSlice.actions;
+export const { addProduct, editProduct, deleteProduct } = productsSlice.actions;
 export default productsSlice.reducer;

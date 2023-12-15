@@ -1,12 +1,18 @@
 import { BsFillHeartFill, BsPencilFill, BsTrash3Fill } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { deleteProduct } from "../../features/products/productsSlice";
 const Product = ({ product }) => {
   const userState = useSelector((state) => state.users.user);
   const user = JSON.parse(sessionStorage.getItem("user")) || null;
+  const dispatch = useDispatch();
 
   const handleLinkClick = () => {
     window.scrollTo(0, 0);
+  };
+
+  const handleDeleteProduct = (id) => {
+    dispatch(deleteProduct(id));
   };
 
   return (
@@ -27,7 +33,7 @@ const Product = ({ product }) => {
               >
                 <BsPencilFill />
               </Link>
-              <button>
+              <button onClick={() => handleDeleteProduct(product?.id)}>
                 <BsTrash3Fill />
               </button>
             </div>
