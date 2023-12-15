@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
-import useConvertBlobToBase64 from "../hooks/useConvertBase64";
+import useConvertBlobToBase64 from "../../hooks/useConvertBase64";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct, editProduct } from "../features/products/productsSlice";
+import { addProduct, editProduct } from "../../features/products/productsSlice";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import {
   createProduct,
   editProduct as updateProduct,
-} from "../helpers/productsApi";
+} from "../../helpers/productsApi";
 import Swal from "sweetalert2";
 
 const AddProducts = () => {

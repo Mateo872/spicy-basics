@@ -104,7 +104,7 @@ const Product = ({ product, setUpdate }) => {
           (user?.role === "admin" && (
             <div className="container_actions">
               <Link
-                to={`/usuario/administrador/editar-producto/${product?._id}`}
+                to={`spicy/admin/usuario/administrador/editar-producto/${product?._id}`}
               >
                 <BsPencilFill />
               </Link>

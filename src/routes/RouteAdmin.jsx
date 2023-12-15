@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import AddProducts from "../components/AddProducts";
+import AddProducts from "../components/product/AddProducts";
 
 const RouteAdmin = () => {
   return (
