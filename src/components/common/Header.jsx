@@ -101,7 +101,11 @@ const Header = () => {
                   {(userState?.user?.role === "admin" ||
                     user?.role === "admin") && (
                     <li>
-                      <Link to={"/usuario/administrador/agregar-producto"}>
+                      <Link
+                        to={
+                          "/spicy/admin/usuario/administrador/agregar-producto"
+                        }
+                      >
                         Admin
                       </Link>
                     </li>
@@ -121,7 +125,9 @@ const Header = () => {
               {(userState?.user?.role === "admin" ||
                 user?.role === "admin") && (
                 <>
-                  <Link to={"/usuario/administrador/agregar-producto"}>
+                  <Link
+                    to={"/spicy/admin/usuario/administrador/agregar-producto"}
+                  >
                     Admin
                   </Link>
                   <h4>|</h4>
