@@ -87,17 +87,21 @@ const User = () => {
                     });
                     sessionStorage.removeItem("token");
                   } else {
-                    Swal.fire({
-                      icon: "success",
-                      title: "Bienvenido",
-                      text: "Ingreso exitoso",
-                    });
-                    navigate("/");
                     dispatch(
                       addUser({
                         ...user,
                       })
                     );
+                    Swal.fire({
+                      icon: "success",
+                      title: "Bienvenido",
+                      text: "Ingreso exitoso",
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        navigate("/");
+                        reset();
+                      }
+                    });
                   }
                 }
               });

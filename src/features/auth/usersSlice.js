@@ -10,6 +10,8 @@ const initialState = {
     role: "",
     favorites: [],
     state: "",
+    cart: [],
+    history: [],
   },
 };
 

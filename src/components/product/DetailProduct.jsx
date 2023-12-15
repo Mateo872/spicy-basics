@@ -8,15 +8,17 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editUser } from "../../features/auth/usersSlice";
+import { updateUser } from "../../helpers/userApi";
 
 const DetailProduct = () => {
   const { id } = useParams();
   const [selectedSize, setSelectedSize] = useState(null);
   const productsState = useSelector((state) => state.products.products);
-  const product = productsState.filter((product) => product.id === id);
+  const product = productsState.filter((product) => product._id === id);
   const userState = useSelector((state) => state.users);
+  const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
-  const [favorites, setFavorites] = useState([]);
+
   useEffect(() => {
     if (product?.[0]?.sizes.length > 0) {
       setSelectedSize(product[0].sizes[0]);
@@ -31,33 +33,44 @@ const DetailProduct = () => {
 
   const getFavorites = () => {
     const exist = userState?.user?.favorites?.includes(id);
-    if (!exist) {
-      const body = {
-        id: userState?.user?.id,
-        name: userState?.user?.name,
-        email: userState?.user?.email,
-        password: userState?.user?.password,
-        image: userState?.user?.image,
-        role: userState?.user?.role,
-        state: userState?.user?.state,
-        favorites: [...userState?.user?.favorites, id],
-      };
-      dispatch(editUser(body));
-    } else {
-      const newFavorites = userState?.user?.favorites?.filter(
-        (fav) => fav !== id
-      );
-      const body = {
-        id: userState?.user?.id,
-        name: userState?.user?.name,
-        email: userState?.user?.email,
-        password: userState?.user?.password,
-        image: userState?.user?.image,
-        role: userState?.user?.role,
-        state: userState?.user?.state,
-        favorites: newFavorites,
-      };
-      dispatch(editUser(body));
+
+    try {
+      if (!exist) {
+        const body = {
+          id: userState?.user?.id,
+          name: userState?.user?.name,
+          email: userState?.user?.email,
+          password: userState?.user?.password,
+          image: userState?.user?.image,
+          role: userState?.user?.role,
+          state: userState?.user?.state,
+          favorites: [...userState?.user?.favorites, id],
+          cart: [],
+          history: [],
+        };
+        updateUser(body, token);
+        dispatch(editUser(body));
+      } else {
+        const newFavorites = userState?.user?.favorites?.filter(
+          (fav) => fav !== id
+        );
+        const body = {
+          id: userState?.user?.id,
+          name: userState?.user?.name,
+          email: userState?.user?.email,
+          password: userState?.user?.password,
+          image: userState?.user?.image,
+          role: userState?.user?.role,
+          state: userState?.user?.state,
+          favorites: newFavorites,
+          cart: [],
+          history: [],
+        };
+        updateUser(body, token);
+        dispatch(editUser(body));
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
