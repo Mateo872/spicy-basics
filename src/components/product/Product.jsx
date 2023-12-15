@@ -2,9 +2,13 @@ import { BsFillHeartFill, BsPencilFill, BsTrash3Fill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteProduct } from "../../features/products/productsSlice";
+import { useEffect, useState } from "react";
+import { getUser } from "../../helpers/userApi";
+import { addUser } from "../../features/auth/usersSlice";
 const Product = ({ product }) => {
   const userState = useSelector((state) => state.users.user);
-  const user = JSON.parse(sessionStorage.getItem("user")) || null;
+  const token = sessionStorage.getItem("token");
+  const [user, setUser] = useState({});
   const dispatch = useDispatch();
 
   const handleLinkClick = () => {
@@ -14,6 +18,15 @@ const Product = ({ product }) => {
   const handleDeleteProduct = (id) => {
     dispatch(deleteProduct(id));
   };
+
+  useEffect(() => {
+    if (token) {
+      getUser(token).then((res) => {
+        setUser(res.user);
+        dispatch(addUser(res.user));
+      });
+    }
+  }, []);
 
   return (
     <div className="product">

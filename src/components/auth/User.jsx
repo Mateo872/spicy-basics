@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEye, BsEyeSlashFill } from "react-icons/bs";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { addUser, users } from "../../features/auth/usersSlice";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useConvertBlobToBase64 from "../../hooks/useConvertBase64";
-import { createUser } from "../../helpers/userApi";
+import { createUser, getUsers, login } from "../../helpers/userApi";
 
 const User = () => {
   const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const userState = useSelector((state) => state.users);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -47,17 +46,17 @@ const User = () => {
         };
         await createUser(body).then((res) => {
           if (res.name) {
+            dispatch(
+              users({
+                ...body,
+              })
+            );
             Swal.fire({
               icon: "success",
               title: "Usuario creado con éxito",
               text: "Inicia sesión para continuar",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(
-                  users({
-                    ...body,
-                  })
-                );
                 navigate("/usuario/iniciar-sesion");
                 reset();
               }
@@ -71,40 +70,46 @@ const User = () => {
           }
         });
       } else {
-        const user = userState.users.find((user) => user.email === data.email);
-        if (!user) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "El usuario no existe",
-          });
-        } else {
-          if (user.password === data.password) {
-            const userLogin = {
-              name: user.name,
-              image: user.image,
-              role: "user",
-            };
-            sessionStorage.setItem("user", JSON.stringify(userLogin));
-            dispatch(addUser(user));
-            Swal.fire({
-              icon: "success",
-              title: "Bienvenido, " + user.name + "!",
-              text: "Iniciaste sesión correctamente",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                navigate("/");
-                reset();
-              }
+        login(data).then((res) => {
+          if (res.token) {
+            sessionStorage.setItem("token", res.token);
+            getUsers().then((res) => {
+              res.forEach((user) => {
+                if (user.email === data.email) {
+                  const userSession = {
+                    state: user.state,
+                  };
+                  if (userSession.state === false) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "El usuario se encuentra suspendido",
+                    });
+                    sessionStorage.removeItem("token");
+                  } else {
+                    Swal.fire({
+                      icon: "success",
+                      title: "Bienvenido",
+                      text: "Ingreso exitoso",
+                    });
+                    navigate("/");
+                    dispatch(
+                      addUser({
+                        ...user,
+                      })
+                    );
+                  }
+                }
+              });
             });
-          } else {
+          } else if (res.message) {
             Swal.fire({
               icon: "error",
               title: "Oops...",
-              text: "Contraseña incorrecta",
+              text: res.message,
             });
           }
-        }
+        });
       }
       scrollTo(0, 0);
     } catch (error) {
