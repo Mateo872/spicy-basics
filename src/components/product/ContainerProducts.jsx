@@ -64,6 +64,15 @@ const ContainerProducts = () => {
     });
   };
 
+  const handleSearch = (e) => {
+    setInputValue(e.target.value);
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  };
+
   const productsFiltered = productsState?.filter((product) =>
     product?.name.toLowerCase().startsWith(inputValue.toLowerCase())
   );
@@ -91,7 +100,7 @@ const ContainerProducts = () => {
           <input
             type="text"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            onChange={(e) => handleSearch(e)}
             placeholder="Buscá tu producto"
           />
           <BsSearch />
