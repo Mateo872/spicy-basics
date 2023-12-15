@@ -3,19 +3,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteProduct } from "../../features/products/productsSlice";
 import { useEffect, useState } from "react";
-import { getUser, deleteProductAdmin } from "../../helpers/userApi";
-import { addUser } from "../../features/auth/usersSlice";
+import {
+  getUser,
+  deleteProductAdmin,
+  getUsers,
+  updateUserAdmin,
+} from "../../helpers/userApi";
+import { addUser, editUser } from "../../features/auth/usersSlice";
 import Swal from "sweetalert2";
 
 const Product = ({ product, setUpdate }) => {
   const userState = useSelector((state) => state.users.user);
   const token = sessionStorage.getItem("token");
+  const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
 
   const handleLinkClick = () => {
     window.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    getUsers().then((res) => {
+      setUsers(res);
+    });
+  }, []);
 
   const handleDeleteProduct = (id) => {
     try {
@@ -32,6 +44,27 @@ const Product = ({ product, setUpdate }) => {
             if (res.message === "Producto borrado correctamente") {
               dispatch(deleteProduct(id));
               setUpdate((prev) => !prev);
+
+              users.map((user) => {
+                const newFavorites = user?.favorites?.filter(
+                  (fav) => fav !== id
+                );
+
+                const body = {
+                  id: user?.id,
+                  name: user?.name,
+                  email: user?.email,
+                  password: user?.password,
+                  image: user?.image,
+                  role: user?.role,
+                  state: user?.state,
+                  favorites: newFavorites,
+                  cart: [],
+                  history: [],
+                };
+                updateUserAdmin(user._id, body, token).then((res) => {});
+                dispatch(editUser(body));
+              });
               Swal.fire(
                 "¡Borrado!",
                 "Producto borrado correctamente",
