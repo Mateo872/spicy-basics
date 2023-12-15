@@ -73,7 +73,13 @@ const Header = () => {
             {(userState?.user?.name || user?.name) &&
               window.innerWidth < 700 && (
                 <>
-                  <picture className="container_image-user">
+                  <picture
+                    className="container_image-user"
+                    onClick={() => {
+                      sessionStorage.removeItem("user"),
+                        window.location.reload();
+                    }}
+                  >
                     <img
                       src={userState?.user?.image || user?.image}
                       alt={userState?.user?.name || user?.name}
@@ -108,7 +114,12 @@ const Header = () => {
                   <h4>|</h4>
                 </>
               )}
-              <picture className="container_image-user">
+              <picture
+                className="container_image-user"
+                onClick={() => {
+                  sessionStorage.removeItem("user"), window.location.reload();
+                }}
+              >
                 <img
                   src={userState?.user?.image || user?.image}
                   alt={userState?.user?.name || user?.name}
