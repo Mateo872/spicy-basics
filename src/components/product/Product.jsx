@@ -99,7 +99,12 @@ const Product = ({ product, setUpdate }) => {
               <BsFillHeartFill />
             </div>
           )}
-        <img src={product?.imageOne} alt={product?.name} />
+        <img
+          src={product?.imageOne}
+          alt={product?.name}
+          loading="lazy"
+          decoding="async"
+        />
         {userState?.user?.role === "admin" ||
           (user?.role === "admin" && (
             <div className="container_actions">

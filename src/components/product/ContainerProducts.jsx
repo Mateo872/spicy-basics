@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setProducts } from "../../features/products/productsSlice";
 import { getProducts } from "../../helpers/productsApi";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import CardSkeleton from "../CardSkeleton";
 
 const ContainerProducts = () => {
   const productsState = useSelector((state) => state.products.products);
@@ -135,7 +138,7 @@ const ContainerProducts = () => {
             )}
           </>
         ) : (
-          <p>Cargando...</p>
+          <CardSkeleton products={productsFiltered.length} />
         )}
       </article>
     </section>
