@@ -2,8 +2,8 @@ const URL_PRODUCT = import.meta.env.VITE_API_PRODUCT;
 
 export const getProducts = async () => {
   try {
-    const respuesta = await fetch(URL_PRODUCT);
-    const product = await respuesta.json();
+    const response = await fetch(URL_PRODUCT);
+    const product = await response.json();
     return product;
   } catch (error) {
     console.log(error);
@@ -11,8 +11,8 @@ export const getProducts = async () => {
 };
 export const getProductId = async (id) => {
   try {
-    const respuesta = await fetch(`${URL_PRODUCT}/${id}`);
-    const product = await respuesta.json();
+    const response = await fetch(`${URL_PRODUCT}/${id}`);
+    const product = await response.json();
     return product;
   } catch (error) {
     console.log(error);
@@ -21,7 +21,7 @@ export const getProductId = async (id) => {
 
 export const createProduct = async (product, token) => {
   try {
-    const respuesta = await fetch(URL_PRODUCT, {
+    const response = await fetch(URL_PRODUCT, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -29,7 +29,7 @@ export const createProduct = async (product, token) => {
       },
       body: JSON.stringify(product),
     });
-    return respuesta;
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -37,7 +37,7 @@ export const createProduct = async (product, token) => {
 
 export const editProduct = async (product, token, id) => {
   try {
-    const respuesta = await fetch(`${URL_PRODUCT}/${id}`, {
+    const response = await fetch(`${URL_PRODUCT}/${id}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -45,7 +45,7 @@ export const editProduct = async (product, token, id) => {
       },
       body: JSON.stringify(product),
     });
-    return respuesta;
+    return response;
   } catch (error) {
     console.log(error);
   }
@@ -53,13 +53,13 @@ export const editProduct = async (product, token, id) => {
 
 export const deleteProduct = async (token, id) => {
   try {
-    const respuesta = await fetch(`${URL_PRODUCT}/${id}`, {
+    const response = await fetch(`${URL_PRODUCT}/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return respuesta;
+    return response;
   } catch (error) {
     console.log(error);
   }
