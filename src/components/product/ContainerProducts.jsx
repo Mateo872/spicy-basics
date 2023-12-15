@@ -20,6 +20,7 @@ const ContainerProducts = () => {
   });
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,7 +34,7 @@ const ContainerProducts = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [update]);
 
   const handleFilterClick = (title) => {
     setFilterState((prev) => {
@@ -115,6 +116,7 @@ const ContainerProducts = () => {
                         key={product._id}
                         id={product._id}
                         product={product}
+                        setUpdate={setUpdate}
                       />
                     ))
                   ) : (
