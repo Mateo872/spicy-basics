@@ -24,6 +24,9 @@ const AddProducts = () => {
   const [image3, setImage3] = useState(false);
   const [urls, setUrls] = useState([]);
   const [productEdit, setProductEdit] = useState([]);
+  const [imageEmptyOne, setImageEmptyOne] = useState(false);
+  const [imageEmptyTwo, setImageEmptyTwo] = useState(false);
+  const [imageEmptyThree, setImageEmptyThree] = useState(false);
   const token = sessionStorage.getItem("token");
   const { id } = useParams();
   const {
@@ -56,8 +59,51 @@ const AddProducts = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    const product = productsState?.find(
+      (product) => product?.name.toLowerCase() === data.name.toLowerCase()
+    );
+
     try {
       if (!id) {
+        if (
+          data.imageOne[0].type !== "image/jpeg" &&
+          data.imageOne[0].type !== "image/png" &&
+          data.imageOne[0].type !== "image/jpg"
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La imágen principal debe ser un archivo de tipo .jpg, .jpeg o .png",
+          });
+          return;
+        }
+
+        if (
+          data.imageTwo[0].type !== "image/jpeg" &&
+          data.imageTwo[0].type !== "image/png" &&
+          data.imageTwo[0].type !== "image/jpg"
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
+          });
+          return;
+        }
+
+        if (
+          data.imageThree[0].type !== "image/jpeg" &&
+          data.imageThree[0].type !== "image/png" &&
+          data.imageThree[0].type !== "image/jpg"
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
+          });
+          return;
+        }
+
         const imageOne = await useConvertBlobToBase64(data.imageOne[0]);
         const imageTwo = await useConvertBlobToBase64(data.imageTwo[0]);
         const imageThree = await useConvertBlobToBase64(data.imageThree[0]);
@@ -74,41 +120,86 @@ const AddProducts = () => {
             stock: data.stock,
             sizes: data.sizes,
           };
-          createProduct(body, token).then((res) => {
-            if (res.status === 200) {
-              dispatch(addProduct(res.product));
-              Swal.fire({
-                icon: "success",
-                title: "Producto agregado correctamente",
-                showConfirmButton: true,
-              }).then((isConfirm) => {
-                if (isConfirm.isConfirmed) {
-                  navigate("/");
-                }
-              });
-            }
-          });
+          if (product) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "El producto ya existe",
+            });
+          } else {
+            createProduct(body, token).then((res) => {
+              if (res.status === 200) {
+                dispatch(addProduct(res.product));
+                Swal.fire({
+                  icon: "success",
+                  title: "Producto agregado correctamente",
+                  showConfirmButton: true,
+                }).then((isConfirm) => {
+                  if (isConfirm.isConfirmed) {
+                    navigate("/");
+                  } else {
+                    navigate("/");
+                  }
+                });
+              }
+            });
+          }
         }
       } else if (urls.length >= 3) {
         const images = [];
+
         if (image1) {
-          const imageOne = await useConvertBlobToBase64(urlsEdit.image1);
+          const imageOne =
+            urlsEdit.image1.type === "image/jpeg" ||
+            urlsEdit.image1.type === "image/png" ||
+            urlsEdit.image1.type === "image/jpg"
+              ? await useConvertBlobToBase64(urlsEdit.image1)
+              : Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "La imágen principal debe ser un archivo de tipo .jpg, .jpeg o .png",
+                });
           images.push(imageOne);
+          setImageEmptyOne(true);
         } else {
           images.push(productEdit.imageOne);
+          setImageEmptyOne(true);
         }
         if (image2) {
-          const imageTwo = await useConvertBlobToBase64(urlsEdit.image2);
+          const imageTwo =
+            urlsEdit.image2.type === "image/jpeg" ||
+            urlsEdit.image2.type === "image/png" ||
+            urlsEdit.image2.type === "image/jpg"
+              ? await useConvertBlobToBase64(urlsEdit.image2)
+              : Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
+                });
           images.push(imageTwo);
+          setImageEmptyTwo(true);
         } else {
           images.push(productEdit.imageTwo);
+          setImageEmptyTwo(true);
         }
         if (image3) {
-          const imageThree = await useConvertBlobToBase64(urlsEdit.image3);
+          const imageThree =
+            urlsEdit.image3.type === "image/jpeg" ||
+            urlsEdit.image3.type === "image/png" ||
+            urlsEdit.image3.type === "image/jpg"
+              ? await useConvertBlobToBase64(urlsEdit.image3)
+              : Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
+                });
           images.push(imageThree);
+          setImageEmptyThree(true);
         } else {
           images.push(productEdit.imageThree);
+          setImageEmptyThree(true);
         }
+
         const body = {
           id: data.id,
           name: data.name,
@@ -121,20 +212,37 @@ const AddProducts = () => {
           stock: data.stock,
           sizes: data.sizes,
         };
-        updateProduct(body, token, id).then((res) => {
-          if (res.status === 200) {
-            dispatch(editProduct(body));
-            Swal.fire({
-              icon: "success",
-              title: "Producto editado correctamente",
-              showConfirmButton: true,
-            }).then((isConfirm) => {
-              if (isConfirm.isConfirmed) {
-                navigate("/");
-              }
-            });
-          }
-        });
+
+        const exist = productsState?.find(
+          (product) =>
+            product?.name.toLowerCase() === data.name.toLowerCase() &&
+            product?._id !== data.id
+        );
+
+        if (exist) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "El nombre del producto ya existe",
+          });
+        } else if (imageEmptyOne && imageEmptyTwo && imageEmptyThree) {
+          updateProduct(body, token, id).then((res) => {
+            if (res.status === 200) {
+              dispatch(editProduct(body));
+              Swal.fire({
+                icon: "success",
+                title: "Producto editado correctamente",
+                showConfirmButton: true,
+              }).then((isConfirm) => {
+                if (isConfirm.isConfirmed) {
+                  navigate("/");
+                } else {
+                  navigate("/");
+                }
+              });
+            }
+          });
+        }
       }
     } catch (error) {
       console.error(error);
@@ -480,7 +588,7 @@ const AddProducts = () => {
           {errors?.sizes?.message && (
             <span className="text_error">{errors.sizes.message}</span>
           )}
-          <button>Agregar producto</button>
+          <button>{id ? "Editar producto" : "Agregar producto"}</button>
         </form>
       </article>
     </section>
