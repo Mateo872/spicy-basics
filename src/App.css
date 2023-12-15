@@ -351,6 +351,17 @@ h6 {
   overflow: hidden;
 }
 
+.product_image .container_heart {
+  position: absolute;
+  top: .8rem;
+  right: .8rem;
+}
+
+.product_image .container_heart svg {
+  color: var(--color-tertiary);
+  font-size: 1.2rem;
+}
+
 .container_actions {
   position: absolute;
   top: .8rem;
@@ -1127,6 +1138,11 @@ p {
   .products_filtered {
     padding: 4rem 0 7rem;
   }
+
+  .product_image .container_heart {
+    top: 1rem;
+    right: 1rem;
+  }
 }
 
 @media (min-width: 988px) {
@@ -1410,6 +1426,10 @@ p {
     transform: translateX(0);
     opacity: 1;
     transition: .3s;
+  }
+
+  .product_image .container_heart svg {
+    font-size: 1.6rem;
   }
 }
 
