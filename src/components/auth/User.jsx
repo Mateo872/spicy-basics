@@ -8,6 +8,7 @@ import { addUser, users } from "../../features/auth/usersSlice";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import useConvertBlobToBase64 from "../../hooks/useConvertBase64";
+import { createUser } from "../../helpers/userApi";
 
 const User = () => {
   const location = useLocation();
@@ -39,17 +40,36 @@ const User = () => {
           password: data.password,
           image,
           favorites: [],
-          role: "admin",
-          state: "active",
+          role: "user",
+          state: true,
+          cart: [],
+          history: [],
         };
-        dispatch(
-          users({
-            ...body,
-            id: new Date().getTime().toString(),
-          })
-        );
-        navigate("/usuario/iniciar-sesion");
-        reset();
+        await createUser(body).then((res) => {
+          if (res.name) {
+            Swal.fire({
+              icon: "success",
+              title: "Usuario creado con éxito",
+              text: "Inicia sesión para continuar",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(
+                  users({
+                    ...body,
+                  })
+                );
+                navigate("/usuario/iniciar-sesion");
+                reset();
+              }
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: res.message,
+            });
+          }
+        });
       } else {
         const user = userState.users.find((user) => user.email === data.email);
         if (!user) {
@@ -63,7 +83,7 @@ const User = () => {
             const userLogin = {
               name: user.name,
               image: user.image,
-              role: "admin",
+              role: "user",
             };
             sessionStorage.setItem("user", JSON.stringify(userLogin));
             dispatch(addUser(user));
