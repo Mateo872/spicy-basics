@@ -42,13 +42,13 @@ const ContainerProducts = () => {
     });
   };
 
-  const productsFiltered = productsState.filter((product) =>
+  const productsFiltered = productsState?.filter((product) =>
     product.name.toLowerCase().startsWith(inputValue.toLowerCase())
   );
 
   const productsEmpty =
-    (productsState.length === 0 && productsFiltered.length === 0) ||
-    productsFiltered.filter(
+    (productsState?.length === 0 && productsFiltered?.length === 0) ||
+    productsFiltered?.filter(
       (product) => filterState.Todos || filterState[product.category]
     ).length === 0;
 
@@ -81,10 +81,10 @@ const ContainerProducts = () => {
           justifyContent: productsEmpty && "center",
         }}
       >
-        {productsState.length > 0 ? (
-          productsFiltered.length > 0 ? (
+        {productsState?.length > 0 ? (
+          productsFiltered?.length > 0 ? (
             (() => {
-              const filteredProducts = productsFiltered.filter(
+              const filteredProducts = productsFiltered?.filter(
                 (product) => filterState.Todos || filterState[product.category]
               );
 
@@ -99,7 +99,7 @@ const ContainerProducts = () => {
               );
             })()
           ) : (
-            productsState.length > 0 && (
+            productsState?.length > 0 && (
               <p>No hay productos disponibles con ese nombre</p>
             )
           )
