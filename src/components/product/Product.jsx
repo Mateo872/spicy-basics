@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteProduct } from "../../features/products/productsSlice";
 import { useEffect, useState } from "react";
-import { getUser } from "../../helpers/userApi";
+import { getUser, deleteProductAdmin } from "../../helpers/userApi";
 import { addUser } from "../../features/auth/usersSlice";
+import Swal from "sweetalert2";
 
-const Product = ({ product }) => {
+const Product = ({ product, setUpdate }) => {
   const userState = useSelector((state) => state.users.user);
   const token = sessionStorage.getItem("token");
   const [user, setUser] = useState({});
@@ -17,7 +18,34 @@ const Product = ({ product }) => {
   };
 
   const handleDeleteProduct = (id) => {
-    dispatch(deleteProduct(id));
+    try {
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: "No podrás revertir esta acción",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteProductAdmin(id, token).then((res) => {
+            if (res.message === "Producto borrado correctamente") {
+              dispatch(deleteProduct(id));
+              setUpdate((prev) => !prev);
+              Swal.fire(
+                "¡Borrado!",
+                "Producto borrado correctamente",
+                "success"
+              );
+            } else {
+              Swal.fire("¡Error!", res.message, "error");
+            }
+          });
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
