@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProduct, editProduct } from "../features/products/productsSlice";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import { createProduct } from "../helpers/productsApi";
+import {
+  createProduct,
+  editProduct as updateProduct,
+} from "../helpers/productsApi";
 import Swal from "sweetalert2";
 
 const AddProducts = () => {
@@ -29,15 +32,15 @@ const AddProducts = () => {
     formState: { errors },
     getValues,
     setValue,
-    reset,
   } = useForm();
 
   useEffect(() => {
     if (id) {
-      const product = productsState.find((product) => product?.id === id);
+      const product = productsState?.find((product) => product?._id === id);
       setProductEdit(product);
-      if (product.length !== 0) {
-        setValue("id", product?.id);
+
+      if (product?.length !== 0) {
+        setValue("id", product?._id);
         setValue("name", product?.name);
         setValue("price", product?.price);
         setValue("imageOne", product?.imageOne);
@@ -77,10 +80,11 @@ const AddProducts = () => {
               Swal.fire({
                 icon: "success",
                 title: "Producto agregado correctamente",
-                showConfirmButton: false,
-                timer: 1500,
-              }).then(() => {
-                navigate("/");
+                showConfirmButton: true,
+              }).then((isConfirm) => {
+                if (isConfirm.isConfirmed) {
+                  navigate("/");
+                }
               });
             }
           });
@@ -117,8 +121,20 @@ const AddProducts = () => {
           stock: data.stock,
           sizes: data.sizes,
         };
-        dispatch(editProduct(body));
-        navigate("/");
+        updateProduct(body, token, id).then((res) => {
+          if (res.status === 200) {
+            dispatch(editProduct(body));
+            Swal.fire({
+              icon: "success",
+              title: "Producto editado correctamente",
+              showConfirmButton: true,
+            }).then((isConfirm) => {
+              if (isConfirm.isConfirmed) {
+                navigate("/");
+              }
+            });
+          }
+        });
       }
     } catch (error) {
       console.error(error);
