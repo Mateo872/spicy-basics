@@ -1,8 +1,10 @@
 import ProductFilter from "./ProductFilter";
 import { BsSearch } from "react-icons/bs";
 import Product from "./Product";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { setProducts } from "../../features/products/productsSlice";
+import { getProducts } from "../../helpers/productsApi";
 
 const ContainerProducts = () => {
   const productsState = useSelector((state) => state.products.products);
@@ -16,6 +18,22 @@ const ContainerProducts = () => {
     Tops: false,
     Remeras: false,
   });
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        getProducts().then((res) => {
+          setLoading(false);
+          dispatch(setProducts(res.products));
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const handleFilterClick = (title) => {
     setFilterState((prev) => {
@@ -43,7 +61,7 @@ const ContainerProducts = () => {
   };
 
   const productsFiltered = productsState?.filter((product) =>
-    product.name.toLowerCase().startsWith(inputValue.toLowerCase())
+    product?.name.toLowerCase().startsWith(inputValue.toLowerCase())
   );
 
   const productsEmpty =
@@ -81,30 +99,41 @@ const ContainerProducts = () => {
           justifyContent: productsEmpty && "center",
         }}
       >
-        {productsState?.length > 0 ? (
-          productsFiltered?.length > 0 ? (
-            (() => {
-              const filteredProducts = productsFiltered?.filter(
-                (product) => filterState.Todos || filterState[product.category]
-              );
+        {!loading ? (
+          <>
+            {productsState?.length > 0 ? (
+              productsFiltered?.length > 0 ? (
+                (() => {
+                  const filteredProducts = productsFiltered?.filter(
+                    (product) =>
+                      filterState.Todos || filterState[product.category]
+                  );
 
-              return filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
-                  <Product key={product.id} id={product.id} product={product} />
-                ))
+                  return filteredProducts.length > 0 ? (
+                    filteredProducts.map((product) => (
+                      <Product
+                        key={product._id}
+                        id={product._id}
+                        product={product}
+                      />
+                    ))
+                  ) : (
+                    <p>
+                      No hay productos disponibles que coincidan con los filtros
+                    </p>
+                  );
+                })()
               ) : (
-                <p>
-                  No hay productos disponibles que coincidan con los filtros
-                </p>
-              );
-            })()
-          ) : (
-            productsState?.length > 0 && (
-              <p>No hay productos disponibles con ese nombre</p>
-            )
-          )
+                productsState?.length > 0 && (
+                  <p>No hay productos disponibles con ese nombre</p>
+                )
+              )
+            ) : (
+              <p>No hay productos disponibles</p>
+            )}
+          </>
         ) : (
-          <p>No hay productos disponibles</p>
+          <p>Cargando...</p>
         )}
       </article>
     </section>

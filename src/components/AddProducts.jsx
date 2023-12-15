@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProduct, editProduct } from "../features/products/productsSlice";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
+import { createProduct } from "../helpers/productsApi";
+import Swal from "sweetalert2";
 
 const AddProducts = () => {
   const productsState = useSelector((state) => state.products.products);
@@ -19,6 +21,7 @@ const AddProducts = () => {
   const [image3, setImage3] = useState(false);
   const [urls, setUrls] = useState([]);
   const [productEdit, setProductEdit] = useState([]);
+  const token = sessionStorage.getItem("token");
   const { id } = useParams();
   const {
     register,
@@ -68,14 +71,19 @@ const AddProducts = () => {
             stock: data.stock,
             sizes: data.sizes,
           };
-          dispatch(
-            addProduct({
-              ...body,
-              id: new Date().getTime().toString(),
-            })
-          );
-          reset();
-          navigate("/");
+          createProduct(body, token).then((res) => {
+            if (res.status === 200) {
+              dispatch(addProduct(res.product));
+              Swal.fire({
+                icon: "success",
+                title: "Producto agregado correctamente",
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(() => {
+                navigate("/");
+              });
+            }
+          });
         }
       } else if (urls.length >= 3) {
         const images = [];

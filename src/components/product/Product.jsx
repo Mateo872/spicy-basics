@@ -5,6 +5,7 @@ import { deleteProduct } from "../../features/products/productsSlice";
 import { useEffect, useState } from "react";
 import { getUser } from "../../helpers/userApi";
 import { addUser } from "../../features/auth/usersSlice";
+
 const Product = ({ product }) => {
   const userState = useSelector((state) => state.users.user);
   const token = sessionStorage.getItem("token");
@@ -31,7 +32,7 @@ const Product = ({ product }) => {
   return (
     <div className="product">
       <div className="product_image">
-        {userState?.favorites?.includes(product?.id) &&
+        {userState?.favorites?.includes(product?._id) &&
           userState.role !== "admin" && (
             <div className="container_heart">
               <BsFillHeartFill />
@@ -42,11 +43,11 @@ const Product = ({ product }) => {
           (user?.role === "admin" && (
             <div className="container_actions">
               <Link
-                to={`/usuario/administrador/editar-producto/${product?.id}`}
+                to={`/usuario/administrador/editar-producto/${product?._id}`}
               >
                 <BsPencilFill />
               </Link>
-              <button onClick={() => handleDeleteProduct(product?.id)}>
+              <button onClick={() => handleDeleteProduct(product?._id)}>
                 <BsTrash3Fill />
               </button>
             </div>
@@ -58,7 +59,7 @@ const Product = ({ product }) => {
           ${parseInt(product?.price).toLocaleString("es-AR")}
         </h3>
         <Link
-          to={`/producto-detalle/name/${product?.id}`}
+          to={`/producto-detalle/name/${product?._id}`}
           onClick={handleLinkClick}
         >
           Ver más
