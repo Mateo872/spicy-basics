@@ -2,14 +2,13 @@ import { useForm } from "react-hook-form";
 import useConvertBlobToBase64 from "../hooks/useConvertBase64";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, editProduct } from "../features/products/productsSlice";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 
 const AddProducts = () => {
   const productsState = useSelector((state) => state.products.products);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const [urlsEdit, setUrlsEdit] = useState({
     image1: "",
     image2: "",
@@ -19,9 +18,6 @@ const AddProducts = () => {
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
   const [urls, setUrls] = useState([]);
-  const [imageError1, setImageError1] = useState(false);
-  const [imageError2, setImageError2] = useState(false);
-  const [imageError3, setImageError3] = useState(false);
   const [productEdit, setProductEdit] = useState([]);
   const { id } = useParams();
   const {
@@ -460,21 +456,7 @@ const AddProducts = () => {
           {errors?.sizes?.message && (
             <span className="text_error">{errors.sizes.message}</span>
           )}
-          <button
-            onClick={() => {
-              if (!urls[0]) {
-                setImageError1(true);
-              }
-              if (!urls[1]) {
-                setImageError2(true);
-              }
-              if (!urls[2]) {
-                setImageError3(true);
-              }
-            }}
-          >
-            Agregar producto
-          </button>
+          <button>Agregar producto</button>
         </form>
       </article>
     </section>

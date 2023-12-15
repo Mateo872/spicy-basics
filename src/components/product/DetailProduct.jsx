@@ -6,15 +6,17 @@ import { Navigation } from "swiper/modules";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { editUser } from "../../features/auth/usersSlice";
 
 const DetailProduct = () => {
-  let [favorites, setFavorites] = useState([]);
   const { id } = useParams();
   const [selectedSize, setSelectedSize] = useState(null);
   const productsState = useSelector((state) => state.products.products);
   const product = productsState.filter((product) => product.id === id);
-
+  const userState = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  const [favorites, setFavorites] = useState([]);
   useEffect(() => {
     if (product?.[0]?.sizes.length > 0) {
       setSelectedSize(product[0].sizes[0]);
@@ -28,11 +30,34 @@ const DetailProduct = () => {
   };
 
   const getFavorites = () => {
-    if (!favorites.includes(id)) {
-      setFavorites([id]);
+    const exist = userState?.user?.favorites?.includes(id);
+    if (!exist) {
+      const body = {
+        id: userState?.user?.id,
+        name: userState?.user?.name,
+        email: userState?.user?.email,
+        password: userState?.user?.password,
+        image: userState?.user?.image,
+        role: userState?.user?.role,
+        state: userState?.user?.state,
+        favorites: [...userState?.user?.favorites, id],
+      };
+      dispatch(editUser(body));
     } else {
-      favorites = favorites.filter((fav) => fav != id);
-      setFavorites([...favorites]);
+      const newFavorites = userState?.user?.favorites?.filter(
+        (fav) => fav !== id
+      );
+      const body = {
+        id: userState?.user?.id,
+        name: userState?.user?.name,
+        email: userState?.user?.email,
+        password: userState?.user?.password,
+        image: userState?.user?.image,
+        role: userState?.user?.role,
+        state: userState?.user?.state,
+        favorites: newFavorites,
+      };
+      dispatch(editUser(body));
     }
   };
 
@@ -49,13 +74,15 @@ const DetailProduct = () => {
         <h6>Stock - {product?.[0]?.stock}</h6>
         <div className="detail_product">
           <div className="detail_image">
-            <div className="container_heart" onClick={getFavorites}>
-              {favorites.filter((fav) => fav === id).length > 0 ? (
-                <BsFillHeartFill />
-              ) : (
-                <BsHeart />
-              )}
-            </div>
+            {userState?.user?.role !== "admin" && (
+              <div className="container_heart" onClick={getFavorites}>
+                {userState?.user?.favorites?.includes(id) ? (
+                  <BsFillHeartFill />
+                ) : (
+                  <BsHeart />
+                )}
+              </div>
+            )}
             <Swiper
               navigation={true}
               modules={[Navigation]}

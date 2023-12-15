@@ -38,7 +38,9 @@ const User = () => {
           email: data.email,
           password: data.password,
           image,
-          role: "admin",
+          favorites: [],
+          role: "user",
+          state: "active",
         };
         dispatch(
           users({
@@ -61,7 +63,7 @@ const User = () => {
             const userLogin = {
               name: user.name,
               image: user.image,
-              role: "admin",
+              role: "user",
             };
             sessionStorage.setItem("user", JSON.stringify(userLogin));
             dispatch(addUser(user));

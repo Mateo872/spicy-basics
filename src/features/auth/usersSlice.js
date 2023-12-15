@@ -8,6 +8,7 @@ const initialState = {
     image: "",
     password: "",
     role: "",
+    favorites: [],
     state: "",
   },
 };
@@ -22,8 +23,32 @@ export const usersSlice = createSlice({
     addUser: (state, action) => {
       state.user = action.payload;
     },
+    editUser: (state, action) => {
+      const {
+        id,
+        name,
+        email,
+        image,
+        password,
+        role,
+        favorites,
+        state: stateUser,
+      } = action.payload;
+
+      const foundUser = state.user;
+
+      if (foundUser) {
+        foundUser.name = name;
+        foundUser.email = email;
+        foundUser.image = image;
+        foundUser.password = password;
+        foundUser.role = role;
+        foundUser.favorites = favorites;
+        foundUser.state = stateUser;
+      }
+    },
   },
 });
 
-export const { users, addUser } = usersSlice.actions;
+export const { users, addUser, editUser } = usersSlice.actions;
 export default usersSlice.reducer;
