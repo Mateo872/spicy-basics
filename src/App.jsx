@@ -5,7 +5,8 @@ import Header from "./components/common/Header";
 import ContainerProducts from "./components/product/ContainerProducts";
 import DetailProduct from "./components/product/DetailProduct";
 import User from "./components/auth/User";
-import AddProducts from "./components/addProducts";
+import RouteProtect from "./routes/RouteProtected";
+import RouteAdmin from "./routes/RouteAdmin";
 
 function App() {
   return (
@@ -29,13 +30,13 @@ function App() {
           <Route path="/usuario/iniciar-sesion" element={<User />} />
           <Route path="/usuario/registrarse" element={<User />} />
           <Route
-            path="/usuario/administrador/agregar-producto"
-            element={<AddProducts />}
-          />
-          <Route
-            path="/usuario/administrador/editar-producto/:id"
-            element={<AddProducts />}
-          />
+            path="/spicy/admin/*"
+            element={
+              <RouteProtect>
+                <RouteAdmin />
+              </RouteProtect>
+            }
+          ></Route>
         </Routes>
       </main>
     </HashRouter>
