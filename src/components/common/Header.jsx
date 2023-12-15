@@ -1,14 +1,18 @@
 import { BiMenu, BiX } from "react-icons/bi";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../helpers/userApi";
+import { addUser } from "../../features/auth/usersSlice";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
   const userState = useSelector((state) => state.users);
-  const user = JSON.parse(sessionStorage.getItem("user")) || null;
+  const token = sessionStorage.getItem("token");
+  const [user, setUser] = useState({});
+  const dispatch = useDispatch();
 
   const menuVisible = () => {
     setShowMenu(!showMenu);
@@ -21,6 +25,15 @@ const Header = () => {
       setScroll(false);
     }
   };
+
+  useEffect(() => {
+    if (token) {
+      getUser(token).then((res) => {
+        setUser(res.user);
+        dispatch(addUser(res.user));
+      });
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -76,7 +89,7 @@ const Header = () => {
                   <picture
                     className="container_image-user"
                     onClick={() => {
-                      sessionStorage.removeItem("user"),
+                      sessionStorage.removeItem("token"),
                         window.location.reload();
                     }}
                   >
@@ -117,7 +130,7 @@ const Header = () => {
               <picture
                 className="container_image-user"
                 onClick={() => {
-                  sessionStorage.removeItem("user"), window.location.reload();
+                  sessionStorage.removeItem("token"), window.location.reload();
                 }}
               >
                 <img
