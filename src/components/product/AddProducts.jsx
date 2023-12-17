@@ -189,7 +189,8 @@ const AddProducts = () => {
                   title: "Oops...",
                   text: "La imágen principal debe ser un archivo de tipo .jpg, .jpeg o .png",
                 });
-          images.push(imageOne);
+          const compressImageOne = await compressBase64Image(imageOne);
+          images.push(compressImageOne);
         } else {
           images.push(productEdit.imageOne);
         }
@@ -204,7 +205,8 @@ const AddProducts = () => {
                   title: "Oops...",
                   text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                 });
-          images.push(imageTwo);
+          const compressImageTwo = await compressBase64Image(imageTwo);
+          images.push(compressImageTwo);
         } else {
           images.push(productEdit.imageTwo);
         }
@@ -219,7 +221,8 @@ const AddProducts = () => {
                   title: "Oops...",
                   text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                 });
-          images.push(imageThree);
+          const compressImageThree = await compressBase64Image(imageThree);
+          images.push(compressImageThree);
         } else {
           images.push(productEdit.imageThree);
         }
