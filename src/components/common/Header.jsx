@@ -2,16 +2,16 @@ import { BiMenu, BiSolidMoon, BiSolidSun, BiX } from "react-icons/bi";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, getUsers, updateUser } from "../../helpers/userApi";
+import { getUser, updateUser } from "../../helpers/userApi";
 import { addUser } from "../../features/auth/usersSlice";
-import { setTheme } from "../../features/theme/themeSlice";
+import { setTheme, setThemeHover } from "../../features/theme/themeSlice";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
   const userState = useSelector((state) => state.users);
-  const themeState = useSelector((state) => state.theme.theme);
+  const themeState = useSelector((state) => state.theme);
   const token = sessionStorage.getItem("token");
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const Header = () => {
           backgroundColor:
             location.pathname === "/" && !scroll
               ? "transparent"
-              : scroll && themeState !== "dark"
+              : scroll && themeState.theme !== "dark"
               ? "#1e1e1e"
               : "#fff",
         }}
@@ -57,7 +57,7 @@ const Header = () => {
         {(!userState?.user?.name || !user?.name) && (
           <div
             className={`container_register ${
-              themeState === "dark" && "container_register-theme"
+              themeState.theme === "dark" && "container_register-theme"
             }`}
           >
             <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
@@ -68,16 +68,16 @@ const Header = () => {
         <nav
           className={`nav_container ${scroll ? "mt-0" : "margen"} ${
             location.pathname !== "/" && "mt-0"
-          } ${themeState === "dark" && "nav_theme"}`}
+          } ${themeState.theme === "dark" && "nav_theme"}`}
           style={{
             backgroundColor:
-              scroll && themeState !== "dark"
+              scroll && themeState.theme !== "dark"
                 ? "#1e1e1e"
-                : scroll && themeState === "dark"
+                : scroll && themeState.theme === "dark"
                 ? "#fff"
-                : location.pathname !== "/" && themeState !== "dark"
+                : location.pathname !== "/" && themeState.theme !== "dark"
                 ? "#1e1e1e"
-                : location.pathname !== "/" && themeState === "dark"
+                : location.pathname !== "/" && themeState.theme === "dark"
                 ? "#fff"
                 : location.pathname === "/" && !scroll && "transparent",
           }}
@@ -85,7 +85,7 @@ const Header = () => {
           <Link
             to={"/"}
             className={`container_logo ${
-              themeState === "dark" && "logo_theme"
+              themeState.theme === "dark" && "logo_theme"
             }`}
           >
             SPICY<span>BASICS</span>
@@ -98,29 +98,71 @@ const Header = () => {
           >
             <ul
               className={`container_menu ${showMenu && "menu_active"} ${
-                themeState === "dark" && "container_menu-theme"
+                themeState.theme === "dark" && "container_menu-theme"
               }`}
             >
               <BiX className="icon_close" onClick={menuVisible} />
               <li>
-                <Link>Productos</Link>
+                <Link
+                  style={{
+                    color:
+                      window.innerWidth > 767 &&
+                      themeState.theme === "dark" &&
+                      "#1e1e1e",
+                  }}
+                  to={"/"}
+                >
+                  Productos
+                </Link>
               </li>
               <li>
-                <Link>Ofertas</Link>
+                <Link
+                  style={{
+                    color:
+                      window.innerWidth > 767 &&
+                      themeState.theme === "dark" &&
+                      "#1e1e1e",
+                  }}
+                >
+                  Ofertas
+                </Link>
               </li>
               <li>
-                <Link>Contacto</Link>
+                <Link
+                  style={{
+                    color:
+                      window.innerWidth > 767 &&
+                      themeState.theme === "dark" &&
+                      "#1e1e1e",
+                  }}
+                >
+                  Contacto
+                </Link>
               </li>
               {window.innerWidth < 700 && (
                 <li
                   className="theme_icon"
                   onClick={() => {
-                    themeState === "dark"
+                    themeState.theme === "dark"
                       ? dispatch(setTheme("light"))
                       : dispatch(setTheme("dark"));
                   }}
+                  onMouseEnter={() => {
+                    if (themeState.theme === "dark") {
+                      dispatch(setThemeHover("light"));
+                    } else {
+                      dispatch(setThemeHover("dark"));
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    dispatch(setThemeHover(themeState.theme));
+                  }}
                 >
-                  {themeState !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
+                  {themeState.theme !== "dark" ? (
+                    <BiSolidMoon />
+                  ) : (
+                    <BiSolidSun />
+                  )}
                 </li>
               )}
               {(userState?.user?.name || user?.name) &&
@@ -158,12 +200,12 @@ const Header = () => {
           <div
             className={`user_register ${
               (userState?.user?.name || user?.name) && "user_register_active"
-            } ${themeState === "dark" && "user_theme"}`}
+            } ${themeState.theme === "dark" && "user_theme"}`}
           >
             <li
               className="theme_icon"
               onClick={() => {
-                if (themeState === "dark") {
+                if (themeState.theme === "dark") {
                   dispatch(setTheme("light"));
                   if (token) {
                     const body = {
@@ -199,8 +241,18 @@ const Header = () => {
                   }
                 }
               }}
+              onMouseEnter={() => {
+                if (themeState.theme === "dark") {
+                  dispatch(setThemeHover("light"));
+                } else {
+                  dispatch(setThemeHover("dark"));
+                }
+              }}
+              onMouseLeave={() => {
+                dispatch(setThemeHover(themeState.theme));
+              }}
             >
-              {themeState !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
+              {themeState.theme !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
             </li>
             {userState?.user?.name || user?.name ? (
               <>
@@ -239,7 +291,7 @@ const Header = () => {
         </nav>
       </header>
       <div
-        className={`container_theme ${themeState === "dark" && "theme"}`}
+        className={`container_theme ${themeState.theme === "dark" && "theme"}`}
       ></div>
     </>
   );

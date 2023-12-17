@@ -120,7 +120,8 @@ header .container_register-theme h4 {
   gap: 1.5rem;
 }
 
-nav .container_menu-theme li a {
+nav .container_menu-theme li a,
+nav .container_menu-theme svg {
   color: var(--color-tertiary);
 }
 
@@ -1124,11 +1125,10 @@ p {
   height: 100vh;
   overflow: hidden;
   transition: .6s;
-  transform: translate(0);
+  transform: translate(-20%);
   position: fixed;
   top: 0;
   left: 0;
-  visibility: hidden;
   transition: .6s;
   z-index: -1;
 }
@@ -1136,22 +1136,22 @@ p {
 .container_theme::before {
   content: "";
   position: fixed;
-  top: -75px;
-  left: -45px;
+  top: 0;
+  left: 0;
   background-color: var(--color-primary);
-  border-radius: 50%;
   width: 160px;
-  height: 160px;
+  height: 100vh;
   transition: .6s;
-  visibility: hidden;
 }
 
 .theme::before {
   transform: scale(20);
-  visibility: visible;
   transition: .6s;
 }
 
+.theme {
+  transform: translate(0);
+}
 
 @media (min-width: 768px) {
   nav {

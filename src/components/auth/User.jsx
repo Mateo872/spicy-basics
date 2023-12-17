@@ -16,7 +16,7 @@ const User = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const themeState = useSelector((state) => state.theme.theme);
+  const themeState = useSelector((state) => state.theme);
 
   const {
     register,
@@ -131,7 +131,7 @@ const User = () => {
     >
       <article
         className={`container_user ${
-          themeState === "dark" && "container_user-theme"
+          themeState.theme === "dark" && "container_user-theme"
         }`}
       >
         <div className="user">

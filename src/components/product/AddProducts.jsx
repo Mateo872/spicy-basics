@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 const AddProducts = () => {
   const productsState = useSelector((state) => state.products.products);
-  const themeState = useSelector((state) => state.theme.theme);
+  const themeState = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [urlsEdit, setUrlsEdit] = useState({
@@ -255,7 +255,7 @@ const AddProducts = () => {
       <article className="container_form-product">
         <form
           className={`container_addProduct ${
-            themeState === "dark" && "container_addProduct-theme"
+            themeState.theme === "dark" && "container_addProduct-theme"
           }`}
           onSubmit={handleSubmit(onSubmit)}
         >

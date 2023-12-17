@@ -23,8 +23,7 @@ const ContainerProducts = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
-  const themeState = useSelector((state) => state.theme.theme);
-  const userState = useSelector((state) => state.users.user.theme);
+  const themeState = useSelector((state) => state.theme);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -87,7 +86,7 @@ const ContainerProducts = () => {
   return (
     <section
       className={`container_products ${
-        themeState === "dark" && ".container_products-theme"
+        themeState.theme === "dark" && ".container_products-theme"
       }`}
     >
       <article className="filters">
@@ -107,9 +106,11 @@ const ContainerProducts = () => {
             value={inputValue}
             onChange={(e) => handleSearch(e)}
             placeholder="Buscá tu producto"
-            className={`${themeState === "dark" && "input_theme"}`}
+            className={`${themeState.theme === "dark" && "input_theme"}`}
           />
-          <BsSearch className={`${themeState === "dark" && "icon_theme"}`} />
+          <BsSearch
+            className={`${themeState.theme === "dark" && "icon_theme"}`}
+          />
         </div>
       </article>
       <article

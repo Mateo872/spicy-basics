@@ -16,7 +16,7 @@ const DetailProduct = () => {
   const productsState = useSelector((state) => state.products.products);
   const product = productsState.filter((product) => product._id === id);
   const userState = useSelector((state) => state.users);
-  const themeState = useSelector((state) => state.theme.theme);
+  const themeState = useSelector((state) => state.theme);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
@@ -78,7 +78,7 @@ const DetailProduct = () => {
   return (
     <section
       className={`container_detail ${
-        themeState === "dark" && "container_detail-theme"
+        themeState.theme === "dark" && "container_detail-theme"
       }`}
     >
       <article>
@@ -129,7 +129,7 @@ const DetailProduct = () => {
           </div>
           <div
             className={`container_features ${
-              themeState === "dark" && "container_features-theme"
+              themeState.theme === "dark" && "container_features-theme"
             }`}
           >
             <div className="features-product">
@@ -182,7 +182,7 @@ const DetailProduct = () => {
       </article>
       <article
         className={`container_similar ${
-          themeState === "dark" && "container_similar-theme"
+          themeState.theme === "dark" && "container_similar-theme"
         }`}
       >
         <h3>Productos similares</h3>
