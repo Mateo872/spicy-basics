@@ -10,12 +10,14 @@ import RouteAdmin from "./routes/RouteAdmin";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { getProducts } from "./helpers/productsApi";
 import { setProducts } from "./features/products/productsSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "./features/loading/loadingSlice";
 import { useEffect } from "react";
 
 function App() {
+  const updateState = useSelector((state) => state.update.update);
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -28,7 +30,7 @@ function App() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [updateState]);
 
   return (
     <SkeletonTheme highlightColor="#ddd">

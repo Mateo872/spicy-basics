@@ -11,10 +11,12 @@ import {
 } from "../../helpers/userApi";
 import { addUser, editUser } from "../../features/auth/usersSlice";
 import Swal from "sweetalert2";
+import { setUpdate } from "../../features/update/updateSlice";
 
-const Product = ({ product, setUpdate }) => {
+const Product = ({ product }) => {
   const userState = useSelector((state) => state.users.user);
   const themeState = useSelector((state) => state.theme);
+  const updateState = useSelector((state) => state.update.update);
   const token = sessionStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
@@ -44,7 +46,7 @@ const Product = ({ product, setUpdate }) => {
           deleteProductAdmin(id, token).then((res) => {
             if (res.message === "Producto borrado correctamente") {
               dispatch(deleteProduct(id));
-              setUpdate((prev) => !prev);
+              dispatch(setUpdate(!updateState));
 
               users.map((user) => {
                 const newFavorites = user?.favorites?.filter(
