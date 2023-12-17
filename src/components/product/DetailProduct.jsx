@@ -29,8 +29,7 @@ const DetailProduct = () => {
     if (product?.[0]?.sizes.length > 0) {
       setSelectedSize(product[0].sizes[0]);
     }
-    // console.log(productsState);
-  }, []);
+  }, [product]);
 
   const handleSizeClick = (size) => {
     if (product?.[0]?.sizes.includes(size)) {
