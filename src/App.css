@@ -229,7 +229,7 @@ nav ul li a:hover::after {
 }
 
 section {
-  padding-top: 6rem;
+  padding-top: 4rem;
 }
 
 .container_hero {
@@ -429,6 +429,14 @@ h6 {
   padding-bottom: 2.5rem;
 }
 
+.slider_products {
+  padding-bottom: 0;
+}
+
+.slider_products .products {
+  padding-bottom: 0;
+}
+
 .product:first-child,
 .product:nth-child(2) {
   margin-top: 1.5rem;
@@ -556,6 +564,10 @@ h6 {
   color: var(--color-tertiary);
 }
 
+.container_detail {
+  padding-bottom: 2rem;
+}
+
 .container_detail .container_pagination {
   display: flex;
   gap: 0.1rem;
@@ -566,16 +578,19 @@ h6 {
   text-decoration: none;
   color: var(--color-primary);
   text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
 .container_detail .container_pagination h4 {
   font-weight: bold;
   color: var(--color-primary);
   text-transform: uppercase;
+  font-size: 0.8rem;
 }
 
 .container_detail .container_pagination span {
   color: var(--color-secondary);
+  font-size: 0.8rem;
   margin-left: 0.1rem;
 }
 
@@ -1125,7 +1140,7 @@ p {
   height: 100vh;
   overflow: hidden;
   transition: .6s;
-  transform: translate(-20%);
+  transform: translate(-55%);
   position: fixed;
   top: 0;
   left: 0;
@@ -1145,7 +1160,7 @@ p {
 }
 
 .theme::before {
-  transform: scale(20);
+  transform: scale(4);
   transition: .6s;
 }
 
@@ -1153,7 +1168,15 @@ p {
   transform: translate(0);
 }
 
+.text_theme {
+  color: var(--color-tertiary)
+}
+
 @media (min-width: 768px) {
+  .theme::before {
+    transform: scale(20);
+  }
+
   nav {
     padding: 1rem 2rem;
   }
@@ -1324,16 +1347,19 @@ p {
     text-decoration: none;
     color: var(--color-primary);
     text-transform: uppercase;
+    font-size: 1rem;
   }
 
   .container_detail .container_pagination h4 {
     font-weight: bold;
     color: var(--color-primary);
     text-transform: uppercase;
+    font-size: 1rem;
   }
 
   .container_detail .container_pagination span {
     color: var(--color-secondary);
+    font-size: 1rem;
     margin-left: 0.1rem;
   }
 
@@ -1414,12 +1440,16 @@ p {
   }
 
   .product_image .container_heart {
-    top: 1rem;
-    right: 1rem;
+    top: 1.5rem;
+    right: 1.5rem;
   }
 }
 
 @media (min-width: 988px) {
+  .theme::before {
+    transform: scale(20);
+  }
+
   nav {
     padding: 1rem 3rem;
   }
@@ -1447,8 +1477,6 @@ p {
   }
 
   .container_hero {
-    /* height: 24rem;
-    padding: 6rem 0; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1548,6 +1576,7 @@ p {
   .container_detail {
     margin: 0 auto;
     width: 70%;
+    padding-top: 5rem;
   }
 
   .detail_product {
@@ -1724,7 +1753,7 @@ p {
 
   .container_detail {
     margin: 0 auto;
-    width: 51%;
+    width: 55%;
   }
 
   .products {
@@ -1741,12 +1770,13 @@ p {
   }
 
   .detail_product {
-    height: 33rem;
+    gap: 4rem;
     justify-content: space-between;
   }
 
   .detail_image {
-    width: 53%;
+    width: 70%;
+    max-height: 40rem;
   }
 
   .container_features {

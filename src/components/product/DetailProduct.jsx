@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editUser } from "../../features/auth/usersSlice";
 import { updateUser } from "../../helpers/userApi";
+import Skeleton from "react-loading-skeleton";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -17,6 +18,10 @@ const DetailProduct = () => {
   const product = productsState.filter((product) => product._id === id);
   const userState = useSelector((state) => state.users);
   const themeState = useSelector((state) => state.theme);
+  const productsCategory = productsState?.filter(
+    (prod) => prod?.category === product?.[0].category
+  );
+  const loading = useSelector((state) => state.loading.loading);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
@@ -24,6 +29,7 @@ const DetailProduct = () => {
     if (product?.[0]?.sizes.length > 0) {
       setSelectedSize(product[0].sizes[0]);
     }
+    // console.log(productsState);
   }, []);
 
   const handleSizeClick = (size) => {
@@ -82,51 +88,78 @@ const DetailProduct = () => {
       }`}
     >
       <article>
-        <div className="container_pagination">
-          <Link to={"/"}>inicio /</Link>
-          <h4>{product?.[0]?.category} /</h4>
-          <h4>
-            <span> {product?.[0]?.name}</span>
-          </h4>
-        </div>
-        <h6>Stock - {product?.[0]?.stock}</h6>
-        <div className="detail_product">
-          <div className="detail_image">
-            {userState?.user?.role !== "admin" && (
-              <div className="container_heart" onClick={getFavorites}>
-                {userState?.user?.favorites?.includes(id) ? (
-                  <BsFillHeartFill />
-                ) : (
-                  <BsHeart />
-                )}
-              </div>
-            )}
-            <Swiper
-              navigation={true}
-              modules={[Navigation]}
-              className="mySwiper"
-              id="swiper"
-            >
-              <SwiperSlide>
-                <img
-                  src={product?.[0]?.imageOne}
-                  alt="Imágen principal del producto"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src={product?.[0]?.imageTwo}
-                  alt="Imágen secundaria del producto"
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src={product?.[0]?.imageThree}
-                  alt="Imágen terciaria del producto"
-                />
-              </SwiperSlide>
-            </Swiper>
+        {!loading ? (
+          <div className="container_pagination">
+            <Link to={"/"}>inicio /</Link>
+            <h4>{product?.[0]?.category} /</h4>
+            <h4>
+              <span> {product?.[0]?.name}</span>
+            </h4>
           </div>
+        ) : (
+          <Skeleton width={200} height={15} />
+        )}
+        {!loading ? (
+          <h6>Stock - {product?.[0]?.stock}</h6>
+        ) : (
+          <Skeleton width={50} height={10} />
+        )}
+        <div className="detail_product">
+          {!loading ? (
+            <div className="detail_image">
+              {token && userState?.user?.role !== "admin" && (
+                <div className="container_heart" onClick={getFavorites}>
+                  {userState?.user?.favorites?.includes(id) ? (
+                    <BsFillHeartFill />
+                  ) : (
+                    <BsHeart />
+                  )}
+                </div>
+              )}
+              <Swiper
+                navigation={true}
+                modules={[Navigation]}
+                className="mySwiper"
+                id="swiper"
+              >
+                <SwiperSlide>
+                  <img
+                    src={product?.[0]?.imageOne}
+                    alt="Imágen principal del producto"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src={product?.[0]?.imageTwo}
+                    alt="Imágen secundaria del producto"
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src={product?.[0]?.imageThree}
+                    alt="Imágen terciaria del producto"
+                  />
+                </SwiperSlide>
+              </Swiper>
+            </div>
+          ) : (
+            <Skeleton
+              width={
+                window.innerWidth >= 768 && window.innerWidth <= 988
+                  ? 330
+                  : window.innerWidth > 988
+                  ? 472
+                  : 280
+              }
+              height={
+                window.innerWidth >= 768
+                  ? window.innerWidth > 1024
+                    ? 478.61
+                    : 450
+                  : 290
+              }
+            />
+          )}
           <div
             className={`container_features ${
               themeState.theme === "dark" && "container_features-theme"
@@ -134,33 +167,58 @@ const DetailProduct = () => {
           >
             <div className="features-product">
               <div>
-                <h2 className="detail_title">
-                  {product?.[0]?.name.toUpperCase()}
-                </h2>
-                <h2>
-                  ${parseInt(product?.[0]?.price).toLocaleString("es-AR")}
-                </h2>
+                {!loading ? (
+                  <h2 className="detail_title">
+                    {product?.[0]?.name.toUpperCase()}
+                  </h2>
+                ) : (
+                  <Skeleton width={80} height={20} />
+                )}
+                {!loading ? (
+                  <h2>
+                    ${parseInt(product?.[0]?.price).toLocaleString("es-AR")}
+                  </h2>
+                ) : (
+                  <Skeleton width={50} height={10} />
+                )}
               </div>
-              <p>{product?.[0]?.description}</p>
+              {!loading ? (
+                <p>{product?.[0]?.description}</p>
+              ) : (
+                <Skeleton width={200} height={15} />
+              )}
               <div>
-                <h3>Tamaño</h3>
-                <div className="container_size">
-                  {["XS", "S", "M", "L", "XL"].map((size) => (
-                    <div
-                      key={size}
-                      className={`size ${
-                        product?.[0]?.sizes.includes(size)
-                          ? selectedSize === size
-                            ? "size_active"
-                            : ""
-                          : "size_disable"
-                      }`}
-                      onClick={() => handleSizeClick(size)}
-                    >
-                      <p>{size}</p>
-                    </div>
-                  ))}
-                </div>
+                {!loading ? (
+                  <h3>Tamaño</h3>
+                ) : (
+                  <Skeleton width={"Tamaño".length * 10} height={10} />
+                )}
+                {!loading ? (
+                  <div className="container_size">
+                    {["XS", "S", "M", "L", "XL"].map((size) => (
+                      <div
+                        key={size}
+                        className={`size ${
+                          product?.[0]?.sizes.includes(size)
+                            ? selectedSize === size
+                              ? "size_active"
+                              : ""
+                            : "size_disable"
+                        }`}
+                        onClick={() => handleSizeClick(size)}
+                      >
+                        <p>{size}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="container_size">
+                    <Skeleton width={40} height={40} />
+                    <Skeleton width={40} height={40} />
+                    <Skeleton width={40} height={40} />
+                    <Skeleton width={40} height={40} />
+                  </div>
+                )}
               </div>
               {/* <div className="container_color">
               <h3>Color</h3>
@@ -172,28 +230,51 @@ const DetailProduct = () => {
             </div>
             <div className="feature_quantity">
               <div className="quantity">
-                <label htmlFor="quantity">Cantidad</label>
-                <input id="quantity" type="number" placeholder="0" />
+                {!loading ? (
+                  <>
+                    <label htmlFor="quantity">Cantidad</label>
+                    <input id="quantity" type="number" placeholder="0" />
+                  </>
+                ) : (
+                  <>
+                    <Skeleton width={"Cantidad".length * 10} height={20} />
+                    <Skeleton
+                      width={window.innerWidth >= 768 ? 260 : 280}
+                      height={20}
+                    />
+                  </>
+                )}
               </div>
-              <button className="btn_add">Agregar al carrito</button>
+              {!loading ? (
+                <button className="btn_add">Agregar al carrito</button>
+              ) : (
+                <Skeleton
+                  width={window.innerWidth >= 768 ? 260 : 280}
+                  height={40}
+                />
+              )}
             </div>
           </div>
         </div>
       </article>
-      <article
-        className={`container_similar ${
-          themeState.theme === "dark" && "container_similar-theme"
-        }`}
-      >
-        <h3>Productos similares</h3>
-        <div className="slider_products">
-          <div className="products">
-            <Product />
-            <Product />
-            <Product />
+      {productsCategory.length > 1 && (
+        <article
+          className={`container_similar ${
+            themeState.theme === "dark" && "container_similar-theme"
+          }`}
+        >
+          <h3>Productos similares</h3>
+          <div className="slider_products">
+            <div className="products">
+              {productsCategory
+                .filter((prod) => prod._id !== id)
+                .map((product) => (
+                  <Product product={product} key={product._id} />
+                ))}
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      )}
     </section>
   );
 };

@@ -8,8 +8,28 @@ import User from "./components/auth/User";
 import RouteProtect from "./routes/RouteProtected";
 import RouteAdmin from "./routes/RouteAdmin";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { getProducts } from "./helpers/productsApi";
+import { setProducts } from "./features/products/productsSlice";
+import { useDispatch } from "react-redux";
+import { setLoading } from "./features/loading/loadingSlice";
+import { useEffect } from "react";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        getProducts().then((res) => {
+          dispatch(setProducts(res.products));
+          dispatch(setLoading(false));
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   return (
     <SkeletonTheme highlightColor="#ddd">
       <HashRouter>
