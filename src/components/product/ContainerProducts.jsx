@@ -7,6 +7,7 @@ import { setProducts } from "../../features/products/productsSlice";
 import { getProducts } from "../../helpers/productsApi";
 import "react-loading-skeleton/dist/skeleton.css";
 import CardSkeleton from "../CardSkeleton";
+import { setLoading } from "../../features/loading/loadingSlice";
 
 const ContainerProducts = () => {
   const productsState = useSelector((state) => state.products.products);
@@ -20,24 +21,14 @@ const ContainerProducts = () => {
     Tops: false,
     Remeras: false,
   });
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
+  const loading = useSelector((state) => state.loading.loading);
   const [update, setUpdate] = useState(false);
   const themeState = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        getProducts().then((res) => {
-          setLoading(false);
-          dispatch(setProducts(res.products));
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchProducts();
-  }, [update]);
+    // console.log(loading);
+  }, []);
 
   const handleFilterClick = (title) => {
     setFilterState((prev) => {
@@ -66,10 +57,10 @@ const ContainerProducts = () => {
 
   const handleSearch = (e) => {
     setInputValue(e.target.value);
-    setLoading(true);
+    dispatch(setLoading(true));
 
     setTimeout(() => {
-      setLoading(false);
+      dispatch(setLoading(false));
     }, 200);
   };
 
@@ -86,7 +77,7 @@ const ContainerProducts = () => {
   return (
     <section
       className={`container_products ${
-        themeState.theme === "dark" && ".container_products-theme"
+        themeState.theme === "dark" ? ".container_products-theme" : ""
       }`}
     >
       <article className="filters">
@@ -106,17 +97,17 @@ const ContainerProducts = () => {
             value={inputValue}
             onChange={(e) => handleSearch(e)}
             placeholder="Buscá tu producto"
-            className={`${themeState.theme === "dark" && "input_theme"}`}
+            className={`${themeState.theme === "dark" ? "input_theme" : ""}`}
           />
           <BsSearch
-            className={`${themeState.theme === "dark" && "icon_theme"}`}
+            className={`${themeState.theme === "dark" ? "icon_theme" : ""}`}
           />
         </div>
       </article>
       <article
-        className={`products ${productsEmpty && "products_filtered"}`}
+        className={`products ${productsEmpty ? "products_filtered" : ""}`}
         style={{
-          justifyContent: productsEmpty && "center",
+          justifyContent: productsEmpty ? "center" : "",
         }}
       >
         {!loading ? (
@@ -139,18 +130,28 @@ const ContainerProducts = () => {
                       />
                     ))
                   ) : (
-                    <p>
+                    <p
+                      className={
+                        themeState.theme === "dark" ? "text_theme" : ""
+                      }
+                    >
                       No hay productos disponibles que coincidan con los filtros
                     </p>
                   );
                 })()
               ) : (
                 productsState?.length > 0 && (
-                  <p>No hay productos disponibles con ese nombre</p>
+                  <p
+                    className={themeState.theme === "dark" ? "text_theme" : ""}
+                  >
+                    No hay productos disponibles con ese nombre
+                  </p>
                 )
               )
             ) : (
-              <p>No hay productos disponibles</p>
+              <p className={themeState.theme === "dark" ? "text_theme" : ""}>
+                No hay productos disponibles
+              </p>
             )}
           </>
         ) : (
