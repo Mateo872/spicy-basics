@@ -58,6 +58,31 @@ const AddProducts = () => {
     }
   }, []);
 
+  function compressBase64Image(base64String) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = base64String;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = 800;
+        canvas.height = (800 / img.width) * img.height;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.5);
+
+        resolve(compressedBase64);
+      };
+
+      img.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }
+
   const onSubmit = async (data) => {
     const product = productsState?.find(
       (product) => product?.name.toLowerCase() === data.name.toLowerCase()
@@ -108,13 +133,17 @@ const AddProducts = () => {
         const imageTwo = await useConvertBlobToBase64(data.imageTwo[0]);
         const imageThree = await useConvertBlobToBase64(data.imageThree[0]);
 
+        const compressImageOne = await compressBase64Image(imageOne);
+        const compressImageTwo = await compressBase64Image(imageTwo);
+        const compressImageThree = await compressBase64Image(imageThree);
+
         if (imageOne && imageTwo && imageThree) {
           const body = {
             name: data.name,
             price: data.price,
-            imageOne,
-            imageTwo,
-            imageThree,
+            imageOne: compressImageOne,
+            imageTwo: compressImageTwo,
+            imageThree: compressImageThree,
             description: data.description,
             category: data.category,
             stock: data.stock,
