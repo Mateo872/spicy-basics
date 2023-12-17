@@ -4,22 +4,26 @@ import { Link } from "react-router-dom";
 import { deleteProduct } from "../../features/products/productsSlice";
 import { useEffect, useState } from "react";
 import {
-  getUser,
   deleteProductAdmin,
   getUsers,
   updateUserAdmin,
 } from "../../helpers/userApi";
-import { addUser, editUser } from "../../features/auth/usersSlice";
+import { editUser } from "../../features/auth/usersSlice";
 import Swal from "sweetalert2";
 import { setUpdate } from "../../features/update/updateSlice";
+import LazyLoad from "react-lazy-load";
+import Skeleton from "react-loading-skeleton";
+import CardSkeleton from "../CardSkeleton";
 
 const Product = ({ product }) => {
   const userState = useSelector((state) => state.users.user);
   const themeState = useSelector((state) => state.theme);
   const updateState = useSelector((state) => state.update.update);
+  const loadingState = useSelector((state) => state.loading.loading);
   const token = sessionStorage.getItem("token");
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState({});
+  const user = { role: userState?.role };
+  const [productDeleted, setProductDeleted] = useState(false);
   const dispatch = useDispatch();
 
   const handleLinkClick = () => {
@@ -27,10 +31,13 @@ const Product = ({ product }) => {
   };
 
   useEffect(() => {
-    getUsers().then((res) => {
-      setUsers(res);
-    });
-  }, []);
+    if (token && productDeleted) {
+      getUsers(token).then((res) => {
+        setUsers(res.users);
+        setProductDeleted(false);
+      });
+    }
+  }, [productDeleted]);
 
   const handleDeleteProduct = (id) => {
     try {
@@ -47,6 +54,7 @@ const Product = ({ product }) => {
             if (res.message === "Producto borrado correctamente") {
               dispatch(deleteProduct(id));
               dispatch(setUpdate(!updateState));
+              setProductDeleted(true);
 
               users.map((user) => {
                 const newFavorites = user?.favorites?.filter(
@@ -84,15 +92,6 @@ const Product = ({ product }) => {
     }
   };
 
-  useEffect(() => {
-    if (token) {
-      getUser(token).then((res) => {
-        setUser(res.user);
-        dispatch(addUser(res.user));
-      });
-    }
-  }, []);
-
   return (
     <div className="product">
       <div className="product_image">
@@ -102,13 +101,25 @@ const Product = ({ product }) => {
               <BsFillHeartFill />
             </div>
           )}
-        <img
-          src={product?.imageOne}
-          alt={product?.name}
-          loading="lazy"
-          decoding="async"
-        />
-        {userState?.user?.role === "admin" ||
+        {!loadingState ? (
+          <LazyLoad offset={100}>
+            <img src={product?.imageOne} alt={product?.name} />
+          </LazyLoad>
+        ) : (
+          <Skeleton
+            width={window.innerWidth >= 1440 ? 320 : 300}
+            height={
+              window.innerWidth < 768
+                ? 130
+                : window.innerWidth >= 768 && window.innerWidth < 1024
+                ? 200
+                : window.innerWidth >= 1024 && window.innerWidth < 1440
+                ? 250
+                : 300
+            }
+          />
+        )}
+        {(!loadingState && userState?.user?.role === "admin") ||
           (user?.role === "admin" && (
             <div className="container_actions">
               <Link

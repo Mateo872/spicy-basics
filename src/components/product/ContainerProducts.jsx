@@ -9,7 +9,6 @@ import { setLoading } from "../../features/loading/loadingSlice";
 
 const ContainerProducts = () => {
   const productsState = useSelector((state) => state.products.products);
-  const updateState = useSelector((state) => state.update.update);
   const [inputValue, setInputValue] = useState("");
   const [filterState, setFilterState] = useState({
     Todos: true,
@@ -21,6 +20,7 @@ const ContainerProducts = () => {
     Remeras: false,
   });
   const loading = useSelector((state) => state.loading.loading);
+  const [loadingInput, setLoadingInput] = useState(false);
   const themeState = useSelector((state) => state.theme);
   const dispatch = useDispatch();
 
@@ -52,9 +52,11 @@ const ContainerProducts = () => {
   const handleSearch = (e) => {
     setInputValue(e.target.value);
     dispatch(setLoading(true));
+    setLoadingInput(true);
 
     setTimeout(() => {
       dispatch(setLoading(false));
+      setLoadingInput(false);
     }, 200);
   };
 
@@ -101,7 +103,7 @@ const ContainerProducts = () => {
       <article
         className={`products ${productsEmpty ? "products_filtered" : ""}`}
         style={{
-          justifyContent: productsEmpty ? "center" : "",
+          justifyContent: productsEmpty || loadingInput ? "center" : "",
         }}
       >
         {!loading ? (
@@ -147,6 +149,8 @@ const ContainerProducts = () => {
               </p>
             )}
           </>
+        ) : loadingInput ? (
+          <div className="loader"></div>
         ) : (
           <CardSkeleton products={productsFiltered.length} />
         )}
