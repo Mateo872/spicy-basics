@@ -1,15 +1,17 @@
-import { BiMenu, BiX } from "react-icons/bi";
+import { BiMenu, BiSolidMoon, BiSolidSun, BiX } from "react-icons/bi";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../helpers/userApi";
+import { getUser, getUsers, updateUser } from "../../helpers/userApi";
 import { addUser } from "../../features/auth/usersSlice";
+import { setTheme } from "../../features/theme/themeSlice";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
   const userState = useSelector((state) => state.users);
+  const themeState = useSelector((state) => state.theme.theme);
   const token = sessionStorage.getItem("token");
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
@@ -31,130 +33,208 @@ const Header = () => {
       getUser(token).then((res) => {
         setUser(res.user);
         dispatch(addUser(res.user));
+        dispatch(setTheme(res.user.theme));
       });
     }
-  }, []);
+  }, [themeState, token]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header style={{ backgroundColor: location.pathname !== "/" && "#1e1e1e" }}>
-      {!userState?.user?.name ||
-        (!user?.name && (
-          <div className="container_register">
-            <>
-              <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
-              <h4>|</h4>
-              <Link to={"/usuario/registrarse"}>Registrarse</Link>
-            </>
-          </div>
-        ))}
-      <nav
-        className={`nav_container ${scroll ? "mt-0" : "margen"} ${
-          location.pathname !== "/" && "mt-0"
-        }`}
+    <>
+      <header
         style={{
-          backgroundColor: scroll
-            ? "#1e1e1e"
-            : location.pathname !== "/"
-            ? "#1e1e1e"
-            : "transparent",
+          backgroundColor:
+            location.pathname === "/" && !scroll
+              ? "transparent"
+              : scroll && themeState !== "dark"
+              ? "#1e1e1e"
+              : "#fff",
         }}
       >
-        <Link to={"/"} className="container_logo">
-          SPICY<span>BASICS</span>
-        </Link>
-        <div
-          className={`menu_overlay ${showMenu && "overlay_active"}`}
-          onClick={(e) =>
-            e.target.classList.contains("menu_overlay") && menuVisible()
-          }
-        >
-          <ul className={`container_menu ${showMenu && "menu_active"}`}>
-            <BiX className="icon_close" onClick={menuVisible} />
-            <li>
-              <Link>Productos</Link>
-            </li>
-            <li>
-              <Link>Ofertas</Link>
-            </li>
-            <li>
-              <Link>Contacto</Link>
-            </li>
-            {(userState?.user?.name || user?.name) &&
-              window.innerWidth < 700 && (
-                <>
-                  <picture
-                    className="container_image-user"
-                    onClick={() => {
-                      sessionStorage.removeItem("token"),
-                        window.location.reload();
-                    }}
-                  >
-                    <img
-                      src={userState?.user?.image || user?.image}
-                      alt={userState?.user?.name || user?.name}
-                    />
-                  </picture>
-                  {(userState?.user?.role === "admin" ||
-                    user?.role === "admin") && (
-                    <li>
-                      <Link
-                        to={
-                          "/spicy/admin/usuario/administrador/agregar-producto"
-                        }
-                      >
-                        Admin
-                      </Link>
-                    </li>
-                  )}
-                </>
-              )}
-          </ul>
-        </div>
-        <BiMenu className="icon_menu" onClick={menuVisible} />
-        <div
-          className={`user_register ${
-            (userState?.user?.name || user?.name) && "user_register_active"
-          }`}
-        >
-          {userState?.user?.name || user?.name ? (
-            <>
-              {(userState?.user?.role === "admin" ||
-                user?.role === "admin") && (
-                <>
-                  <Link
-                    to={"/spicy/admin/usuario/administrador/agregar-producto"}
-                  >
-                    Admin
-                  </Link>
-                  <h4>|</h4>
-                </>
-              )}
-              <picture
-                className="container_image-user"
-                onClick={() => {
-                  sessionStorage.removeItem("token"), window.location.reload();
-                }}
-              >
-                <img
-                  src={userState?.user?.image || user?.image}
-                  alt={userState?.user?.name || user?.name}
-                />
-              </picture>
-            </>
-          ) : (
-            <>
+        {!userState?.user?.name ||
+          (!user?.name && (
+            <div className="container_register">
               <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
               <h4>|</h4>
               <Link to={"/usuario/registrarse"}>Registrarse</Link>
-            </>
-          )}
-        </div>
-      </nav>
-    </header>
+            </div>
+          ))}
+        <nav
+          className={`nav_container ${scroll ? "mt-0" : "margen"} ${
+            location.pathname !== "/" && "mt-0"
+          } ${themeState === "dark" && "nav_theme"}`}
+          style={{
+            backgroundColor:
+              scroll && themeState !== "dark"
+                ? "#1e1e1e"
+                : scroll && themeState === "dark"
+                ? "#fff"
+                : location.pathname !== "/" && themeState !== "dark"
+                ? "#1e1e1e"
+                : location.pathname !== "/" && themeState === "dark"
+                ? "#fff"
+                : location.pathname === "/" && !scroll && "transparent",
+          }}
+        >
+          <Link
+            to={"/"}
+            className={`container_logo ${
+              themeState === "dark" && "logo_theme"
+            }`}
+          >
+            SPICY<span>BASICS</span>
+          </Link>
+          <div
+            className={`menu_overlay ${showMenu && "overlay_active"}`}
+            onClick={(e) =>
+              e.target.classList.contains("menu_overlay") && menuVisible()
+            }
+          >
+            <ul className={`container_menu ${showMenu && "menu_active"}`}>
+              <BiX className="icon_close" onClick={menuVisible} />
+              <li>
+                <Link>Productos</Link>
+              </li>
+              <li>
+                <Link>Ofertas</Link>
+              </li>
+              <li>
+                <Link>Contacto</Link>
+              </li>
+              {window.innerWidth < 700 && (
+                <li
+                  className="theme_icon"
+                  onClick={() => {
+                    themeState === "dark"
+                      ? dispatch(setTheme("light"))
+                      : dispatch(setTheme("dark"));
+                  }}
+                >
+                  {themeState !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
+                </li>
+              )}
+              {(userState?.user?.name || user?.name) &&
+                window.innerWidth < 700 && (
+                  <>
+                    <picture
+                      className="container_image-user"
+                      onClick={() => {
+                        sessionStorage.removeItem("token"),
+                          window.location.reload();
+                      }}
+                    >
+                      <img
+                        src={userState?.user?.image || user?.image}
+                        alt={userState?.user?.name || user?.name}
+                      />
+                    </picture>
+                    {(userState?.user?.role === "admin" ||
+                      user?.role === "admin") && (
+                      <li>
+                        <Link
+                          to={
+                            "/spicy/admin/usuario/administrador/agregar-producto"
+                          }
+                        >
+                          Admin
+                        </Link>
+                      </li>
+                    )}
+                  </>
+                )}
+            </ul>
+          </div>
+          <BiMenu className="icon_menu" onClick={menuVisible} />
+          <div
+            className={`user_register ${
+              (userState?.user?.name || user?.name) && "user_register_active"
+            } ${themeState === "dark" && "user_theme"}`}
+          >
+            <li
+              className="theme_icon"
+              onClick={() => {
+                if (themeState === "dark") {
+                  dispatch(setTheme("light"));
+                  if (token) {
+                    const body = {
+                      name: userState?.user?.name || user?.name,
+                      email: userState?.user?.email || user?.email,
+                      password: userState?.user?.password || user?.password,
+                      image: userState?.user?.image || user?.image,
+                      favorites: userState?.user?.favorites || user?.favorites,
+                      role: userState?.user?.role || user?.role,
+                      state: userState?.user?.state || user?.state,
+                      cart: userState?.user?.cart || user?.cart,
+                      history: userState?.user?.history || user?.history,
+                      theme: "light",
+                    };
+                    updateUser(body, token);
+                  }
+                } else {
+                  dispatch(setTheme("dark"));
+                  if (token) {
+                    const body = {
+                      name: userState?.user?.name || user?.name,
+                      email: userState?.user?.email || user?.email,
+                      password: userState?.user?.password || user?.password,
+                      image: userState?.user?.image || user?.image,
+                      favorites: userState?.user?.favorites || user?.favorites,
+                      role: userState?.user?.role || user?.role,
+                      state: userState?.user?.state || user?.state,
+                      cart: userState?.user?.cart || user?.cart,
+                      history: userState?.user?.history || user?.history,
+                      theme: "dark",
+                    };
+                    updateUser(body, token);
+                  }
+                }
+              }}
+            >
+              {themeState !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
+            </li>
+            {userState?.user?.name || user?.name ? (
+              <>
+                {(userState?.user?.role === "admin" ||
+                  user?.role === "admin") && (
+                  <>
+                    <Link
+                      to={"/spicy/admin/usuario/administrador/agregar-producto"}
+                    >
+                      Admin
+                    </Link>
+                    <h4>|</h4>
+                  </>
+                )}
+                <picture
+                  className="container_image-user"
+                  onClick={() => {
+                    sessionStorage.removeItem("token"),
+                      window.location.reload();
+                  }}
+                >
+                  <img
+                    src={userState?.user?.image || user?.image}
+                    alt={userState?.user?.name || user?.name}
+                  />
+                </picture>
+              </>
+            ) : (
+              <>
+                <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
+                <h4>|</h4>
+                <Link to={"/usuario/registrarse"}>Registrarse</Link>
+              </>
+            )}
+          </div>
+        </nav>
+      </header>
+      <div
+        className={`container_theme ${themeState === "dark" && "theme"}`}
+      ></div>
+    </>
   );
 };
 

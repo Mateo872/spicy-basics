@@ -17,6 +17,11 @@ body {
   margin: 0;
 }
 
+#root {
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
 main {
   flex-grow: 1;
 }
@@ -25,6 +30,7 @@ header {
   width: 100%;
   position: fixed;
   z-index: 99;
+  max-width: 1400px;
 }
 
 nav {
@@ -32,6 +38,25 @@ nav {
   padding: 0 1rem;
   background-color: var(--color-primary);
   transition: .3s;
+}
+
+header .nav_theme {
+  background-color: var(--color-tertiary);
+}
+
+header .nav_theme li a,
+header .nav_theme h4 {
+  color: var(--color-primary);
+}
+
+nav .logo_theme {
+  color: var(--color-primary);
+}
+
+nav .user_theme a,
+nav .user_theme h4,
+nav .user_theme svg {
+  color: var(--color-primary);
 }
 
 article {
@@ -57,7 +82,7 @@ article {
   font-size: .8rem;
   color: var(--color-tertiary);
   margin: 0;
-  font-weight: 300;
+  font-weight: bold;
 }
 
 .container_register a {
@@ -143,6 +168,7 @@ nav ul li a {
   text-decoration: none;
   color: var(--color-tertiary);
   padding-bottom: 0.4rem;
+  font-weight: bold;
 }
 
 nav ul li a::after {
@@ -154,9 +180,23 @@ nav ul li a::after {
   transition: 0.3s;
 }
 
+header .nav_theme ul li a::after {
+  background: var(--color-primary);
+}
+
 nav ul li a:hover::after {
   width: 100%;
   transition: 0.3s;
+}
+
+.theme_icon {
+  cursor: pointer;
+  list-style: none;
+}
+
+.theme_icon svg {
+  color: var(--color-tertiary);
+  font-size: 1.2rem;
 }
 
 .user_register {
@@ -177,6 +217,7 @@ section {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 .container_input {
@@ -264,6 +305,8 @@ h6 {
   display: flex;
   flex-direction: column;
   padding: 0;
+  position: relative;
+  z-index: 98;
 }
 
 .container_products .filters {
@@ -294,6 +337,12 @@ h6 {
   margin: 0;
 }
 
+.theme_filter {
+  color: var(--color-tertiary);
+  background-color: var(--color-primary);
+  border-color: var(--color-tertiary);
+}
+
 .filter:hover {
   background-color: var(--color-primary);
   color: var(--color-tertiary);
@@ -301,9 +350,19 @@ h6 {
   transition: .2s;
 }
 
+.theme_filter:hover {
+  background-color: var(--color-tertiary);
+  color: var(--color-primary);
+}
+
 .filter_active {
   background-color: var(--color-primary);
   color: var(--color-tertiary);
+}
+
+.theme_filter_active {
+  background-color: var(--color-tertiary);
+  color: var(--color-primary);
 }
 
 .container_products input {
@@ -313,6 +372,16 @@ h6 {
   outline: none;
   font-size: 0.7rem;
   position: relative;
+}
+
+.container_products .container_input .input_theme {
+  color: var(--color-tertiary);
+  background-color: var(--color-primary);
+  border-color: var(--color-tertiary);
+}
+
+.container_products .icon_theme {
+  color: var(--color-tertiary);
 }
 
 .container_products input::placeholder {
@@ -417,8 +486,16 @@ h6 {
   white-space: nowrap;
 }
 
+.product_features .product_title-theme {
+  color: var(--color-tertiary);
+}
+
 .product_features .product_price {
   font-size: 1rem;
+}
+
+.product_features .product_price-theme {
+  color: var(--color-tertiary);
 }
 
 .product_features a {
@@ -437,11 +514,22 @@ h6 {
   text-decoration: none;
 }
 
+.product_features .product_link-theme {
+  background-color: var(--color-tertiary);
+  border-color: var(--color-tertiary);
+  color: var(--color-primary);
+}
+
 .product_features a:hover {
   background-color: transparent;
   color: var(--color-primary);
   cursor: pointer;
   transition: .2s;
+}
+
+.product_features .product_link-theme:hover {
+  background-color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .container_detail .container_pagination {
@@ -467,12 +555,21 @@ h6 {
   margin-left: 0.1rem;
 }
 
+main .container_detail-theme .container_pagination a,
+main .container_detail-theme .container_pagination h4 {
+  color: var(--color-tertiary);
+}
+
 .container_detail h6 {
   margin-top: 0.3rem;
   color: var(--color-primary);
   font-size: 0.8rem;
   opacity: .7;
   font-weight: 400;
+}
+
+main .container_detail-theme h6 {
+  color: var(--color-tertiary);
 }
 
 .detail_product {
@@ -516,21 +613,26 @@ p {
   margin: 0;
 }
 
+.container_features-theme h2,
+.container_features-theme h3,
+.container_features-theme h4,
+.container_features-theme p {
+  color: var(--color-tertiary);
+}
+
 .container_features,
 .detail_title {
   font-weight: 400;
   margin-bottom: 0;
 }
 
-.container_features,
-h2 {
+.container_features h2 {
   margin: 0.4rem 0;
   font-weight: bold;
   font-size: 1.4rem;
 }
 
-.container_features,
-p {
+.container_features p {
   font-weight: 400;
   font-size: .9rem;
 }
@@ -550,18 +652,34 @@ p {
   flex: 1;
 }
 
+.container_features-theme .container_size .size {
+  border: 2px solid var(--color-tertiary);
+}
+
 .container_features .container_size .size:hover {
   background-color: var(--color-primary);
   cursor: pointer;
   transition: .2s;
 }
 
+.container_features-theme .container_size .size:hover {
+  background-color: var(--color-tertiary);
+}
+
 .container_features .container_size .size:hover p {
   color: var(--color-tertiary);
 }
 
+.container_features-theme .container_size .size:hover p {
+  color: var(--color-primary);
+}
+
 .container_features .container_size .size_active {
   background-color: var(--color-primary);
+}
+
+.container_features-theme .container_size .size_active {
+  background-color: var(--color-tertiary);
 }
 
 .container_features .container_size .size p {
@@ -569,8 +687,16 @@ p {
   font-weight: bold;
 }
 
+.container_features-theme .container_size .size p {
+  color: var(--color-tertiary);
+}
+
 .container_features .container_size .size_active p {
   color: var(--color-tertiary);
+}
+
+.container_features-theme .container_size .size_active p {
+  color: var(--color-primary);
 }
 
 .container_features .quantity {
@@ -592,6 +718,11 @@ p {
   border: 2px solid var(--color-primary);
 }
 
+.container_features-theme .quantity input {
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-tertiary);
+}
+
 .container_features button {
   width: 100%;
   padding: 0.7rem;
@@ -602,11 +733,22 @@ p {
   font-weight: bold;
 }
 
+.container_features-theme button {
+  background-color: var(--color-tertiary);
+  border-color: var(--color-tertiary);
+  color: var(--color-primary);
+}
+
 .container_features button:hover {
   background-color: transparent;
   color: var(--color-primary);
   cursor: pointer;
   transition: .2s;
+}
+
+.container_features-theme button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .container_color .color {
@@ -623,6 +765,10 @@ p {
 
 .container_similar h3 {
   margin: 1rem 0;
+}
+
+.container_similar-theme h3 {
+  color: var(--color-tertiary);
 }
 
 .swiper {
@@ -691,6 +837,15 @@ p {
   border-radius: .3rem;
 }
 
+.container_user-theme h4,
+.container_user-theme h2 {
+  color: var(--color-tertiary);
+}
+
+.container_user-theme .user {
+  background-color: var(--color-primary);
+}
+
 .container_user .user form {
   margin-top: 0.5rem;
   display: flex;
@@ -709,6 +864,12 @@ p {
   border: 1px solid var(--color-primary);
   border-radius: .2rem;
   font-size: 0.8rem;
+}
+
+.container_user-theme .user form input {
+  background-color: var(--color-primary);
+  border-color: var(--color-tertiary);
+  color: var(--color-tertiary);
 }
 
 .container_user .user form input {
@@ -767,6 +928,10 @@ p {
   color: var(--color-secondary);
 }
 
+.container_user-theme .user_create p {
+  color: var(--color-tertiary);
+}
+
 .container_user .user form .input_image {
   padding: 0.41rem;
 }
@@ -775,6 +940,10 @@ p {
   color: #dc3545;
   font-size: 0.8rem;
   margin-bottom: 1rem;
+}
+
+.container_user-theme .text_error {
+  font-weight: bold;
 }
 
 .icon_eye {
@@ -801,6 +970,10 @@ p {
   cursor: pointer;
 }
 
+.container_user-theme .container_image-user {
+  border-color: var(--color-tertiary);
+}
+
 .container_image-user img {
   width: 100%;
   height: 100%;
@@ -824,6 +997,11 @@ p {
   padding: 2rem;
 }
 
+.container_addProduct-theme {
+  background-color: var(--color-primary);
+  border-color: var(--color-tertiary);
+}
+
 .container_addProduct input,
 .container_addProduct select {
   padding: 0.4rem;
@@ -831,6 +1009,22 @@ p {
 
 .container_addProduct input[type="file"] {
   padding: 0;
+}
+
+.container_addProduct-theme input[type="file"] {
+  color: var(--color-tertiary);
+}
+
+.container_user-theme svg,
+.container_user-theme p {
+  color: var(--color-tertiary);
+}
+
+.container_addProduct button:hover {
+  background-color: transparent;
+  color: var(--color-secondary);
+  cursor: pointer;
+  transition: .3s;
 }
 
 .container_addProduct button {
@@ -848,6 +1042,14 @@ p {
   color: var(--color-secondary);
   cursor: pointer;
   transition: .3s;
+}
+
+.container_user-theme label {
+  color: var(--color-tertiary);
+}
+
+.container_addProduct-theme label {
+  color: var(--color-tertiary);
 }
 
 .container_addProduct .container_check {
@@ -890,6 +1092,43 @@ p {
 .products_filtered {
   padding: 4rem 0;
 }
+
+.container_theme {
+  background-color: var(--color-tertiary);
+  border-radius: 6px;
+  padding: 16px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  transition: .6s;
+  transform: translate(0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  transition: .6s;
+  z-index: -1;
+}
+
+.container_theme::before {
+  content: "";
+  position: fixed;
+  top: -75px;
+  left: -45px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  transition: .6s;
+  visibility: hidden;
+}
+
+.theme::before {
+  transform: scale(20);
+  visibility: visible;
+  transition: .6s;
+}
+
 
 @media (min-width: 768px) {
   nav {
@@ -935,7 +1174,7 @@ p {
     text-decoration: none;
     color: var(--color-tertiary);
     font-size: 0.8rem;
-    font-weight: 300;
+    font-weight: bold;
   }
 
   .user_register a::after {
@@ -947,16 +1186,25 @@ p {
     transition: 0.3s;
   }
 
+  .user_theme a::after {
+    background: var(--color-primary);
+  }
+
   .user_register a:hover::after {
     width: 100%;
     transition: 0.3s;
+    font-weight: bold;
   }
 
   .user_register h4 {
     color: var(--color-tertiary);
     font-size: 0.8rem;
-    font-weight: 300;
     margin: 0;
+    font-weight: bold;
+  }
+
+  .theme_icon {
+    margin-right: 0.3rem;
   }
 
   .icon_close {
@@ -1164,7 +1412,6 @@ p {
     text-decoration: none;
     color: var(--color-tertiary);
     font-size: 1rem;
-    font-weight: 300;
   }
 
   .user_register h4 {
