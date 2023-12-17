@@ -54,14 +54,17 @@ const Header = () => {
               : "#fff",
         }}
       >
-        {!userState?.user?.name ||
-          (!user?.name && (
-            <div className="container_register">
-              <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
-              <h4>|</h4>
-              <Link to={"/usuario/registrarse"}>Registrarse</Link>
-            </div>
-          ))}
+        {(!userState?.user?.name || !user?.name) && (
+          <div
+            className={`container_register ${
+              themeState === "dark" && "container_register-theme"
+            }`}
+          >
+            <Link to={"/usuario/iniciar-sesion"}>Iniciar sesión</Link>
+            <h4>|</h4>
+            <Link to={"/usuario/registrarse"}>Registrarse</Link>
+          </div>
+        )}
         <nav
           className={`nav_container ${scroll ? "mt-0" : "margen"} ${
             location.pathname !== "/" && "mt-0"
@@ -93,7 +96,11 @@ const Header = () => {
               e.target.classList.contains("menu_overlay") && menuVisible()
             }
           >
-            <ul className={`container_menu ${showMenu && "menu_active"}`}>
+            <ul
+              className={`container_menu ${showMenu && "menu_active"} ${
+                themeState === "dark" && "container_menu-theme"
+              }`}
+            >
               <BiX className="icon_close" onClick={menuVisible} />
               <li>
                 <Link>Productos</Link>

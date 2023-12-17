@@ -59,6 +59,10 @@ nav .user_theme svg {
   color: var(--color-primary);
 }
 
+.nav_theme svg {
+  color: var(--color-primary);
+}
+
 article {
   padding: 0 1rem;
 }
@@ -70,6 +74,22 @@ article {
   gap: 1rem;
   background-color: var(--color-primary);
   padding: 0.4rem;
+  border-bottom: 2px solid var(--color-tertiary);
+}
+
+.container_register-theme {
+  background-color: var(--color-tertiary);
+  border-color: var(--color-primary);
+}
+
+header .container_register a,
+header .container_register h4 {
+  font-weight: bold;
+}
+
+header .container_register-theme a,
+header .container_register-theme h4 {
+  color: var(--color-primary);
 }
 
 .nav_container {
@@ -98,6 +118,10 @@ article {
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
+}
+
+nav .container_menu-theme li a {
+  color: var(--color-tertiary);
 }
 
 .size_disable {
@@ -224,7 +248,6 @@ section {
   width: 100%;
   display: flex;
   border-radius: .4rem;
-  background-color: var(--color-tertiary);
   position: relative;
 }
 
