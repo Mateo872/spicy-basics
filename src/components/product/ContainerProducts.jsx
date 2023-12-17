@@ -2,15 +2,14 @@ import ProductFilter from "./ProductFilter";
 import { BsSearch } from "react-icons/bs";
 import Product from "./Product";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { setProducts } from "../../features/products/productsSlice";
-import { getProducts } from "../../helpers/productsApi";
+import { useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
 import CardSkeleton from "../CardSkeleton";
 import { setLoading } from "../../features/loading/loadingSlice";
 
 const ContainerProducts = () => {
   const productsState = useSelector((state) => state.products.products);
+  const updateState = useSelector((state) => state.update.update);
   const [inputValue, setInputValue] = useState("");
   const [filterState, setFilterState] = useState({
     Todos: true,
@@ -22,13 +21,8 @@ const ContainerProducts = () => {
     Remeras: false,
   });
   const loading = useSelector((state) => state.loading.loading);
-  const [update, setUpdate] = useState(false);
   const themeState = useSelector((state) => state.theme);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    // console.log(loading);
-  }, []);
 
   const handleFilterClick = (title) => {
     setFilterState((prev) => {
@@ -126,7 +120,6 @@ const ContainerProducts = () => {
                         key={product._id}
                         id={product._id}
                         product={product}
-                        setUpdate={setUpdate}
                       />
                     ))
                   ) : (

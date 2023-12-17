@@ -9,10 +9,12 @@ import {
   editProduct as updateProduct,
 } from "../../helpers/productsApi";
 import Swal from "sweetalert2";
+import { setUpdate } from "../../features/update/updateSlice";
 
 const AddProducts = () => {
   const productsState = useSelector((state) => state.products.products);
   const themeState = useSelector((state) => state.theme);
+  const updateState = useSelector((state) => state.update.update);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [urlsEdit, setUrlsEdit] = useState({
@@ -25,9 +27,6 @@ const AddProducts = () => {
   const [image3, setImage3] = useState(false);
   const [urls, setUrls] = useState([]);
   const [productEdit, setProductEdit] = useState([]);
-  const [imageEmptyOne, setImageEmptyOne] = useState(false);
-  const [imageEmptyTwo, setImageEmptyTwo] = useState(false);
-  const [imageEmptyThree, setImageEmptyThree] = useState(false);
   const token = sessionStorage.getItem("token");
   const { id } = useParams();
   const {
@@ -131,6 +130,7 @@ const AddProducts = () => {
             createProduct(body, token).then((res) => {
               if (res.status === 200) {
                 dispatch(addProduct(res.product));
+                dispatch(setUpdate(!updateState));
                 Swal.fire({
                   icon: "success",
                   title: "Producto agregado correctamente",
@@ -161,10 +161,8 @@ const AddProducts = () => {
                   text: "La imágen principal debe ser un archivo de tipo .jpg, .jpeg o .png",
                 });
           images.push(imageOne);
-          setImageEmptyOne(true);
         } else {
           images.push(productEdit.imageOne);
-          setImageEmptyOne(true);
         }
         if (image2) {
           const imageTwo =
@@ -178,10 +176,8 @@ const AddProducts = () => {
                   text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                 });
           images.push(imageTwo);
-          setImageEmptyTwo(true);
         } else {
           images.push(productEdit.imageTwo);
-          setImageEmptyTwo(true);
         }
         if (image3) {
           const imageThree =
@@ -195,10 +191,8 @@ const AddProducts = () => {
                   text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                 });
           images.push(imageThree);
-          setImageEmptyThree(true);
         } else {
           images.push(productEdit.imageThree);
-          setImageEmptyThree(true);
         }
 
         const body = {
@@ -226,10 +220,11 @@ const AddProducts = () => {
             title: "Oops...",
             text: "El nombre del producto ya existe",
           });
-        } else if (imageEmptyOne && imageEmptyTwo && imageEmptyThree) {
+        } else {
           updateProduct(body, token, id).then((res) => {
             if (res.status === 200) {
               dispatch(editProduct(body));
+              dispatch(setUpdate(!updateState));
               Swal.fire({
                 icon: "success",
                 title: "Producto editado correctamente",
@@ -320,11 +315,24 @@ const AddProducts = () => {
                 placeholder="Image One"
                 style={{ marginBottom: errors.imageOne && ".3rem" }}
                 onChange={(e) => {
-                  setImage1(true),
-                    setUrlsEdit({
-                      ...urlsEdit,
-                      image1: e.target.files[0],
+                  if (
+                    e.target.files[0].type !== "image/jpeg" &&
+                    e.target.files[0].type !== "image/png" &&
+                    e.target.files[0].type !== "image/jpg"
+                  ) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "La imágen principal debe ser un archivo de tipo .jpg, .jpeg o .png",
                     });
+                    e.target.value = null;
+                  } else {
+                    setImage1(true),
+                      setUrlsEdit({
+                        ...urlsEdit,
+                        image1: e.target.files[0],
+                      });
+                  }
                 }}
               />
             </>
@@ -371,11 +379,24 @@ const AddProducts = () => {
                 placeholder="Image One"
                 style={{ marginBottom: errors.imageTwo && ".3rem" }}
                 onChange={(e) => {
-                  setImage2(true),
-                    setUrlsEdit({
-                      ...urlsEdit,
-                      image2: e.target.files[0],
+                  if (
+                    e.target.files[0].type !== "image/jpeg" &&
+                    e.target.files[0].type !== "image/png" &&
+                    e.target.files[0].type !== "image/jpg"
+                  ) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                     });
+                    e.target.value = null;
+                  } else {
+                    setImage2(true),
+                      setUrlsEdit({
+                        ...urlsEdit,
+                        image2: e.target.files[0],
+                      });
+                  }
                 }}
               />
             </>
@@ -421,11 +442,24 @@ const AddProducts = () => {
                 placeholder="Image One"
                 style={{ marginBottom: errors.imageThree && ".3rem" }}
                 onChange={(e) => {
-                  setImage3(true),
-                    setUrlsEdit({
-                      ...urlsEdit,
-                      image3: e.target.files[0],
+                  if (
+                    e.target.files[0].type !== "image/jpeg" &&
+                    e.target.files[0].type !== "image/png" &&
+                    e.target.files[0].type !== "image/jpg"
+                  ) {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                     });
+                    e.target.value = null;
+                  } else {
+                    setImage3(true),
+                      setUrlsEdit({
+                        ...urlsEdit,
+                        image3: e.target.files[0],
+                      });
+                  }
                 }}
               />
             </>
