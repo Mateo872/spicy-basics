@@ -13,7 +13,6 @@ import Swal from "sweetalert2";
 import { setUpdate } from "../../features/update/updateSlice";
 import LazyLoad from "react-lazy-load";
 import Skeleton from "react-loading-skeleton";
-import CardSkeleton from "../CardSkeleton";
 
 const Product = ({ product }) => {
   const userState = useSelector((state) => state.users.user);
@@ -22,8 +21,9 @@ const Product = ({ product }) => {
   const loadingState = useSelector((state) => state.loading.loading);
   const token = sessionStorage.getItem("token");
   const [users, setUsers] = useState([]);
-  const user = { role: userState?.role };
   const [productDeleted, setProductDeleted] = useState(false);
+  const [imageHover, setImageHover] = useState([product?.imageOne]);
+  const user = { role: userState?.role };
   const dispatch = useDispatch();
 
   const handleLinkClick = () => {
@@ -94,7 +94,11 @@ const Product = ({ product }) => {
 
   return (
     <div className="product">
-      <div className="product_image">
+      <div
+        className="product_image"
+        onMouseEnter={() => setImageHover([product?.imageTwo])}
+        onMouseLeave={() => setImageHover([product?.imageOne])}
+      >
         {userState?.favorites?.includes(product?._id) &&
           userState.role !== "admin" && (
             <div className="container_heart">
@@ -103,7 +107,7 @@ const Product = ({ product }) => {
           )}
         {!loadingState ? (
           <LazyLoad offset={100}>
-            <img src={product?.imageOne} alt={product?.name} />
+            <img src={imageHover[0] || product?.imageOne} alt={product?.name} />
           </LazyLoad>
         ) : (
           <Skeleton
