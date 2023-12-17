@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsEye, BsEyeSlashFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { addUser, users } from "../../features/auth/usersSlice";
@@ -16,6 +16,7 @@ const User = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const themeState = useSelector((state) => state.theme.theme);
 
   const {
     register,
@@ -43,6 +44,7 @@ const User = () => {
           state: true,
           cart: [],
           history: [],
+          theme: "light",
         };
         await createUser(body).then((res) => {
           if (res.name) {
@@ -127,7 +129,11 @@ const User = () => {
         location.pathname === "/usuario/registrarse" && "section_userCreate"
       }`}
     >
-      <article className="container_user">
+      <article
+        className={`container_user ${
+          themeState === "dark" && "container_user-theme"
+        }`}
+      >
         <div className="user">
           <h4>SPICYBASICS</h4>
           <h2>

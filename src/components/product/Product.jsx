@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 
 const Product = ({ product, setUpdate }) => {
   const userState = useSelector((state) => state.users.user);
+  const themeState = useSelector((state) => state.theme.theme);
   const token = sessionStorage.getItem("token");
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
@@ -120,13 +121,24 @@ const Product = ({ product, setUpdate }) => {
           ))}
       </div>
       <div className="product_features">
-        <h3 className="product_title">{product?.name}</h3>
-        <h3 className="product_price">
+        <h3
+          className={`product_title ${
+            themeState === "dark" && "product_title-theme"
+          }`}
+        >
+          {product?.name}
+        </h3>
+        <h3
+          className={`product_price ${
+            themeState === "dark" && "product_price-theme"
+          }`}
+        >
           ${parseInt(product?.price).toLocaleString("es-AR")}
         </h3>
         <Link
           to={`/producto-detalle/name/${product?._id}`}
           onClick={handleLinkClick}
+          className={`${themeState === "dark" && "product_link-theme"}`}
         >
           Ver más
         </Link>

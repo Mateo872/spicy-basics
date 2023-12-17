@@ -5,7 +5,7 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editUser } from "../../features/auth/usersSlice";
 import { updateUser } from "../../helpers/userApi";
@@ -16,6 +16,7 @@ const DetailProduct = () => {
   const productsState = useSelector((state) => state.products.products);
   const product = productsState.filter((product) => product._id === id);
   const userState = useSelector((state) => state.users);
+  const themeState = useSelector((state) => state.theme.theme);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
@@ -75,10 +76,14 @@ const DetailProduct = () => {
   };
 
   return (
-    <section className="container_detail">
+    <section
+      className={`container_detail ${
+        themeState === "dark" && "container_detail-theme"
+      }`}
+    >
       <article>
         <div className="container_pagination">
-          <a href="#">inicio /</a>
+          <Link to={"/"}>inicio /</Link>
           <h4>{product?.[0]?.category} /</h4>
           <h4>
             <span> {product?.[0]?.name}</span>
@@ -122,7 +127,11 @@ const DetailProduct = () => {
               </SwiperSlide>
             </Swiper>
           </div>
-          <div className="container_features">
+          <div
+            className={`container_features ${
+              themeState === "dark" && "container_features-theme"
+            }`}
+          >
             <div className="features-product">
               <div>
                 <h2 className="detail_title">
@@ -171,7 +180,11 @@ const DetailProduct = () => {
           </div>
         </div>
       </article>
-      <article className="container_similar">
+      <article
+        className={`container_similar ${
+          themeState === "dark" && "container_similar-theme"
+        }`}
+      >
         <h3>Productos similares</h3>
         <div className="slider_products">
           <div className="products">

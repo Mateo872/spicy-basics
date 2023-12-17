@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { setProducts } from "../../features/products/productsSlice";
 import { getProducts } from "../../helpers/productsApi";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import CardSkeleton from "../CardSkeleton";
 
@@ -24,6 +23,8 @@ const ContainerProducts = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [update, setUpdate] = useState(false);
+  const themeState = useSelector((state) => state.theme.theme);
+  const userState = useSelector((state) => state.users.user.theme);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -84,7 +85,11 @@ const ContainerProducts = () => {
     ).length === 0;
 
   return (
-    <section className="container_products">
+    <section
+      className={`container_products ${
+        themeState === "dark" && ".container_products-theme"
+      }`}
+    >
       <article className="filters">
         <div className="container_filters">
           {Object.keys(filterState).map((title, index) => (
@@ -102,8 +107,9 @@ const ContainerProducts = () => {
             value={inputValue}
             onChange={(e) => handleSearch(e)}
             placeholder="Buscá tu producto"
+            className={`${themeState === "dark" && "input_theme"}`}
           />
-          <BsSearch />
+          <BsSearch className={`${themeState === "dark" && "icon_theme"}`} />
         </div>
       </article>
       <article
