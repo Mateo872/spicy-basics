@@ -1202,6 +1202,16 @@ p {
   color: var(--color-tertiary)
 }
 
+.btn_add-disable {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.input_disable {
+  pointer-events: none;
+  opacity: .5;
+}
+
 @media (min-width: 768px) {
   .theme::before {
     transform: scale(20);

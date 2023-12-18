@@ -5,11 +5,16 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { BsHeart, BsFillHeartFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { editUser } from "../../features/auth/usersSlice";
 import { updateUser } from "../../helpers/userApi";
 import Skeleton from "react-loading-skeleton";
+import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
+import { editProduct as updateProduct } from "../../helpers/productsApi";
+import { editProduct } from "../../features/products/productsSlice";
+import { setUpdate } from "../../features/update/updateSlice";
 
 const DetailProduct = () => {
   const { id } = useParams();
@@ -18,11 +23,19 @@ const DetailProduct = () => {
   const product = productsState.filter((product) => product._id === id);
   const userState = useSelector((state) => state.users);
   const themeState = useSelector((state) => state.theme);
+  const updateState = useSelector((state) => state.update.update);
   const productsCategory = productsState?.filter(
     (prod) => prod?.category === product?.[0].category
   );
   const loading = useSelector((state) => state.loading.loading);
   const token = sessionStorage.getItem("token");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,7 +56,7 @@ const DetailProduct = () => {
     try {
       if (!exist) {
         const body = {
-          id: userState?.user?.id,
+          id: userState?.user?._id,
           name: userState?.user?.name,
           email: userState?.user?.email,
           password: userState?.user?.password,
@@ -61,7 +74,7 @@ const DetailProduct = () => {
           (fav) => fav !== id
         );
         const body = {
-          id: userState?.user?.id,
+          id: userState?.user?._id,
           name: userState?.user?.name,
           email: userState?.user?.email,
           password: userState?.user?.password,
@@ -77,6 +90,107 @@ const DetailProduct = () => {
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const onSubmit = (data) => {
+    if (product?.[0]?.stock === 0) {
+      Swal.fire({
+        title: "Error",
+        text: "No hay stock disponible",
+        icon: "error",
+        confirmButtonText: "Ok",
+      });
+    } else {
+      try {
+        const exist = userState?.user?.cart?.some(
+          (prod) => prod.id === product?.[0]?._id
+        );
+
+        if (exist) {
+          const newCart = userState?.user?.cart?.map((prod) => {
+            if (prod.id === product?.[0]?._id) {
+              const newSize = prod.size.includes(selectedSize)
+                ? prod.size
+                : [...prod.size, selectedSize];
+
+              return {
+                id: prod.id,
+                price: parseInt(prod.price),
+                quantity: parseInt(+prod.quantity + +data.quantity),
+                size: newSize,
+              };
+            } else {
+              return prod;
+            }
+          });
+
+          const body = {
+            id: userState?.user?._id,
+            name: userState?.user?.name,
+            email: userState?.user?.email,
+            password: userState?.user?.password,
+            image: userState?.user?.image,
+            role: userState?.user?.role,
+            state: userState?.user?.state,
+            favorites: userState?.user?.favorites,
+            cart: newCart,
+            history: userState?.user?.history,
+            theme: userState?.user?.theme,
+          };
+          updateUser(body, token);
+          dispatch(editUser(body));
+        } else {
+          const body = {
+            id: userState?.user?._id,
+            name: userState?.user?.name,
+            email: userState?.user?.email,
+            password: userState?.user?.password,
+            image: userState?.user?.image,
+            role: userState?.user?.role,
+            state: userState?.user?.state,
+            favorites: userState?.user?.favorites,
+            cart: [
+              ...userState?.user?.cart,
+              {
+                id: product?.[0]?._id,
+                price: product?.[0]?.price,
+                quantity: parseInt(+data.quantity),
+                size: [selectedSize],
+              },
+            ],
+            history: userState?.user?.history,
+            theme: userState?.user?.theme,
+          };
+
+          updateUser(body, token);
+          dispatch(editUser(body));
+        }
+        Swal.fire({
+          title: "Producto agregado al carrito",
+          icon: "success",
+          confirmButtonText: "Ok",
+        });
+        const bodyProduct = {
+          id: product?.[0]?._id,
+          name: product?.[0]?.name,
+          imageOne: product?.[0]?.imageOne,
+          imageTwo: product?.[0]?.imageTwo,
+          imageThree: product?.[0]?.imageThree,
+          price: product?.[0]?.price,
+          description: product?.[0]?.description,
+          stock: product?.[0]?.stock - parseInt(+data.quantity),
+          category: product?.[0]?.category,
+          sizes: product?.[0]?.sizes,
+        };
+        dispatch(editProduct(bodyProduct));
+        dispatch(setUpdate(!updateState));
+        updateProduct(bodyProduct, token, product?.[0]?._id);
+        setValue("quantity", "");
+        setSelectedSize(product?.[0]?.sizes[0]);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -99,11 +213,15 @@ const DetailProduct = () => {
           <Skeleton width={200} height={15} />
         )}
         {!loading ? (
-          <h6>Stock - {product?.[0]?.stock}</h6>
+          product?.[0]?.stock > 0 ? (
+            <h6>Stock - {product?.[0]?.stock}</h6>
+          ) : (
+            <h6>No disponible</h6>
+          )
         ) : (
           <Skeleton width={50} height={10} />
         )}
-        <div className="detail_product">
+        <form className="detail_product" onSubmit={handleSubmit(onSubmit)}>
           {!loading ? (
             <div className="detail_image">
               {token && userState?.user?.role !== "admin" && (
@@ -199,11 +317,11 @@ const DetailProduct = () => {
                         key={size}
                         className={`size ${
                           product?.[0]?.sizes.includes(size)
-                            ? selectedSize === size
+                            ? selectedSize === size && product?.[0]?.stock > 0
                               ? "size_active"
                               : ""
                             : "size_disable"
-                        }`}
+                        } ${product?.[0]?.stock === 0 && "size_disable"}`}
                         onClick={() => handleSizeClick(size)}
                       >
                         <p>{size}</p>
@@ -231,8 +349,48 @@ const DetailProduct = () => {
               <div className="quantity">
                 {!loading ? (
                   <>
-                    <label htmlFor="quantity">Cantidad</label>
-                    <input id="quantity" type="number" placeholder="0" />
+                    <label
+                      className={product?.[0]?.stock === 0 && "input_disable"}
+                      htmlFor="quantity"
+                    >
+                      Cantidad
+                    </label>
+                    <input
+                      id="quantity"
+                      className={product?.[0]?.stock === 0 && "input_disable"}
+                      type="number"
+                      disabled={product?.[0]?.stock === 0}
+                      placeholder="0"
+                      {...register("quantity", {
+                        required: {
+                          value: true,
+                          message: "Este campo es requerido",
+                        },
+                        min: {
+                          value: 1,
+                          message: "La cantidad mínima es 1",
+                        },
+                        max: {
+                          value: product?.[0]?.stock,
+                          message: `La cantidad máxima es ${product?.[0]?.stock}`,
+                        },
+                        pattern: {
+                          value: /^[0-9]+$/,
+                          message: "Solo se permiten números",
+                        },
+
+                        validate: {
+                          max: (value) =>
+                            parseInt(value) <= product?.[0]?.stock ||
+                            `La cantidad máxima es ${product?.[0]?.stock}`,
+                        },
+                      })}
+                    />
+                    {errors.quantity && (
+                      <span className="text_error">
+                        {errors.quantity.message}
+                      </span>
+                    )}
                   </>
                 ) : (
                   <>
@@ -245,7 +403,35 @@ const DetailProduct = () => {
                 )}
               </div>
               {!loading ? (
-                <button className="btn_add">Agregar al carrito</button>
+                <button
+                  className={`btn_add ${
+                    product?.[0]?.stock === 0 && "btn_add-disable"
+                  }`}
+                  disabled={product?.[0]?.stock === 0}
+                  onClick={() =>
+                    userState?.user?.name.length === 0
+                      ? Swal.fire({
+                          title: "Debe iniciar sesión",
+                          icon: "question",
+                          showCancelButton: true,
+                          confirmButtonText: "Iniciar sesión",
+                          cancelButtonText: "No",
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            navigate("/usuario/iniciar-sesion");
+                          }
+                        })
+                      : userState?.user?.role === "admin" &&
+                        Swal.fire({
+                          title: "Error",
+                          text: "Los administradores no pueden agregar productos al carrito",
+                          icon: "error",
+                          confirmButtonText: "Ok",
+                        })
+                  }
+                >
+                  Agregar al carrito
+                </button>
               ) : (
                 <Skeleton
                   width={window.innerWidth >= 768 ? 260 : 280}
@@ -254,7 +440,7 @@ const DetailProduct = () => {
               )}
             </div>
           </div>
-        </div>
+        </form>
       </article>
       {productsCategory.length > 1 && (
         <article

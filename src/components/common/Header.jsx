@@ -173,6 +173,7 @@ const Header = () => {
                       onClick={() => {
                         sessionStorage.removeItem("token"),
                           window.location.reload();
+                        window.location.href = "/";
                       }}
                     >
                       <img
@@ -272,6 +273,7 @@ const Header = () => {
                   onClick={() => {
                     sessionStorage.removeItem("token"),
                       window.location.reload();
+                    window.location.href = "/";
                   }}
                 >
                   <img
