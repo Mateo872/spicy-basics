@@ -19,7 +19,7 @@ body {
 
 #root {
   margin: 0 auto;
-  max-width: 1400px;
+  max-width: 1920px;
 }
 
 main {
@@ -30,7 +30,7 @@ header {
   width: 100%;
   position: fixed;
   z-index: 99;
-  max-width: 1400px;
+  max-width: 1920px;
 }
 
 nav {
@@ -629,6 +629,14 @@ main .container_detail-theme .container_pagination h4 {
   color: var(--color-tertiary);
 }
 
+main .container_detail-theme label {
+  color: var(--color-tertiary);
+}
+
+main .container_detail-theme input {
+  color: var(--color-tertiary);
+}
+
 .container_detail h6 {
   margin-top: 0.3rem;
   color: var(--color-primary);
@@ -1212,6 +1220,26 @@ p {
   opacity: .5;
 }
 
+.container_cart {
+  position: relative;
+  color: var(--color-tertiary);
+  cursor: pointer;
+}
+
+.container_cart span {
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  background-color: var(--color-secondary);
+  width: .8rem;
+  height: .8rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.6rem;
+}
+
 @media (min-width: 768px) {
   .theme::before {
     transform: scale(20);
@@ -1251,6 +1279,10 @@ p {
     display: flex;
     align-items: center;
     gap: .5rem;
+  }
+
+  .user_register li {
+    list-style: none;
   }
 
   .user_register a {
@@ -1482,6 +1514,10 @@ p {
   .product_image .container_heart {
     top: 1.5rem;
     right: 1.5rem;
+  }
+
+  .container_cart {
+    margin-right: .6rem;
   }
 }
 

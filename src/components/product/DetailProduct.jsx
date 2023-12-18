@@ -197,7 +197,7 @@ const DetailProduct = () => {
   return (
     <section
       className={`container_detail ${
-        themeState.theme === "dark" && "container_detail-theme"
+        themeState.theme === "dark" ? "container_detail-theme" : ""
       }`}
     >
       <article>
@@ -279,7 +279,7 @@ const DetailProduct = () => {
           )}
           <div
             className={`container_features ${
-              themeState.theme === "dark" && "container_features-theme"
+              themeState.theme === "dark" ? "container_features-theme" : ""
             }`}
           >
             <div className="features-product">
@@ -350,14 +350,18 @@ const DetailProduct = () => {
                 {!loading ? (
                   <>
                     <label
-                      className={product?.[0]?.stock === 0 && "input_disable"}
+                      className={
+                        product?.[0]?.stock === 0 ? "input_disable" : ""
+                      }
                       htmlFor="quantity"
                     >
                       Cantidad
                     </label>
                     <input
                       id="quantity"
-                      className={product?.[0]?.stock === 0 && "input_disable"}
+                      className={
+                        product?.[0]?.stock === 0 ? "input_disable" : ""
+                      }
                       type="number"
                       disabled={product?.[0]?.stock === 0}
                       placeholder="0"
@@ -405,7 +409,7 @@ const DetailProduct = () => {
               {!loading ? (
                 <button
                   className={`btn_add ${
-                    product?.[0]?.stock === 0 && "btn_add-disable"
+                    product?.[0]?.stock === 0 ? "btn_add-disable" : ""
                   }`}
                   disabled={product?.[0]?.stock === 0}
                   onClick={() =>
@@ -445,7 +449,7 @@ const DetailProduct = () => {
       {productsCategory.length > 1 && (
         <article
           className={`container_similar ${
-            themeState.theme === "dark" && "container_similar-theme"
+            themeState.theme === "dark" ? "container_similar-theme" : ""
           }`}
         >
           <h3>Productos similares</h3>
