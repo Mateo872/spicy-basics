@@ -27,7 +27,6 @@ export const usersSlice = createSlice({
     },
     editUser: (state, action) => {
       const {
-        id,
         name,
         email,
         image,
@@ -35,6 +34,8 @@ export const usersSlice = createSlice({
         role,
         favorites,
         state: stateUser,
+        cart,
+        history,
       } = action.payload;
 
       const foundUser = state.user;
@@ -47,6 +48,8 @@ export const usersSlice = createSlice({
         foundUser.role = role;
         foundUser.favorites = favorites;
         foundUser.state = stateUser;
+        foundUser.cart = cart;
+        foundUser.history = history;
       }
     },
   },
