@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Hero from "./components/Hero";
 import Header from "./components/common/Header";
 import ContainerProducts from "./components/product/ContainerProducts";
@@ -13,6 +13,7 @@ import { setProducts } from "./features/products/productsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "./features/loading/loadingSlice";
 import { useEffect } from "react";
+import CartContainer from "./components/CartContainer";
 
 function App() {
   const updateState = useSelector((state) => state.update.update);
@@ -61,6 +62,7 @@ function App() {
                 </RouteProtect>
               }
             ></Route>
+            <Route path="/usuario/carrito" element={<CartContainer />} />
           </Routes>
         </main>
       </BrowserRouter>

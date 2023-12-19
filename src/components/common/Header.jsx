@@ -167,14 +167,16 @@ const Header = () => {
                 </li>
               )}
               {window.innerWidth < 700 && (
-                <li className="container_cart">
-                  <span className="badge">
-                    {userState?.user?.cart.reduce(
-                      (acc, item) => acc + item.quantity,
-                      0
-                    )}
-                  </span>
-                  <BsCartFill />
+                <li className="container_cart-icon">
+                  <Link to={"/usuario/carrito"}>
+                    <span className="badge">
+                      {userState?.user?.cart.reduce(
+                        (acc, item) => acc + item.quantity,
+                        0
+                      )}
+                    </span>
+                    <BsCartFill />
+                  </Link>
                 </li>
               )}
               {(userState?.user?.name || user?.name) &&
@@ -267,14 +269,16 @@ const Header = () => {
             >
               {themeState.theme !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
             </li>
-            <li className="container_cart">
-              <span className="badge">
-                {userState?.user?.cart.reduce(
-                  (acc, item) => acc + item.quantity,
-                  0
-                )}
-              </span>
-              <BsCartFill />
+            <li className="container_cart-icon">
+              <Link to={"/usuario/carrito"}>
+                <span className="badge">
+                  {userState?.user?.cart.reduce(
+                    (acc, item) => acc + item.quantity,
+                    0
+                  )}
+                </span>
+                <BsCartFill />
+              </Link>
             </li>
             {userState?.user?.name || user?.name ? (
               <>
