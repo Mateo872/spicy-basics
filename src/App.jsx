@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Hero from "./components/Hero";
 import Header from "./components/common/Header";
@@ -34,7 +34,7 @@ function App() {
 
   return (
     <SkeletonTheme highlightColor="#ddd">
-      <HashRouter>
+      <BrowserRouter>
         <Header />
         <main>
           <Routes>
@@ -63,7 +63,7 @@ function App() {
             ></Route>
           </Routes>
         </main>
-      </HashRouter>
+      </BrowserRouter>
     </SkeletonTheme>
   );
 }
