@@ -5,11 +5,12 @@ import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 
 export default function render() {
-  return ReactDOMServer.renderToString(
+  const html = ReactDOMServer.renderToString(
     <React.StrictMode>
       <Provider store={store}>
         <App />
       </Provider>
     </React.StrictMode>
   );
+  return { html };
 }
