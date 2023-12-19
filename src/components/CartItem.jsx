@@ -9,13 +9,12 @@ const CartItem = ({ product }) => {
   const products = useSelector((state) => state.products.products);
   const productItem = products.find((item) => item?._id === product?.id);
   const userState = useSelector((state) => state.users.user);
-  //   const [productQuantity, setProductQuantity] = useState(product?.quantity);
+  const [productQuantity, setProductQuantity] = useState(product?.quantity);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
   const deleteProduct = (id) => {
     const newCart = userState.cart.filter((item) => item.id !== id);
-    // if (product.quantity > 1) { }
     Swal.fire({
       title: "¿Estás seguro?",
       text: "No podrás recuperar este producto",
@@ -46,6 +45,39 @@ const CartItem = ({ product }) => {
     });
   };
 
+  const editQuantity = (id, quantity, action) => {
+    if (action === "substract" && quantity === 1) {
+      deleteProduct(id);
+      return;
+    }
+    const newCart = userState.cart.map((item) => {
+      if (item.id === id) {
+        if (action === "add") {
+          return { ...item, quantity: parseInt(item.quantity) + 1 };
+        } else if (action === "substract") {
+          return { ...item, quantity: parseInt(item.quantity) - 1 };
+        }
+      } else {
+        return item;
+      }
+    });
+
+    const body = {
+      id: userState?._id,
+      name: userState?.name,
+      email: userState?.email,
+      password: userState?.password,
+      image: userState?.image,
+      role: userState?.role,
+      state: userState?.state,
+      favorites: [...userState?.favorites, id],
+      cart: newCart,
+      history: [],
+    };
+    updateUser(body, token);
+    dispatch(editUser(body));
+  };
+
   return (
     <div className="container_product-cart">
       {window.innerWidth >= 768 && (
@@ -60,9 +92,23 @@ const CartItem = ({ product }) => {
           {productItem?.name}
         </h6>
       </div>
-      <div className="cart_features">
+      <div className="cart_features features_quantity">
         <h6 className="title">Cantidad</h6>
-        <h6 className="subtitle">{parseInt(product?.quantity)}</h6>
+        <div className="cart_features-quantity">
+          <button
+            onClick={() =>
+              editQuantity(product?.id, product?.quantity, "substract")
+            }
+          >
+            -
+          </button>
+          <h6 className="subtitle">{parseInt(product?.quantity)}</h6>
+          <button
+            onClick={() => editQuantity(product?.id, product?.quantity, "add")}
+          >
+            +
+          </button>
+        </div>
       </div>
       <div className="cart_features">
         <h6 className="title">Precio</h6>
