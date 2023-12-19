@@ -397,7 +397,18 @@ const DetailProduct = () => {
                       })}
                     />
                     {errors.quantity && (
-                      <span className="text_error">
+                      <span
+                        className="text_error"
+                        style={{
+                          marginTop:
+                            innerWidth < 768
+                              ? "1rem"
+                              : innerWidth >= 768 && innerWidth < 1024
+                              ? ".4rem"
+                              : ".2",
+                          marginBottom: "-.5rem",
+                        }}
+                      >
                         {errors.quantity.message}
                       </span>
                     )}

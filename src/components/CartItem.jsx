@@ -9,7 +9,6 @@ const CartItem = ({ product }) => {
   const products = useSelector((state) => state.products.products);
   const productItem = products.find((item) => item?._id === product?.id);
   const userState = useSelector((state) => state.users.user);
-  const [productQuantity, setProductQuantity] = useState(product?.quantity);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
