@@ -351,7 +351,10 @@ const DetailProduct = () => {
                   <>
                     <label
                       className={
-                        product?.[0]?.stock === 0 ? "input_disable" : ""
+                        product?.[0]?.stock === 0 ||
+                        userState?.user?.name.length === 0
+                          ? "input_disable"
+                          : ""
                       }
                       htmlFor="quantity"
                     >
@@ -360,7 +363,10 @@ const DetailProduct = () => {
                     <input
                       id="quantity"
                       className={
-                        product?.[0]?.stock === 0 ? "input_disable" : ""
+                        product?.[0]?.stock === 0 ||
+                        userState?.user?.name.length === 0
+                          ? "input_disable"
+                          : ""
                       }
                       type="number"
                       disabled={product?.[0]?.stock === 0}
@@ -409,9 +415,15 @@ const DetailProduct = () => {
               {!loading ? (
                 <button
                   className={`btn_add ${
-                    product?.[0]?.stock === 0 ? "btn_add-disable" : ""
+                    product?.[0]?.stock === 0 ||
+                    userState?.user?.name.length === 0
+                      ? "btn_add-disable"
+                      : ""
                   }`}
-                  disabled={product?.[0]?.stock === 0}
+                  disabled={
+                    product?.[0]?.stock === 0 ||
+                    userState?.user?.name.length === 0
+                  }
                   onClick={() =>
                     userState?.user?.name.length === 0
                       ? Swal.fire({
