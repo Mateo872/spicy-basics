@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import express from "express";
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.VITE_NODE_ENV === "production";
 const port = process.env.PORT || 5173;
 const base = process.env.BASE || "/";
 
