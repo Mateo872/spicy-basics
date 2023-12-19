@@ -1,12 +1,48 @@
 import { Link } from "react-router-dom";
 import { GiShoppingBag } from "react-icons/gi";
 import CartItem from "./CartItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../helpers/userApi";
+import { editUser } from "../features/auth/usersSlice";
+import Swal from "sweetalert2";
 
 const CartContainer = () => {
   const themeState = useSelector((state) => state.theme.theme);
   const userState = useSelector((state) => state.users.user);
   const loadingState = useSelector((state) => state.loading.loading);
+  const token = sessionStorage.getItem("token");
+  const dispatch = useDispatch();
+
+  const emptyCart = () => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás recuperar estos productos",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, vaciar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const body = {
+          id: userState?._id,
+          name: userState?.name,
+          email: userState?.email,
+          password: userState?.password,
+          image: userState?.image,
+          role: userState?.role,
+          state: userState?.state,
+          favorites: [...userState?.favorites],
+          cart: [],
+          history: [],
+        };
+        Swal.fire("Vacío!", "El carrito fue vaciado", "success");
+        updateUser(body, token);
+        dispatch(editUser(body));
+      }
+    });
+  };
 
   return (
     <section
@@ -43,7 +79,9 @@ const CartContainer = () => {
             </div>
             {userState && userState?.cart?.length > 0 && (
               <div className="container_buttons">
-                <button className="empty_button">Vaciar carrito</button>
+                <button className="empty_button" onClick={() => emptyCart()}>
+                  Vaciar carrito
+                </button>
                 <div className="container_total">
                   <h5>
                     Total:{" "}
