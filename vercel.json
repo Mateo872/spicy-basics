@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/client/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dist/server/**",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/dist/server/$1"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/.*",
+      "dest": "/dist/client/index.html"
+    }
+  ],
+  "env": {
+    "VITE_NODE_ENV": "production"
+  }
+}
