@@ -33,7 +33,7 @@ const CartContainer = () => {
           image: userState?.image,
           role: userState?.role,
           state: userState?.state,
-          favorites: [...userState?.favorites],
+          favorites: userState?.favorites,
           cart: [],
           history: [],
         };

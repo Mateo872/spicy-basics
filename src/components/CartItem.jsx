@@ -33,7 +33,7 @@ const CartItem = ({ product }) => {
           image: userState?.image,
           role: userState?.role,
           state: userState?.state,
-          favorites: [...userState?.favorites, id],
+          favorites: userState?.favorites,
           cart: newCart,
           history: [],
         };
@@ -69,7 +69,7 @@ const CartItem = ({ product }) => {
       image: userState?.image,
       role: userState?.role,
       state: userState?.state,
-      favorites: [...userState?.favorites, id],
+      favorites: userState?.favorites,
       cart: newCart,
       history: [],
     };
