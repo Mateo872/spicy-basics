@@ -3,6 +3,6 @@
   "builds": [{ "src": "build/*", "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest": "build/index.html" }],
   "env": {
-    "VITE_API_BASE_URL": "@vite/api_base_url"
+    "VITE_NODE_ENV": "production"
   }
 }
