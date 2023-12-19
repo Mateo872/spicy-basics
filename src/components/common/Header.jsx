@@ -37,7 +37,7 @@ const Header = () => {
         dispatch(setTheme(res.user.theme));
       });
     }
-  }, [themeState, token]);
+  }, [token]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
