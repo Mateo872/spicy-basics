@@ -1,34 +1,48 @@
 import { BsTrash } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
-const CartItem = () => {
-  const image = "https://via.placeholder.com/150";
-  const name = "Nombre del ";
-  const quantity = 2;
-  const price = 200;
+const CartItem = ({ product }) => {
+  const products = useSelector((state) => state.products.products);
+  const productItem = products.find((item) => item?._id === product?.id);
 
   return (
     <div className="container_product-cart">
-      <div
-        className="container_image"
-        style={{ backgroundImage: `url(${image})` }}
-      ></div>
+      {window.innerWidth >= 768 && (
+        <div
+          className="container_image"
+          style={{ backgroundImage: `url(${productItem?.imageOne})` }}
+        ></div>
+      )}
       <div className="cart_features">
         <h6 className="title">Título</h6>
-        <h6 className="subtitle" title={name}>
-          {name}
+        <h6 className="subtitle" title={productItem?.name}>
+          {productItem?.name}
         </h6>
       </div>
       <div className="cart_features">
         <h6 className="title">Cantidad</h6>
-        <h6 className="subtitle">{quantity}</h6>
+        <h6 className="subtitle">{parseInt(product?.quantity)}</h6>
       </div>
       <div className="cart_features">
         <h6 className="title">Precio</h6>
-        <h6 className="subtitle">${price}</h6>
+        <h6 className="subtitle">
+          {parseInt(product?.price).toLocaleString("es-AR", {
+            style: "currency",
+            currency: "ARS",
+          })}
+        </h6>
       </div>
       <div className="cart_features">
         <h6 className="title">Subtotal</h6>
-        <h6 className="subtitle">${price * quantity}</h6>
+        <h6 className="subtitle">
+          {parseInt(product?.price * product?.quantity).toLocaleString(
+            "es-AR",
+            {
+              style: "currency",
+              currency: "ARS",
+            }
+          )}
+        </h6>
       </div>
       <div className="container_cart-trash">
         <BsTrash />
