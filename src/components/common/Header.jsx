@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser, updateUser } from "../../helpers/userApi";
 import { addUser } from "../../features/auth/usersSlice";
 import { setTheme, setThemeHover } from "../../features/theme/themeSlice";
+import { BsCartFill } from "react-icons/bs";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -165,6 +166,17 @@ const Header = () => {
                   )}
                 </li>
               )}
+              {window.innerWidth < 700 && (
+                <li className="container_cart">
+                  <span className="badge">
+                    {userState?.user?.cart.reduce(
+                      (acc, item) => acc + item.quantity,
+                      0
+                    )}
+                  </span>
+                  <BsCartFill />
+                </li>
+              )}
               {(userState?.user?.name || user?.name) &&
                 window.innerWidth < 700 && (
                   <>
@@ -254,6 +266,15 @@ const Header = () => {
               }}
             >
               {themeState.theme !== "dark" ? <BiSolidMoon /> : <BiSolidSun />}
+            </li>
+            <li className="container_cart">
+              <span className="badge">
+                {userState?.user?.cart.reduce(
+                  (acc, item) => acc + item.quantity,
+                  0
+                )}
+              </span>
+              <BsCartFill />
             </li>
             {userState?.user?.name || user?.name ? (
               <>
