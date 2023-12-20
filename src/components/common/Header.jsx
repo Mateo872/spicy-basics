@@ -166,7 +166,7 @@ const Header = () => {
                   )}
                 </li>
               )}
-              {window.innerWidth < 700 && (
+              {window.innerWidth < 700 && userState?.user?.name.length > 0 && (
                 <li className="container_cart-icon">
                   <Link to={"/usuario/carrito"}>
                     <span className="badge">
@@ -179,7 +179,7 @@ const Header = () => {
                   </Link>
                 </li>
               )}
-              {userState?.user?.name && window.innerWidth < 700 && (
+              {userState?.user?.name.length > 0 && window.innerWidth < 700 && (
                 <>
                   <picture
                     className="container_image-user"
@@ -273,17 +273,19 @@ const Header = () => {
                     <BiSolidSun />
                   )}
                 </li>
-                <li className="container_cart-icon">
-                  <Link to={"/usuario/carrito"}>
-                    <span className="badge">
-                      {userState?.user?.cart.reduce(
-                        (acc, item) => acc + item.quantity,
-                        0
-                      )}
-                    </span>
-                    <BsCartFill />
-                  </Link>
-                </li>
+                {userState?.user?.name.length > 0 && (
+                  <li className="container_cart-icon">
+                    <Link to={"/usuario/carrito"}>
+                      <span className="badge">
+                        {userState?.user?.cart.reduce(
+                          (acc, item) => acc + item.quantity,
+                          0
+                        )}
+                      </span>
+                      <BsCartFill />
+                    </Link>
+                  </li>
+                )}
               </>
             )}
             {userState?.user?.name ? (
@@ -311,11 +313,6 @@ const Header = () => {
                     alt={userState?.user?.name}
                   />
                 </picture>
-              </>
-            ) : loadingState && !token ? (
-              <>
-                <Skeleton height={20} width={100} />
-                <Skeleton height={20} width={100} />
               </>
             ) : loadingState && token ? (
               <Skeleton height={40} width={40} />
