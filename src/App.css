@@ -1531,10 +1531,20 @@ p {
   background-color: var(--color-primary);
 }
 
+.container_user-theme .container_user-buttons .container_separator div {
+  background-color: var(--color-tertiary);
+}
+
 .container_user-buttons .button_email {
   background-color: var(--color-primary);
   border: 2px solid var(--color-primary);
   color: var(--color-tertiary);
+}
+
+.container_user-theme .container_user-buttons .button_email {
+  background-color: var(--color-tertiary);
+  border: 2px solid var(--color-tertiary);
+  color: var(--color-primary);
 }
 
 .container_user-buttons .button_email:hover {
@@ -1542,6 +1552,11 @@ p {
   color: var(--color-primary);
   transition: .3s;
   cursor: pointer;
+}
+
+.container_user-theme .container_user-buttons .button_email:hover {
+  background-color: var(--color-primary);
+  color: var(--color-tertiary);
 }
 
 .container_link-back {
