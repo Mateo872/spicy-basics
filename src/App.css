@@ -59,10 +59,6 @@ nav .user_theme svg {
   color: var(--color-primary);
 }
 
-.nav_theme svg {
-  color: var(--color-primary);
-}
-
 article {
   padding: 0 1rem;
 }
@@ -295,9 +291,9 @@ button {
 }
 
 .container_hero,
-h2,
-h4,
-h6 {
+.container_hero h2,
+.container_hero h4,
+.container_hero h6 {
   margin: 0;
   color: var(--color-tertiary);
 }
