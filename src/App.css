@@ -639,6 +639,7 @@ main .container_detail-theme input {
   font-size: 0.8rem;
   opacity: .7;
   font-weight: 400;
+  margin-bottom: 0;
 }
 
 main .container_detail-theme h6 {
