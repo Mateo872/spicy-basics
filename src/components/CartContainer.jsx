@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../helpers/userApi";
 import { editUser } from "../features/auth/usersSlice";
 import Swal from "sweetalert2";
+import { BsArrowLeft } from "react-icons/bs";
 
 const CartContainer = () => {
   const themeState = useSelector((state) => state.theme.theme);
@@ -101,6 +102,12 @@ const CartContainer = () => {
                 </div>
               </div>
             )}
+            <div className="container_link-back">
+              <Link className="link_back" to={"/"}>
+                <BsArrowLeft />
+                Volver a la tienda
+              </Link>
+            </div>
           </>
         ) : (
           <div className="loader"></div>

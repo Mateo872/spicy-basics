@@ -1496,6 +1496,72 @@ p {
   color: var(--color-primary);
 }
 
+.container_user-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.container_user-buttons .button_register {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-tertiary);
+  font-weight: bold;
+  font-size: 0.8rem;
+  border-radius: .4rem;
+}
+
+.container_user-buttons .container_separator {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .2rem;
+  opacity: .4;
+}
+
+.container_user-buttons .container_separator div {
+  margin-top: 0.1rem;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-primary);
+}
+
+.container_user-buttons .button_email {
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  color: var(--color-tertiary);
+}
+
+.container_user-buttons .button_email:hover {
+  background-color: transparent;
+  color: var(--color-primary);
+  transition: .3s;
+  cursor: pointer;
+}
+
+.container_link-back {
+  display: inline-block;
+}
+
+.link_back {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  text-decoration: none;
+  color: var(--color-secondary);
+  font-weight: bold;
+}
+
+.link_back svg {
+  color: var(--color-secondary);
+}
+
 @media (min-width: 768px) {
   .theme::before {
     transform: scale(20);
@@ -1824,6 +1890,10 @@ p {
 
   .container_product-cart svg {
     font-size: 1rem;
+  }
+
+  .link_back {
+    margin-top: 4rem;
   }
 }
 
@@ -2208,6 +2278,14 @@ p {
   .container_product-cart svg {
     font-size: 1.3rem;
   }
+
+  .container_user-buttons .container_separator div {
+    margin-top: 0.2rem;
+  }
+
+  .link_back {
+    margin-top: 12rem;
+  }
 }
 
 @media(min-width:1400px) {
@@ -2281,4 +2359,5 @@ p {
   .title_cart {
     margin-top: 20rem;
   }
+
 }
