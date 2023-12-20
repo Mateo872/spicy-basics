@@ -8,9 +8,10 @@ import Swal from "sweetalert2";
 import { BsArrowLeft } from "react-icons/bs";
 
 const CartContainer = () => {
-  const themeState = useSelector((state) => state.theme.theme);
   const userState = useSelector((state) => state.users.user);
+  const themeState = useSelector((state) => state.theme.theme);
   const loadingState = useSelector((state) => state.loading.loading);
+  const productsState = useSelector((state) => state.products.products);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
@@ -45,6 +46,39 @@ const CartContainer = () => {
     });
   };
 
+  const payment = (cart, totalPrice) => {
+    const productsInCart = cart.map((item) => {
+      const product = productsState.find((product) => product._id === item.id);
+      return {
+        id: product._id,
+        name: product.name,
+        quantity: item.quantity,
+        price: item.price,
+        image: product.imageOne,
+        size: item.size,
+      };
+    });
+
+    const body = {
+      id: userState?._id,
+      name: userState?.name,
+      email: userState?.email,
+      image: userState?.image,
+      role: userState?.role,
+      state: userState?.state,
+      favorites: userState?.favorites,
+      cart: [],
+      history: [
+        ...userState.history,
+        {
+          date: new Date().toLocaleString(),
+          products: productsInCart,
+          totalPrice: totalPrice,
+        },
+      ],
+    };
+  };
+
   return (
     <section
       className={`container_cart ${
@@ -60,7 +94,7 @@ const CartContainer = () => {
           alignItems: loadingState ? "center" : "",
         }}
       >
-        {!loadingState ? (
+        {!loadingState && (
           <>
             {userState && userState?.cart?.length > 0 && (
               <h1 className="title_cart">Spicy carrito</h1>
@@ -98,7 +132,20 @@ const CartContainer = () => {
                         })}
                     </span>
                   </h5>
-                  <button className="buy_button">Comprar</button>
+                  <button
+                    className="buy_button"
+                    onClick={() => {
+                      payment(
+                        userState.cart,
+                        userState.cart.reduce(
+                          (acc, curr) => acc + curr.price * curr.quantity,
+                          0
+                        )
+                      );
+                    }}
+                  >
+                    Comprar
+                  </button>
                 </div>
               </div>
             )}
@@ -109,8 +156,6 @@ const CartContainer = () => {
               </Link>
             </div>
           </>
-        ) : (
-          <div className="loader"></div>
         )}
       </article>
     </section>
