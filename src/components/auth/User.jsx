@@ -30,6 +30,9 @@ const User = () => {
   } = useForm();
 
   useEffect(() => {
+    if (sessionStorage.getItem("token")) {
+      navigate("/");
+    }
     reset();
   }, [location.pathname]);
 
@@ -426,7 +429,6 @@ const User = () => {
         ) : (
           <div className="container_user-buttons">
             <GoogleLogin onSuccess={(res) => decode(res.credential)} />
-            {/* <button onClick={() => login()}>Google</button> */}
             <div className="container_separator">
               <div></div>
               <p>o</p>
