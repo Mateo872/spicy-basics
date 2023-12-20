@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GiShoppingBag } from "react-icons/gi";
 import CartItem from "./CartItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,8 @@ import { updateUser } from "../helpers/userApi";
 import { editUser } from "../features/auth/usersSlice";
 import Swal from "sweetalert2";
 import { BsArrowLeft } from "react-icons/bs";
+import { payment as paymentApi } from "../helpers/paymentApi";
+import { useEffect } from "react";
 
 const CartContainer = () => {
   const userState = useSelector((state) => state.users.user);
@@ -14,6 +16,8 @@ const CartContainer = () => {
   const productsState = useSelector((state) => state.products.products);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const emptyCart = () => {
     Swal.fire({
@@ -46,7 +50,54 @@ const CartContainer = () => {
     });
   };
 
-  const payment = (cart, totalPrice) => {
+  useEffect(() => {
+    if (location.search && userState.name.length > 0) {
+      const merchant_order_id = location.search.split("&")[6].split("=")[1];
+
+      if (merchant_order_id !== "null") {
+        const body = {
+          id: userState?._id,
+          name: userState?.name,
+          email: userState?.email,
+          password: userState?.password,
+          image: userState?.image,
+          role: userState?.role,
+          state: userState?.state,
+          favorites: userState?.favorites,
+          cart: [],
+          history: [
+            ...userState.history,
+            {
+              date: new Date().toLocaleString(),
+              products: userState.cart,
+              totalPrice: userState.cart.reduce(
+                (acc, curr) => acc + curr.price * curr.quantity,
+                0
+              ),
+            },
+          ],
+        };
+        updateUser(body, token).then((res) => {
+          if (res.message === "El usuario fue editado correctamente") {
+            dispatch(editUser(body));
+            Swal.fire({
+              icon: "success",
+              title: "Compra realizada",
+              text: "Gracias por tu compra!",
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Hubo un error al querer realizar la compra",
+            });
+          }
+        });
+      }
+    }
+  }, [location.search, userState.name.length]);
+
+  const payment = (cart) => {
     const productsInCart = cart.map((item) => {
       const product = productsState.find((product) => product._id === item.id);
       return {
@@ -59,24 +110,23 @@ const CartContainer = () => {
       };
     });
 
-    const body = {
-      id: userState?._id,
-      name: userState?.name,
-      email: userState?.email,
-      image: userState?.image,
-      role: userState?.role,
-      state: userState?.state,
-      favorites: userState?.favorites,
-      cart: [],
-      history: [
-        ...userState.history,
-        {
-          date: new Date().toLocaleString(),
-          products: productsInCart,
-          totalPrice: totalPrice,
-        },
-      ],
-    };
+    paymentApi(
+      {
+        items: productsInCart,
+        userPayer: { name: userState.name, email: "mateo@gmail.com" },
+      },
+      token
+    ).then((res) => {
+      if (res.api_response.status === 201) {
+        window.open(res.init_point, "_self");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Hubo un error al querer realizar la compra",
+        });
+      }
+    });
   };
 
   return (
@@ -135,13 +185,7 @@ const CartContainer = () => {
                   <button
                     className="buy_button"
                     onClick={() => {
-                      payment(
-                        userState.cart,
-                        userState.cart.reduce(
-                          (acc, curr) => acc + curr.price * curr.quantity,
-                          0
-                        )
-                      );
+                      payment(userState.cart);
                     }}
                   >
                     Comprar
@@ -149,12 +193,14 @@ const CartContainer = () => {
                 </div>
               </div>
             )}
-            <div className="container_link-back">
-              <Link className="link_back" to={"/"}>
-                <BsArrowLeft />
-                Volver a la tienda
-              </Link>
-            </div>
+            {userState && userState?.cart?.length > 0 && (
+              <div className="container_link-back">
+                <Link className="link_back" to={"/"}>
+                  <BsArrowLeft />
+                  Volver a la tienda
+                </Link>
+              </div>
+            )}
           </>
         )}
       </article>
