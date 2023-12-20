@@ -14,6 +14,7 @@ const CartItem = ({ product }) => {
 
   const deleteProduct = (id) => {
     const newCart = userState.cart.filter((item) => item.id !== id);
+
     Swal.fire({
       title: "¿Estás seguro?",
       text: "No podrás recuperar este producto",
