@@ -19,8 +19,9 @@ Bienvenido a Spicy Basics, una aplicación de comercio electrónico full-stack c
 - **Backend:** <img src="https://i.postimg.cc/Hx2j2KKc/4375017-js-logo-node-icon.png" alt="Node.js" width="20" heigth="20"/> Node.js  <img src="https://i.postimg.cc/rm1jV8Hd/icons8-express-js-500.png" alt="Express.js" width="20" heigth="20"/> Express.js
 - **Base de Datos:** <img src="https://i.postimg.cc/MprfQhB9/mongodb-original-logo-icon-146424.png" alt="MongoDB" width="20" heigth="20"/> MongoDB
 - **Gestión de Estado:** <img src="https://i.postimg.cc/WbYfd15C/react-redux-removebg-preview.png" alt="Redux" width="20" heigth="20"/> Redux - Redux Toolkit
-- **Autenticación:** <img src="https://i.postimg.cc/44Mn1rNM/1657421703592.png" alt="JWT"  width="20" heigth="20"/> Tokens de JSON Web (JWT)  <img src="https://i.postimg.cc/PrQn2RWh/Google-G-logo-svg.png" alt="Google OAuth 2.0"  width="20" heigth="20"/> Google OAuth 2.0
-- **Pasarela de Pago:** <img src="https://i.postimg.cc/SKW0518m/icon-256x256.png" alt="Mercado Pago"  width="20" heigth="20"/> Mercado Pago
+- **Autenticación:** <img src="https://i.postimg.cc/44Mn1rNM/1657421703592.png" alt="JWT"  width="20" heigth="20"/> Tokens de JSON Web (JWT)  <img src="https://i.postimg.cc/PrQn2RWh/Google-G-logo-svg.png" alt="Google OAuth 2.0" width="20" heigth="20"/> Google OAuth 2.0
+- **Pasarela de Pago:** <img src="https://i.postimg.cc/SKW0518m/icon-256x256.png" alt="Mercado Pago" width="20" heigth="20"/> Mercado Pago
+- **Envío de Correo Electrónico:** <img src="https://i.postimg.cc/767KqXyX/favicon-0.png" alt="Resend" width="20" heigth="20"/> Resend
 
 ## Cómo Empezar
 
@@ -70,7 +71,7 @@ VITE_CLIENT_ID=tu_client_id_de_mercado_pago
 
 Para obtener detalles sobre la implementación del backend y explorar el código fuente, te invito a visitar el repositorio correspondiente:
 
-[Spicy Basics Backend Repository](https://github.com/Mateo872/backend-spicy)
+[Spicy Basics - Backend](https://github.com/Mateo872/backend-spicy)
 
 Si tienes preguntas específicas sobre el backend o deseas contribuir, ¡no dudes en revisar y participar en el desarrollo!
 
