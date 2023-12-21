@@ -15,12 +15,12 @@ Bienvenido a Spicy Basics, una aplicación de comercio electrónico full-stack c
 
 ## Tecnologías Utilizadas
 
-- **Frontend:** React ![React](https://i.postimg.cc/m27J5sj5/1174949-js-react-js-logo-react-react-native-icon.png){width=50 height=50}
-- **Backend:** Node.js ![Node.js](https://i.postimg.cc/Hx2j2KKc/4375017-js-logo-node-icon.png){width=50 height=50}, Express.js ![Express.js](https://i.postimg.cc/rm1jV8Hd/icons8-express-js-500.png){width=50 height=50}
-- **Base de Datos:** MongoDB ![MongoDB](https://i.postimg.cc/MprfQhB9/mongodb-original-logo-icon-146424.png){width=50 height=50}
-- **Gestión de Estado:** Redux ![Redux](https://i.postimg.cc/WbYfd15C/react-redux-removebg-preview.png){width=50 height=50}, Redux Toolkit ![Redux Toolkit](https://i.postimg.cc/Bvwm6S4N/1-AJp-FZrofvx-Mn3-MHh9p3i-Q-removebg-preview.png){width=50 height=50}
-- **Autenticación:** Tokens de JSON Web (JWT) ![JWT](https://i.postimg.cc/44Mn1rNM/1657421703592.png){width=50 height=50}
-- **Pasarela de Pago:** Mercado Pago ![Mercado Pago](https://i.postimg.cc/zf2ZwYSP/download-removebg-preview.png){width=50 height=50}
+- **Frontend:** React <img src="https://i.postimg.cc/m27J5sj5/1174949-js-react-js-logo-react-react-native-icon.png" alt="React" width="50" height="50"/>
+- **Backend:** Node.js <img src="https://i.postimg.cc/Hx2j2KKc/4375017-js-logo-node-icon.png" alt="Node.js" width="50" height="50"/>, Express.js <img src="https://i.postimg.cc/rm1jV8Hd/icons8-express-js-500.png" alt="Express.js" width="50" height="50"/>
+- **Base de Datos:** MongoDB <img src="https://i.postimg.cc/MprfQhB9/mongodb-original-logo-icon-146424.png" alt="MongoDB" width="50" height="50"/>
+- **Gestión de Estado:** Redux <img src="https://i.postimg.cc/WbYfd15C/react-redux-removebg-preview.png"  alt="Redux" width="50" height="50" />, Redux Toolkit <img src="https://i.postimg.cc/Bvwm6S4N/1-AJp-FZrofvx-Mn3-MHh9p3i-Q-removebg-preview.png" alt="Redux Toolkit" width="50" height="50" />
+- **Autenticación:** Tokens de JSON Web (JWT) <img src="https://i.postimg.cc/44Mn1rNM/1657421703592.png" alt="JWT" width="50" height="50" />, Google OAuth 2.0 <img src="https://i.postimg.cc/3wZzZJ3r/JSON-Web-Token-Logo-removebg-preview.png" alt="Google OAuth 2.0" width="50" height="50" />
+- **Pasarela de Pago:** Mercado Pago <img src="https://i.postimg.cc/SKW0518m/icon-256x256.png" alt="Mercado Pago" width="50" height="50" />
 
 ## Cómo Empezar
 
