@@ -114,13 +114,12 @@ const Header = () => {
                   style={{
                     color:
                       window.innerWidth > 767 &&
-                      themeState.theme === "dark" &&
-                      scroll
+                      (themeState.theme === "dark" && scroll
                         ? "#1e1e1e"
                         : themeState.theme === "dark" &&
                           location.pathname !== "/"
                         ? "#1e1e1e"
-                        : "#fff",
+                        : "#fff"),
                   }}
                   to={"/"}
                 >
@@ -132,13 +131,12 @@ const Header = () => {
                   style={{
                     color:
                       window.innerWidth > 767 &&
-                      themeState.theme === "dark" &&
-                      scroll
+                      (themeState.theme === "dark" && scroll
                         ? "#1e1e1e"
                         : themeState.theme === "dark" &&
                           location.pathname !== "/"
                         ? "#1e1e1e"
-                        : "#fff",
+                        : "#fff"),
                   }}
                 >
                   Ofertas
@@ -149,13 +147,12 @@ const Header = () => {
                   style={{
                     color:
                       window.innerWidth > 767 &&
-                      themeState.theme === "dark" &&
-                      scroll
+                      (themeState.theme === "dark" && scroll
                         ? "#1e1e1e"
                         : themeState.theme === "dark" &&
                           location.pathname !== "/"
                         ? "#1e1e1e"
-                        : "#fff",
+                        : "#fff"),
                   }}
                 >
                   Contacto
