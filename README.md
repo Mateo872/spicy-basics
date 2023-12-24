@@ -16,10 +16,10 @@ Bienvenido a Spicy Basics, una aplicación de comercio electrónico full-stack c
 ## Tecnologías Utilizadas
 
 - **Frontend:** <img src="https://i.postimg.cc/m27J5sj5/1174949-js-react-js-logo-react-react-native-icon.png" alt="React" width="20" heigth="20" /> React
-- **Backend:** <img src="https://i.postimg.cc/Hx2j2KKc/4375017-js-logo-node-icon.png" alt="Node.js" width="20" heigth="20"/> Node.js  <img src="https://i.postimg.cc/rm1jV8Hd/icons8-express-js-500.png" alt="Express.js" width="20" heigth="20"/> Express.js
+- **Backend:** <img src="https://i.postimg.cc/Hx2j2KKc/4375017-js-logo-node-icon.png" alt="Node.js" width="20" heigth="20"/> Node.js <img src="https://i.postimg.cc/rm1jV8Hd/icons8-express-js-500.png" alt="Express.js" width="20" heigth="20"/> Express.js
 - **Base de datos:** <img src="https://i.postimg.cc/MprfQhB9/mongodb-original-logo-icon-146424.png" alt="MongoDB" width="20" heigth="20"/> MongoDB
 - **Gestión de estado:** <img src="https://i.postimg.cc/WbYfd15C/react-redux-removebg-preview.png" alt="Redux" width="20" heigth="20"/> Redux - Redux Toolkit
-- **Autenticación:** <img src="https://i.postimg.cc/44Mn1rNM/1657421703592.png" alt="JWT"  width="20" heigth="20"/> Tokens de JSON Web (JWT)  <img src="https://i.postimg.cc/PrQn2RWh/Google-G-logo-svg.png" alt="Google OAuth 2.0" width="20" heigth="20"/> Google OAuth 2.0
+- **Autenticación:** <img src="https://i.postimg.cc/44Mn1rNM/1657421703592.png" alt="JWT"  width="20" heigth="20"/> Tokens de JSON Web (JWT) <img src="https://i.postimg.cc/PrQn2RWh/Google-G-logo-svg.png" alt="Google OAuth 2.0" width="20" heigth="20"/> Google OAuth 2.0
 - **Pasarela de pago:** <img src="https://i.postimg.cc/SKW0518m/icon-256x256.png" alt="Mercado Pago" width="20" heigth="20"/> Mercado Pago
 - **Envío de correo electrónico:** <img src="https://i.postimg.cc/767KqXyX/favicon-0.png" alt="Resend" width="20" heigth="20"/> Resend
 
@@ -54,6 +54,7 @@ VITE_API_USERS=tu_api_de_usuarios
 VITE_API_USERCREATE=tu_api_de_creacion_de_usuarios
 VITE_API_USER=tu_api_de_usuario
 VITE_API_PAYMENT=tu_api_de_pago
+VITE_API_EMAIL=tu_api_de_email
 VITE_CLIENT_ID=tu_client_id_de_mercado_pago
 ```
 

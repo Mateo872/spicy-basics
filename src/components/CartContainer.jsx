@@ -96,7 +96,7 @@ const CartContainer = () => {
           if (res.message === "El usuario fue editado correctamente") {
             dispatch(editUser(body));
 
-            sendMail(products, "bellinimateo1@gmail.com");
+            sendMail(products, userState.email);
 
             Swal.fire({
               icon: "success",
@@ -131,7 +131,7 @@ const CartContainer = () => {
     paymentApi(
       {
         items: productsInCart,
-        userPayer: { name: userState.name, email: "mateo@gmail.com" },
+        userPayer: { name: userState.name, email: userState.email },
       },
       token
     ).then((res) => {
