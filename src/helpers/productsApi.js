@@ -9,6 +9,7 @@ export const getProducts = async () => {
     console.log(error);
   }
 };
+
 export const getProductId = async (id) => {
   try {
     const response = await fetch(`${URL_PRODUCT}/${id}`);

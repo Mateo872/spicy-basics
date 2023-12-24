@@ -116,6 +116,7 @@ const DetailProduct = () => {
 
               return {
                 id: prod.id,
+                name: prod.name,
                 price: parseInt(prod.price),
                 quantity: parseInt(+prod.quantity + +data.quantity),
                 size: newSize,
@@ -154,6 +155,7 @@ const DetailProduct = () => {
               ...userState?.user?.cart,
               {
                 id: product?.[0]?._id,
+                name: product?.[0]?.name,
                 price: product?.[0]?.price,
                 quantity: parseInt(+data.quantity),
                 size: [selectedSize],

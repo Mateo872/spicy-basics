@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { GiShoppingBag } from "react-icons/gi";
 import CartItem from "./CartItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,16 +8,17 @@ import Swal from "sweetalert2";
 import { BsArrowLeft } from "react-icons/bs";
 import { payment as paymentApi } from "../helpers/paymentApi";
 import { useEffect } from "react";
+import { sendMail } from "../helpers/emailApi";
 
 const CartContainer = () => {
   const userState = useSelector((state) => state.users.user);
   const themeState = useSelector((state) => state.theme.theme);
   const loadingState = useSelector((state) => state.loading.loading);
   const productsState = useSelector((state) => state.products.products);
+
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const emptyCart = () => {
     Swal.fire({
@@ -77,9 +78,26 @@ const CartContainer = () => {
             },
           ],
         };
+
+        const products = {
+          name: userState.cart.map((c) => c.name),
+          quantity: userState.cart.reduce(
+            (acc, item) => acc + item.quantity,
+            0
+          ),
+          imageOne: "https://placehold.co/40x40",
+          totalPrice: userState.cart.reduce(
+            (acc, curr) => acc + curr.price * curr.quantity,
+            0
+          ),
+        };
+
         updateUser(body, token).then((res) => {
           if (res.message === "El usuario fue editado correctamente") {
             dispatch(editUser(body));
+
+            sendMail(products, "bellinimateo1@gmail.com");
+
             Swal.fire({
               icon: "success",
               title: "Compra realizada",
