@@ -1,26 +1,31 @@
+import { Product, ProductCreate, Welcome } from "../types/types.products";
+
 const URL_PRODUCT = import.meta.env.VITE_API_PRODUCT;
 
 export const getProducts = async () => {
   try {
     const response = await fetch(URL_PRODUCT);
-    const product = await response.json();
+    const product: Welcome = await response.json();
     return product;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getProductId = async (id) => {
+export const getProductId = async (id: Product["_id"]) => {
   try {
     const response = await fetch(`${URL_PRODUCT}/${id}`);
-    const product = await response.json();
+    const product: Welcome = await response.json();
     return product;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const createProduct = async (product, token) => {
+export const createProduct = async (
+  product: Omit<Product, "_id" | "__v">,
+  token: string
+) => {
   try {
     const response = await fetch(URL_PRODUCT, {
       method: "POST",
@@ -30,13 +35,20 @@ export const createProduct = async (product, token) => {
       },
       body: JSON.stringify(product),
     });
-    return response;
+
+    const data: ProductCreate = await response.json();
+
+    return data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const editProduct = async (product, token, id) => {
+export const editProduct = async (
+  product: Omit<Product, "__v">,
+  token: string,
+  id: Product["_id"]
+) => {
   try {
     const response = await fetch(`${URL_PRODUCT}/${id}`, {
       method: "PUT",
@@ -52,7 +64,7 @@ export const editProduct = async (product, token, id) => {
   }
 };
 
-export const deleteProduct = async (token, id) => {
+export const deleteProduct = async (token: string, id: Product["_id"]) => {
   try {
     const response = await fetch(`${URL_PRODUCT}/${id}`, {
       method: "DELETE",

@@ -1,7 +1,19 @@
 import { useSelector } from "react-redux";
+import { ThemeState } from "../../types/types.themes";
+import React from "react";
 
-const ProductFilter = ({ title, isActive, handleFilterClick }) => {
-  const themeState = useSelector((state) => state.theme);
+interface Prop {
+  title: string;
+  isActive: boolean;
+  handleFilterClick: (title: string) => void;
+}
+
+const ProductFilter: React.FC<Prop> = ({
+  title,
+  isActive,
+  handleFilterClick,
+}) => {
+  const themeState = useSelector((state: ThemeState) => state.theme);
 
   return (
     <p

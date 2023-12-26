@@ -14,18 +14,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "./features/loading/loadingSlice";
 import { useEffect } from "react";
 import CartContainer from "./components/CartContainer";
+import { Welcome } from "./types/types.products";
+import { UpdateState } from "./types/types.update";
+import Footer from "./components/common/Footer";
 
 function App() {
-  const updateState = useSelector((state) => state.update.update);
+  const updateState = useSelector((state: UpdateState) => state.update.update);
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        getProducts().then((res) => {
+        const res: Welcome | undefined = await getProducts();
+        if (res) {
           dispatch(setProducts(res.products));
           dispatch(setLoading(false));
-        });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -65,6 +69,7 @@ function App() {
             <Route path="/usuario/carrito" element={<CartContainer />} />
           </Routes>
         </main>
+        <Footer />
       </BrowserRouter>
     </SkeletonTheme>
   );

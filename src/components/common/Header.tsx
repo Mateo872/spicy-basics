@@ -7,14 +7,20 @@ import { addUser } from "../../features/auth/usersSlice";
 import { setTheme, setThemeHover } from "../../features/theme/themeSlice";
 import { BsCartFill } from "react-icons/bs";
 import Skeleton from "react-loading-skeleton";
+import { UsersState } from "../../types/types.users";
+import { ThemeState } from "../../types/types.themes";
+import { LoadingState } from "../../types/types.loading";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [scroll, setScroll] = useState(false);
   const location = useLocation();
-  const userState = useSelector((state) => state.users);
-  const themeState = useSelector((state) => state.theme);
-  const loadingState = useSelector((state) => state.loading.loading);
+  const userState = useSelector((state: UsersState) => state.users);
+  const themeState = useSelector((state: ThemeState) => state.theme);
+  const loadingState = useSelector(
+    (state: LoadingState) => state.loading.loading
+  );
+
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
@@ -33,8 +39,10 @@ const Header = () => {
   useEffect(() => {
     if (token) {
       getUser(token).then((res) => {
-        dispatch(addUser(res.user));
-        dispatch(setTheme(res.user.theme));
+        if (res) {
+          dispatch(addUser(res.user));
+          dispatch(setTheme(res.user.theme));
+        }
       });
     }
   }, [token]);
@@ -42,6 +50,13 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
   }, []);
+
+  const colorTheme =
+    themeState.theme === "dark" && scroll
+      ? "#1e1e1e"
+      : themeState.theme === "dark" && location.pathname !== "/"
+      ? "#1e1e1e"
+      : "#fff";
 
   return (
     <>
@@ -80,27 +95,26 @@ const Header = () => {
                 ? "#1e1e1e"
                 : location.pathname !== "/" && themeState.theme === "dark"
                 ? "#fff"
-                : location.pathname === "/" && !scroll && "transparent",
+                : location.pathname === "/" && !scroll
+                ? "transparent"
+                : "transparent",
           }}
         >
           <Link
-            to={"/"}
             className="container_logo"
             style={{
-              color:
-                themeState.theme === "dark" && scroll
-                  ? "#1e1e1e"
-                  : themeState.theme === "dark" && location.pathname !== "/"
-                  ? "#1e1e1e"
-                  : "#fff",
+              color: colorTheme,
             }}
+            to={"/"}
           >
             SPICY<span>BASICS</span>
           </Link>
           <div
             className={`menu_overlay ${showMenu && "overlay_active"}`}
             onClick={(e) =>
-              e.target.classList.contains("menu_overlay") && menuVisible()
+              e.target instanceof HTMLElement &&
+              e.target.classList.contains("menu_overlay") &&
+              menuVisible()
             }
           >
             <ul
@@ -112,14 +126,7 @@ const Header = () => {
               <li>
                 <Link
                   style={{
-                    color:
-                      window.innerWidth > 767 &&
-                      (themeState.theme === "dark" && scroll
-                        ? "#1e1e1e"
-                        : themeState.theme === "dark" &&
-                          location.pathname !== "/"
-                        ? "#1e1e1e"
-                        : "#fff"),
+                    color: window.innerWidth > 767 ? colorTheme : "",
                   }}
                   to={"/"}
                 >
@@ -129,15 +136,9 @@ const Header = () => {
               <li>
                 <Link
                   style={{
-                    color:
-                      window.innerWidth > 767 &&
-                      (themeState.theme === "dark" && scroll
-                        ? "#1e1e1e"
-                        : themeState.theme === "dark" &&
-                          location.pathname !== "/"
-                        ? "#1e1e1e"
-                        : "#fff"),
+                    color: window.innerWidth > 767 ? colorTheme : "",
                   }}
+                  to={"/"}
                 >
                   Ofertas
                 </Link>
@@ -145,15 +146,9 @@ const Header = () => {
               <li>
                 <Link
                   style={{
-                    color:
-                      window.innerWidth > 767 &&
-                      (themeState.theme === "dark" && scroll
-                        ? "#1e1e1e"
-                        : themeState.theme === "dark" &&
-                          location.pathname !== "/"
-                        ? "#1e1e1e"
-                        : "#fff"),
+                    color: window.innerWidth > 767 ? colorTheme : "",
                   }}
+                  to={"/"}
                 >
                   Contacto
                 </Link>
@@ -231,18 +226,19 @@ const Header = () => {
             className="icon_menu"
             onClick={menuVisible}
             style={{
-              color:
-                themeState.theme === "dark" && scroll
-                  ? "#1e1e1e"
-                  : themeState.theme === "dark" && location.pathname !== "/"
-                  ? "#1e1e1e"
-                  : "#fff",
+              color: colorTheme,
             }}
           />
           <div
             className={`user_register ${
               userState?.user?.name && "user_register_active"
-            } ${themeState.theme === "dark" && scroll && "user_theme"}`}
+            } ${
+              themeState.theme === "dark" && location.pathname === "/" && scroll
+                ? "user_theme"
+                : themeState.theme === "dark" &&
+                  location.pathname !== "/" &&
+                  "user_theme"
+            }`}
           >
             {!loadingState && (
               <>
@@ -299,25 +295,13 @@ const Header = () => {
                   {themeState.theme !== "dark" ? (
                     <BiSolidMoon
                       style={{
-                        color:
-                          themeState.theme === "dark" && scroll
-                            ? "#1e1e1e"
-                            : themeState.theme === "dark" &&
-                              location.pathname !== "/"
-                            ? "#1e1e1e"
-                            : "#fff",
+                        color: colorTheme,
                       }}
                     />
                   ) : (
                     <BiSolidSun
                       style={{
-                        color:
-                          themeState.theme === "dark" && scroll
-                            ? "#1e1e1e"
-                            : themeState.theme === "dark" &&
-                              location.pathname !== "/"
-                            ? "#1e1e1e"
-                            : "#fff",
+                        color: colorTheme,
                       }}
                     />
                   )}
@@ -327,13 +311,7 @@ const Header = () => {
                     <Link
                       to={"/usuario/carrito"}
                       style={{
-                        color:
-                          themeState.theme === "dark" && scroll
-                            ? "#1e1e1e"
-                            : themeState.theme === "dark" &&
-                              location.pathname !== "/"
-                            ? "#1e1e1e"
-                            : "#fff",
+                        color: colorTheme,
                       }}
                     >
                       <span className="badge">
@@ -357,7 +335,13 @@ const Header = () => {
                     >
                       Admin
                     </Link>
-                    <h4>|</h4>
+                    <h4
+                      style={{
+                        color: colorTheme,
+                      }}
+                    >
+                      |
+                    </h4>
                   </>
                 )}
                 <picture

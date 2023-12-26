@@ -11,30 +11,47 @@ import { editUser } from "../../features/auth/usersSlice";
 import { updateUser } from "../../helpers/userApi";
 import Skeleton from "react-loading-skeleton";
 import Swal from "sweetalert2";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { editProduct as updateProduct } from "../../helpers/productsApi";
 import { editProduct } from "../../features/products/productsSlice";
 import { setUpdate } from "../../features/update/updateSlice";
+import { Product as Prod } from "../../types/types.products";
+import { UsersState } from "../../types/types.users";
+import { ThemeState } from "../../types/types.themes";
+import { UpdateState } from "../../types/types.update";
+import { LoadingState } from "../../types/types.loading";
+
+interface PropProducts {
+  products: {
+    products: Prod[];
+  };
+}
+
+type FormValues = {
+  quantity: string;
+};
 
 const DetailProduct = () => {
   const { id } = useParams();
-  const [selectedSize, setSelectedSize] = useState(null);
-  const productsState = useSelector((state) => state.products.products);
+  const [selectedSize, setSelectedSize] = useState<any>(null);
+  const productsState = useSelector(
+    (state: PropProducts) => state.products.products
+  );
   const product = productsState.filter((product) => product._id === id);
-  const userState = useSelector((state) => state.users);
-  const themeState = useSelector((state) => state.theme);
-  const updateState = useSelector((state) => state.update.update);
+  const userState = useSelector((state: UsersState) => state.users);
+  const themeState = useSelector((state: ThemeState) => state.theme);
+  const updateState = useSelector((state: UpdateState) => state.update.update);
   const productsCategory = productsState?.filter(
     (prod) => prod?.category === product?.[0].category
   );
-  const loading = useSelector((state) => state.loading.loading);
-  const token = sessionStorage.getItem("token");
+  const loading = useSelector((state: LoadingState) => state.loading.loading);
+  const token: string | null = sessionStorage.getItem("token");
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<FormValues>();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -44,88 +61,18 @@ const DetailProduct = () => {
     }
   }, [product?.[0]?.sizes]);
 
-  const handleSizeClick = (size) => {
+  const handleSizeClick = (size: string) => {
     if (product?.[0]?.sizes.includes(size)) {
       setSelectedSize(size);
     }
   };
 
   const getFavorites = () => {
-    const exist = userState?.user?.favorites?.includes(id);
+    if (id && token) {
+      const exist = userState?.user?.favorites?.includes(id);
 
-    try {
-      if (!exist) {
-        const body = {
-          id: userState?.user?._id,
-          name: userState?.user?.name,
-          email: userState?.user?.email,
-          password: userState?.user?.password,
-          image: userState?.user?.image,
-          role: userState?.user?.role,
-          state: userState?.user?.state,
-          favorites: [...userState?.user?.favorites, id],
-          cart: [],
-          history: [],
-        };
-        updateUser(body, token);
-        dispatch(editUser(body));
-      } else {
-        const newFavorites = userState?.user?.favorites?.filter(
-          (fav) => fav !== id
-        );
-        const body = {
-          id: userState?.user?._id,
-          name: userState?.user?.name,
-          email: userState?.user?.email,
-          password: userState?.user?.password,
-          image: userState?.user?.image,
-          role: userState?.user?.role,
-          state: userState?.user?.state,
-          favorites: newFavorites,
-          cart: [],
-          history: [],
-        };
-        updateUser(body, token);
-        dispatch(editUser(body));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const onSubmit = (data) => {
-    if (product?.[0]?.stock === 0) {
-      Swal.fire({
-        title: "Error",
-        text: "No hay stock disponible",
-        icon: "error",
-        confirmButtonText: "Ok",
-      });
-    } else {
       try {
-        const exist = userState?.user?.cart?.some(
-          (prod) => prod.id === product?.[0]?._id
-        );
-
-        if (exist) {
-          const newCart = userState?.user?.cart?.map((prod) => {
-            if (prod.id === product?.[0]?._id) {
-              const newSize = prod.size.includes(selectedSize)
-                ? prod.size
-                : [...prod.size, selectedSize];
-
-              return {
-                id: prod.id,
-                name: prod.name,
-                price: parseInt(prod.price),
-                quantity: parseInt(+prod.quantity + +data.quantity),
-                size: newSize,
-              };
-            } else {
-              return prod;
-            }
-          });
-
+        if (!exist) {
           const body = {
             id: userState?.user?._id,
             name: userState?.user?.name,
@@ -134,14 +81,16 @@ const DetailProduct = () => {
             image: userState?.user?.image,
             role: userState?.user?.role,
             state: userState?.user?.state,
-            favorites: userState?.user?.favorites,
-            cart: newCart,
-            history: userState?.user?.history,
-            theme: userState?.user?.theme,
+            favorites: [...userState?.user?.favorites, id],
+            cart: [],
+            history: [],
           };
           updateUser(body, token);
           dispatch(editUser(body));
         } else {
+          const newFavorites = userState?.user?.favorites?.filter(
+            (fav) => fav !== id
+          );
           const body = {
             id: userState?.user?._id,
             name: userState?.user?.name,
@@ -150,48 +99,120 @@ const DetailProduct = () => {
             image: userState?.user?.image,
             role: userState?.user?.role,
             state: userState?.user?.state,
-            favorites: userState?.user?.favorites,
-            cart: [
-              ...userState?.user?.cart,
-              {
-                id: product?.[0]?._id,
-                name: product?.[0]?.name,
-                price: product?.[0]?.price,
-                quantity: parseInt(+data.quantity),
-                size: [selectedSize],
-              },
-            ],
-            history: userState?.user?.history,
-            theme: userState?.user?.theme,
+            favorites: newFavorites,
+            cart: [],
+            history: [],
           };
-
           updateUser(body, token);
           dispatch(editUser(body));
         }
-        Swal.fire({
-          title: "Producto agregado al carrito",
-          icon: "success",
-          confirmButtonText: "Ok",
-        });
-        const bodyProduct = {
-          id: product?.[0]?._id,
-          name: product?.[0]?.name,
-          imageOne: product?.[0]?.imageOne,
-          imageTwo: product?.[0]?.imageTwo,
-          imageThree: product?.[0]?.imageThree,
-          price: product?.[0]?.price,
-          description: product?.[0]?.description,
-          stock: product?.[0]?.stock - parseInt(+data.quantity),
-          category: product?.[0]?.category,
-          sizes: product?.[0]?.sizes,
-        };
-        dispatch(editProduct(bodyProduct));
-        dispatch(setUpdate(!updateState));
-        updateProduct(bodyProduct, token, product?.[0]?._id);
-        setValue("quantity", "");
-        setSelectedSize(product?.[0]?.sizes[0]);
       } catch (error) {
         console.error(error);
+      }
+    }
+  };
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    if (token) {
+      if (product?.[0]?.stock === 0) {
+        Swal.fire({
+          title: "Error",
+          text: "No hay stock disponible",
+          icon: "error",
+          confirmButtonText: "Ok",
+        });
+      } else {
+        try {
+          const exist = userState?.user?.cart?.some(
+            (prod) => prod.id === product?.[0]?._id
+          );
+
+          if (exist) {
+            const newCart = userState?.user?.cart?.map((prod) => {
+              if (prod.id === product?.[0]?._id) {
+                const newSize = prod.size.includes(selectedSize)
+                  ? prod.size
+                  : [...prod.size, selectedSize];
+
+                return {
+                  id: prod.id,
+                  name: prod.name,
+                  price: prod.price,
+                  quantity: +prod.quantity + +data.quantity,
+                  size: newSize,
+                };
+              } else {
+                return prod;
+              }
+            });
+
+            const body = {
+              id: userState?.user?._id,
+              name: userState?.user?.name,
+              email: userState?.user?.email,
+              password: userState?.user?.password,
+              image: userState?.user?.image,
+              role: userState?.user?.role,
+              state: userState?.user?.state,
+              favorites: userState?.user?.favorites,
+              cart: newCart,
+              history: userState?.user?.history,
+              theme: userState?.user?.theme,
+            };
+            updateUser(body, token);
+            dispatch(editUser(body));
+          } else {
+            const body = {
+              id: userState?.user?._id,
+              name: userState?.user?.name,
+              email: userState?.user?.email,
+              password: userState?.user?.password,
+              image: userState?.user?.image,
+              role: userState?.user?.role,
+              state: userState?.user?.state,
+              favorites: userState?.user?.favorites,
+              cart: [
+                ...userState?.user?.cart,
+                {
+                  id: product?.[0]?._id,
+                  name: product?.[0]?.name,
+                  price: product?.[0]?.price,
+                  quantity: +data.quantity,
+                  size: [selectedSize],
+                },
+              ],
+              history: userState?.user?.history,
+              theme: userState?.user?.theme,
+            };
+
+            updateUser(body, token);
+            dispatch(editUser(body));
+          }
+          Swal.fire({
+            title: "Producto agregado al carrito",
+            icon: "success",
+            confirmButtonText: "Ok",
+          });
+          const bodyProduct = {
+            _id: product?.[0]?._id,
+            name: product?.[0]?.name,
+            imageOne: product?.[0]?.imageOne,
+            imageTwo: product?.[0]?.imageTwo,
+            imageThree: product?.[0]?.imageThree,
+            price: product?.[0]?.price,
+            description: product?.[0]?.description,
+            stock: product?.[0]?.stock - +data.quantity,
+            category: product?.[0]?.category,
+            sizes: product?.[0]?.sizes,
+          };
+          dispatch(editProduct(bodyProduct));
+          dispatch(setUpdate(!updateState));
+          updateProduct(bodyProduct, token, product?.[0]?._id);
+          setValue("quantity", "");
+          setSelectedSize(product?.[0]?.sizes[0]);
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   };
@@ -228,7 +249,7 @@ const DetailProduct = () => {
             <div className="detail_image">
               {token && userState?.user?.role !== "admin" && (
                 <div className="container_heart" onClick={getFavorites}>
-                  {userState?.user?.favorites?.includes(id) ? (
+                  {id && userState?.user?.favorites?.includes(id) ? (
                     <BsFillHeartFill />
                   ) : (
                     <BsHeart />
@@ -294,9 +315,7 @@ const DetailProduct = () => {
                   <Skeleton width={80} height={20} />
                 )}
                 {!loading ? (
-                  <h2>
-                    ${parseInt(product?.[0]?.price).toLocaleString("es-AR")}
-                  </h2>
+                  <h2>${(product?.[0]?.price).toLocaleString("es-AR")}</h2>
                 ) : (
                   <Skeleton width={50} height={10} />
                 )}
@@ -339,13 +358,6 @@ const DetailProduct = () => {
                   </div>
                 )}
               </div>
-              {/* <div className="container_color">
-              <h3>Color</h3>
-              <div className="color">
-                <div className="color_item"></div>
-                <div className="color_item"></div>
-              </div>
-            </div> */}
             </div>
             <div className="feature_quantity">
               <div className="quantity">

@@ -1,6 +1,8 @@
+import { MailProducts } from "../types/types.mail";
+
 const URL_EMAIL = import.meta.env.VITE_API_EMAIL;
 
-export const sendMail = async (products, email) => {
+export const sendMail = async (products: MailProducts, email: string) => {
   try {
     const productParams = encodeURIComponent(JSON.stringify(products));
     const response = await fetch(

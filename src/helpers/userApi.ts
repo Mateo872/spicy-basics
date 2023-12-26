@@ -1,8 +1,18 @@
+import { Product } from "../types/types.products";
+import {
+  EditUser,
+  Login,
+  User,
+  UserOmit,
+  Users,
+  Welcome,
+} from "../types/types.users";
+
 const URL_USERS = import.meta.env.VITE_API_USERS;
 const URL_USER = import.meta.env.VITE_API_USER;
 const URL_USERCREATE = import.meta.env.VITE_API_USERCREATE;
 
-export const login = async (user) => {
+export const login = async (user: Partial<User>) => {
   try {
     const response = await fetch(`${URL_USER}`, {
       method: "POST",
@@ -12,7 +22,7 @@ export const login = async (user) => {
       body: JSON.stringify(user),
     });
 
-    const data = await response.json();
+    const data: Login = await response.json();
 
     return data;
   } catch (error) {
@@ -21,7 +31,7 @@ export const login = async (user) => {
   }
 };
 
-export const getUser = async (token) => {
+export const getUser = async (token: string) => {
   try {
     const res = await fetch(`${URL_USER}`, {
       method: "GET",
@@ -30,7 +40,7 @@ export const getUser = async (token) => {
       },
     });
 
-    const user = await res.json();
+    const user: Welcome = await res.json();
 
     return user;
   } catch (error) {
@@ -38,7 +48,7 @@ export const getUser = async (token) => {
   }
 };
 
-export const createUser = async (user) => {
+export const createUser = async (user: UserOmit) => {
   try {
     const res = await fetch(`${URL_USERCREATE}`, {
       method: "POST",
@@ -56,7 +66,7 @@ export const createUser = async (user) => {
   }
 };
 
-export const updateUser = async (user, token) => {
+export const updateUser = async (user: Partial<User>, token: string) => {
   try {
     const res = await fetch(`${URL_USER}`, {
       method: "PUT",
@@ -67,7 +77,7 @@ export const updateUser = async (user, token) => {
       body: JSON.stringify(user),
     });
 
-    const data = await res.json();
+    const data: EditUser = await res.json();
 
     return data;
   } catch (error) {
@@ -75,7 +85,7 @@ export const updateUser = async (user, token) => {
   }
 };
 
-export const deleteUser = async (id) => {
+export const deleteUser = async (id: Product["_id"]) => {
   try {
     const res = await fetch(`${URL_USER}/${id}`, {
       method: "DELETE",
@@ -95,7 +105,7 @@ export const getUsers = async () => {
       method: "GET",
     });
 
-    const data = await res.json();
+    const data: Users[] = await res.json();
 
     return data;
   } catch (error) {
@@ -103,7 +113,11 @@ export const getUsers = async () => {
   }
 };
 
-export const updateUserAdmin = async (id, body, token) => {
+export const updateUserAdmin = async (
+  id: Product["_id"] | undefined,
+  body: Partial<Product>,
+  token: string
+) => {
   try {
     const res = await fetch(`${URL_USERS}/${id}`, {
       method: "PUT",
@@ -122,7 +136,7 @@ export const updateUserAdmin = async (id, body, token) => {
   }
 };
 
-export const deleteUserAdmin = async (id, token) => {
+export const deleteUserAdmin = async (id: Product["_id"], token: string) => {
   try {
     const res = await fetch(`${URL_USERS}/${id}`, {
       method: "DELETE",
@@ -138,7 +152,7 @@ export const deleteUserAdmin = async (id, token) => {
   }
 };
 
-export const deleteProductAdmin = async (id, token) => {
+export const deleteProductAdmin = async (id: Product["_id"], token: string) => {
   try {
     const res = await fetch(`${URL_USERS}/product/${id}`, {
       method: "DELETE",
@@ -154,7 +168,10 @@ export const deleteProductAdmin = async (id, token) => {
   }
 };
 
-export const deleteProductsAdmin = async (ids, token) => {
+export const deleteProductsAdmin = async (
+  ids: Product["_id"][],
+  token: string
+) => {
   try {
     const res = await Promise.all(
       ids.map((id) =>

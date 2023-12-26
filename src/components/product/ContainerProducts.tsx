@@ -2,15 +2,30 @@ import ProductFilter from "./ProductFilter";
 import { BsSearch } from "react-icons/bs";
 import Product from "./Product";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import React, { useState } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
 import CardSkeleton from "../CardSkeleton";
 import { setLoading } from "../../features/loading/loadingSlice";
+import { LoadingState } from "../../types/types.loading";
+import { ThemeState } from "../../types/types.themes";
+import { Product as Prod } from "../../types/types.products";
+
+interface Prop {
+  [key: string]: boolean;
+}
+
+interface PropProducts {
+  products: {
+    products: Prod[];
+  };
+}
 
 const ContainerProducts = () => {
-  const productsState = useSelector((state) => state.products.products);
-  const [inputValue, setInputValue] = useState("");
-  const [filterState, setFilterState] = useState({
+  const productsState = useSelector(
+    (state: PropProducts) => state.products.products
+  );
+  const [inputValue, setInputValue] = useState<string>("");
+  const [filterState, setFilterState] = useState<Prop>({
     Todos: true,
     Conjuntos: false,
     Vestidos: false,
@@ -19,19 +34,19 @@ const ContainerProducts = () => {
     Tops: false,
     Remeras: false,
   });
-  const loading = useSelector((state) => state.loading.loading);
+  const loading = useSelector((state: LoadingState) => state.loading.loading);
   const [loadingInput, setLoadingInput] = useState(false);
-  const themeState = useSelector((state) => state.theme);
+  const themeState = useSelector((state: ThemeState) => state.theme);
   const dispatch = useDispatch();
 
-  const handleFilterClick = (title) => {
+  const handleFilterClick = (title: string) => {
     setFilterState((prev) => {
       const newFilterState = { ...prev, [title]: !prev[title] };
 
       if (title !== "Todos") {
         newFilterState.Todos = false;
       } else {
-        Object.keys(newFilterState).forEach((filterTitle) => {
+        Object.keys(newFilterState).forEach((filterTitle: string) => {
           if (filterTitle !== "Todos") {
             newFilterState[filterTitle] = false;
           }
@@ -49,7 +64,7 @@ const ContainerProducts = () => {
     });
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     dispatch(setLoading(true));
     setLoadingInput(true);
@@ -60,14 +75,14 @@ const ContainerProducts = () => {
     }, 200);
   };
 
-  const productsFiltered = productsState?.filter((product) =>
+  const productsFiltered = productsState?.filter((product: Prod) =>
     product?.name.toLowerCase().startsWith(inputValue.toLowerCase())
   );
 
   const productsEmpty =
     (productsState?.length === 0 && productsFiltered?.length === 0) ||
     productsFiltered?.filter(
-      (product) => filterState.Todos || filterState[product.category]
+      (product: Prod) => filterState.Todos || filterState[product.category]
     ).length === 0;
 
   return (
@@ -112,15 +127,15 @@ const ContainerProducts = () => {
               productsFiltered?.length > 0 ? (
                 (() => {
                   const filteredProducts = productsFiltered?.filter(
-                    (product) =>
+                    (product: Prod) =>
                       filterState.Todos || filterState[product.category]
                   );
 
                   return filteredProducts.length > 0 ? (
-                    filteredProducts.map((product) => (
+                    filteredProducts.map((product: Prod) => (
                       <Product
                         key={product._id}
-                        id={product._id}
+                        // id={product._id}
                         product={product}
                       />
                     ))

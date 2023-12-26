@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import useConvertBlobToBase64 from "../../hooks/useConvertBase64";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, editProduct } from "../../features/products/productsSlice";
@@ -10,11 +10,29 @@ import {
 } from "../../helpers/productsApi";
 import Swal from "sweetalert2";
 import { setUpdate } from "../../features/update/updateSlice";
+import { PRODUCT_CREATE, ProductsState } from "../../types/types.products";
+import { ThemeState } from "../../types/types.themes";
+import { UpdateState } from "../../types/types.update";
+
+type FormValues = {
+  _id: string;
+  name: string;
+  price: number;
+  description: string;
+  category: string;
+  stock: number;
+  sizes: string[];
+  imageOne: string;
+  imageTwo: string;
+  imageThree: string;
+};
 
 const AddProducts = () => {
-  const productsState = useSelector((state) => state.products.products);
-  const themeState = useSelector((state) => state.theme);
-  const updateState = useSelector((state) => state.update.update);
+  const productsState = useSelector(
+    (state: ProductsState) => state.products.products
+  );
+  const themeState = useSelector((state: ThemeState) => state.theme);
+  const updateState = useSelector((state: UpdateState) => state.update.update);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [urlsEdit, setUrlsEdit] = useState({
@@ -25,8 +43,8 @@ const AddProducts = () => {
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
-  const [urls, setUrls] = useState([]);
-  const [productEdit, setProductEdit] = useState([]);
+  const [urls, setUrls] = useState<string[]>([]);
+  const [productEdit, setProductEdit] = useState<any>([]);
   const token = sessionStorage.getItem("token");
   const { id } = useParams();
   const {
@@ -35,15 +53,15 @@ const AddProducts = () => {
     formState: { errors },
     getValues,
     setValue,
-  } = useForm();
+  } = useForm<FormValues>();
 
   useEffect(() => {
     if (id) {
       const product = productsState?.find((product) => product?._id === id);
-      setProductEdit(product);
+      product && setProductEdit(product);
 
-      if (product?.length !== 0) {
-        setValue("id", product?._id);
+      if (product && product?.length !== 0) {
+        setValue("_id", product?._id);
         setValue("name", product?.name);
         setValue("price", product?.price);
         setValue("imageOne", product?.imageOne);
@@ -58,7 +76,7 @@ const AddProducts = () => {
     }
   }, []);
 
-  function compressBase64Image(base64String) {
+  function compressBase64Image(base64String: string) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.src = base64String;
@@ -70,7 +88,7 @@ const AddProducts = () => {
         canvas.width = 800;
         canvas.height = (800 / img.width) * img.height;
 
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        ctx && ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
         const compressedBase64 = canvas.toDataURL("image/jpeg", 0.5);
 
@@ -83,7 +101,7 @@ const AddProducts = () => {
     });
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const product = productsState?.find(
       (product) => product?.name.toLowerCase() === data.name.toLowerCase()
     );
@@ -129,15 +147,27 @@ const AddProducts = () => {
           return;
         }
 
-        const imageOne = await useConvertBlobToBase64(data.imageOne[0]);
-        const imageTwo = await useConvertBlobToBase64(data.imageTwo[0]);
-        const imageThree = await useConvertBlobToBase64(data.imageThree[0]);
+        const imageOne = (await useConvertBlobToBase64(
+          data.imageOne[0]
+        )) as string;
+        const imageTwo = (await useConvertBlobToBase64(
+          data.imageTwo[0]
+        )) as string;
+        const imageThree = (await useConvertBlobToBase64(
+          data.imageThree[0]
+        )) as string;
 
-        const compressImageOne = await compressBase64Image(imageOne);
-        const compressImageTwo = await compressBase64Image(imageTwo);
-        const compressImageThree = await compressBase64Image(imageThree);
+        const compressImageOne = (await compressBase64Image(
+          imageOne
+        )) as string;
+        const compressImageTwo = (await compressBase64Image(
+          imageTwo
+        )) as string;
+        const compressImageThree = (await compressBase64Image(
+          imageThree
+        )) as string;
 
-        if (imageOne && imageTwo && imageThree) {
+        if (imageOne && imageTwo && imageThree && token) {
           const body = {
             name: data.name,
             price: data.price,
@@ -157,7 +187,7 @@ const AddProducts = () => {
             });
           } else {
             createProduct(body, token).then((res) => {
-              if (res.status === 200) {
+              if (res && res.message === PRODUCT_CREATE.CREATED) {
                 dispatch(addProduct(res.product));
                 dispatch(setUpdate(!updateState));
                 Swal.fire({
@@ -179,7 +209,7 @@ const AddProducts = () => {
         const images = [];
 
         if (image1) {
-          const imageOne =
+          const imageOne: any =
             urlsEdit.image1.type === "image/jpeg" ||
             urlsEdit.image1.type === "image/png" ||
             urlsEdit.image1.type === "image/jpg"
@@ -195,7 +225,7 @@ const AddProducts = () => {
           images.push(productEdit.imageOne);
         }
         if (image2) {
-          const imageTwo =
+          const imageTwo: any =
             urlsEdit.image2.type === "image/jpeg" ||
             urlsEdit.image2.type === "image/png" ||
             urlsEdit.image2.type === "image/jpg"
@@ -211,7 +241,7 @@ const AddProducts = () => {
           images.push(productEdit.imageTwo);
         }
         if (image3) {
-          const imageThree =
+          const imageThree: any =
             urlsEdit.image3.type === "image/jpeg" ||
             urlsEdit.image3.type === "image/png" ||
             urlsEdit.image3.type === "image/jpg"
@@ -228,7 +258,7 @@ const AddProducts = () => {
         }
 
         const body = {
-          id: data.id,
+          _id: data._id,
           name: data.name,
           price: data.price,
           imageOne: images[0],
@@ -243,7 +273,7 @@ const AddProducts = () => {
         const exist = productsState?.find(
           (product) =>
             product?.name.toLowerCase() === data.name.toLowerCase() &&
-            product?._id !== data.id
+            product?._id !== data._id
         );
 
         if (exist) {
@@ -253,23 +283,25 @@ const AddProducts = () => {
             text: "El nombre del producto ya existe",
           });
         } else {
-          updateProduct(body, token, id).then((res) => {
-            if (res.status === 200) {
-              dispatch(editProduct(body));
-              dispatch(setUpdate(!updateState));
-              Swal.fire({
-                icon: "success",
-                title: "Producto editado correctamente",
-                showConfirmButton: true,
-              }).then((isConfirm) => {
-                if (isConfirm.isConfirmed) {
-                  navigate("/");
-                } else {
-                  navigate("/");
-                }
-              });
-            }
-          });
+          if (token) {
+            updateProduct(body, token, id).then((res) => {
+              if (res && res.status === 200) {
+                dispatch(editProduct(body));
+                dispatch(setUpdate(!updateState));
+                Swal.fire({
+                  icon: "success",
+                  title: "Producto editado correctamente",
+                  showConfirmButton: true,
+                }).then((isConfirm) => {
+                  if (isConfirm.isConfirmed) {
+                    navigate("/");
+                  } else {
+                    navigate("/");
+                  }
+                });
+              }
+            });
+          }
         }
       }
     } catch (error) {
@@ -289,7 +321,6 @@ const AddProducts = () => {
           <label htmlFor="name">Nombre</label>
           <input
             type="text"
-            name="name"
             id="name"
             placeholder="Name"
             style={{ marginBottom: errors.name && ".3rem" }}
@@ -310,7 +341,6 @@ const AddProducts = () => {
           <label htmlFor="price">Precio</label>
           <input
             type="number"
-            name="price"
             id="price"
             placeholder="Price"
             style={{ marginBottom: errors.price && ".3rem" }}
@@ -346,8 +376,9 @@ const AddProducts = () => {
                 id="imageOne"
                 placeholder="Image One"
                 style={{ marginBottom: errors.imageOne && ".3rem" }}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (
+                    e.target.files &&
                     e.target.files[0].type !== "image/jpeg" &&
                     e.target.files[0].type !== "image/png" &&
                     e.target.files[0].type !== "image/jpg"
@@ -357,7 +388,7 @@ const AddProducts = () => {
                       title: "Oops...",
                       text: "La imágen principal debe ser un archivo de tipo .jpg, .jpeg o .png",
                     });
-                    e.target.value = null;
+                    e.target.value = "";
                   } else {
                     setImage1(true),
                       setUrlsEdit({
@@ -372,7 +403,6 @@ const AddProducts = () => {
             <>
               <input
                 type="file"
-                name="imageOne"
                 id="imageOne"
                 placeholder="Image One"
                 onChange={(e) => {
@@ -406,28 +436,29 @@ const AddProducts = () => {
               />
               <input
                 type="file"
-                name="imageTwo"
                 id="imageTwo"
                 placeholder="Image One"
                 style={{ marginBottom: errors.imageTwo && ".3rem" }}
                 onChange={(e) => {
-                  if (
-                    e.target.files[0].type !== "image/jpeg" &&
-                    e.target.files[0].type !== "image/png" &&
-                    e.target.files[0].type !== "image/jpg"
-                  ) {
-                    Swal.fire({
-                      icon: "error",
-                      title: "Oops...",
-                      text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
-                    });
-                    e.target.value = null;
-                  } else {
-                    setImage2(true),
-                      setUrlsEdit({
-                        ...urlsEdit,
-                        image2: e.target.files[0],
+                  if (e.target.files) {
+                    if (
+                      e.target.files[0].type !== "image/jpeg" &&
+                      e.target.files[0].type !== "image/png" &&
+                      e.target.files[0].type !== "image/jpg"
+                    ) {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "La imágen secundaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                       });
+                      e.target.value = "";
+                    } else {
+                      setImage2(true),
+                        setUrlsEdit({
+                          ...urlsEdit,
+                          image2: e.target.files[0],
+                        });
+                    }
                   }
                 }}
               />
@@ -436,7 +467,6 @@ const AddProducts = () => {
             <>
               <input
                 type="file"
-                name="imageTwo"
                 id="imageTwo"
                 placeholder="Image Two"
                 onChange={(e) => {
@@ -469,28 +499,29 @@ const AddProducts = () => {
               />
               <input
                 type="file"
-                name="imageThree"
                 id="imageThree"
                 placeholder="Image One"
                 style={{ marginBottom: errors.imageThree && ".3rem" }}
                 onChange={(e) => {
-                  if (
-                    e.target.files[0].type !== "image/jpeg" &&
-                    e.target.files[0].type !== "image/png" &&
-                    e.target.files[0].type !== "image/jpg"
-                  ) {
-                    Swal.fire({
-                      icon: "error",
-                      title: "Oops...",
-                      text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
-                    });
-                    e.target.value = null;
-                  } else {
-                    setImage3(true),
-                      setUrlsEdit({
-                        ...urlsEdit,
-                        image3: e.target.files[0],
+                  if (e.target.files) {
+                    if (
+                      e.target.files[0].type !== "image/jpeg" &&
+                      e.target.files[0].type !== "image/png" &&
+                      e.target.files[0].type !== "image/jpg"
+                    ) {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "La imágen terciaria debe ser un archivo de tipo .jpg, .jpeg o .png",
                       });
+                      e.target.value = "";
+                    } else {
+                      setImage3(true),
+                        setUrlsEdit({
+                          ...urlsEdit,
+                          image3: e.target.files[0],
+                        });
+                    }
                   }
                 }}
               />
@@ -499,7 +530,6 @@ const AddProducts = () => {
             <>
               <input
                 type="file"
-                name="imageThree"
                 id="imageThree"
                 onChange={(e) => {
                   setUrls([...urls, e.target.files[0]]);
@@ -520,7 +550,6 @@ const AddProducts = () => {
           )}
           <label htmlFor="description">Descripción</label>
           <input
-            name="description"
             id="description"
             placeholder="Description"
             style={{ marginBottom: errors.description && ".3rem" }}
@@ -540,7 +569,6 @@ const AddProducts = () => {
           )}
           <label htmlFor="category">Categoría</label>
           <select
-            name="category"
             id="category"
             style={{ marginBottom: errors.category && ".3rem" }}
             {...register("category", {
@@ -564,7 +592,6 @@ const AddProducts = () => {
           <label htmlFor="stock">Stock</label>
           <input
             type="number"
-            name="stock"
             id="stock"
             placeholder="Stock"
             style={{ marginBottom: errors.stock && ".3rem" }}
@@ -586,7 +613,6 @@ const AddProducts = () => {
             <label className="label_check">
               <input
                 type="checkbox"
-                name="XS"
                 value="XS"
                 {...register("sizes", {
                   required: {
@@ -600,7 +626,6 @@ const AddProducts = () => {
             <label className="label_check">
               <input
                 type="checkbox"
-                name="S"
                 value="S"
                 {...register("sizes", {
                   required: {
@@ -614,7 +639,6 @@ const AddProducts = () => {
             <label className="label_check">
               <input
                 type="checkbox"
-                name="M"
                 value="M"
                 {...register("sizes", {
                   required: {
@@ -628,7 +652,6 @@ const AddProducts = () => {
             <label className="label_check">
               <input
                 type="checkbox"
-                name="L"
                 value="L"
                 {...register("sizes", {
                   required: {
@@ -642,7 +665,6 @@ const AddProducts = () => {
             <label className="label_check">
               <input
                 type="checkbox"
-                name="XL"
                 value="XL"
                 {...register("sizes", {
                   required: {
