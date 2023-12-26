@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import { GiShoppingBag } from "react-icons/gi";
-import CartItem from "./CartItem";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../helpers/userApi";
 import { editUser } from "../features/auth/usersSlice";
@@ -9,14 +8,23 @@ import { BsArrowLeft } from "react-icons/bs";
 import { payment as paymentApi } from "../helpers/paymentApi";
 import { useEffect } from "react";
 import { sendMail } from "../helpers/emailApi";
+import { Cart, STATUS_EDIT, User, UsersState } from "../types/types.users";
+import { ThemeState } from "../types/types.themes";
+import { LoadingState } from "../types/types.loading";
+import { ProductsState } from "../types/types.products";
+import CartItem from "./CartItem";
 
 const CartContainer = () => {
-  const userState = useSelector((state) => state.users.user);
-  const themeState = useSelector((state) => state.theme.theme);
-  const loadingState = useSelector((state) => state.loading.loading);
-  const productsState = useSelector((state) => state.products.products);
+  const userState = useSelector((state: UsersState) => state.users.user);
+  const themeState = useSelector((state: ThemeState) => state.theme.theme);
+  const loadingState = useSelector(
+    (state: LoadingState) => state.loading.loading
+  );
+  const productsState = useSelector(
+    (state: ProductsState) => state.products.products
+  );
 
-  const token = sessionStorage.getItem("token");
+  const token = sessionStorage.getItem("token") as string;
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -56,8 +64,8 @@ const CartContainer = () => {
       const merchant_order_id = location.search.split("&")[6].split("=")[1];
 
       if (merchant_order_id !== "null") {
-        const body = {
-          id: userState?._id,
+        const body: User = {
+          _id: userState?._id,
           name: userState?.name,
           email: userState?.email,
           password: userState?.password,
@@ -65,6 +73,7 @@ const CartContainer = () => {
           role: userState?.role,
           state: userState?.state,
           favorites: userState?.favorites,
+          theme: userState?.theme,
           cart: [],
           history: [
             ...userState.history,
@@ -93,7 +102,7 @@ const CartContainer = () => {
         };
 
         updateUser(body, token).then((res) => {
-          if (res.message === "El usuario fue editado correctamente") {
+          if (res && res.message === STATUS_EDIT.OK) {
             dispatch(editUser(body));
 
             sendMail(products, userState.email);
@@ -115,15 +124,15 @@ const CartContainer = () => {
     }
   }, [location.search, userState.name.length]);
 
-  const payment = (cart) => {
+  const payment = (cart: Cart[]) => {
     const productsInCart = cart.map((item) => {
       const product = productsState.find((product) => product._id === item.id);
       return {
-        id: product._id,
-        name: product.name,
+        id: product?._id || "",
+        name: product?.name || "",
         quantity: item.quantity,
         price: item.price,
-        image: product.imageOne,
+        image: product?.imageOne || undefined,
         size: item.size,
       };
     });
@@ -135,7 +144,7 @@ const CartContainer = () => {
       },
       token
     ).then((res) => {
-      if (res.api_response.status === 201) {
+      if (res && res.api_response.status === 201) {
         window.open(res.init_point, "_self");
       } else {
         Swal.fire({

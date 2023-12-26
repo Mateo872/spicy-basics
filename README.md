@@ -15,7 +15,7 @@ Bienvenido a Spicy Basics, una aplicación de comercio electrónico full-stack c
 
 ## Tecnologías Utilizadas
 
-- **Frontend:** <img src="https://i.postimg.cc/m27J5sj5/1174949-js-react-js-logo-react-react-native-icon.png" alt="React" width="20" heigth="20" /> React
+- **Frontend:** <img src="https://i.postimg.cc/m27J5sj5/1174949-js-react-js-logo-react-react-native-icon.png" alt="React" width="20" heigth="20" /> React <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/typescript/typescript.png" alt="React" width="20" heigth="20" /> TypeScript
 - **Backend:** <img src="https://i.postimg.cc/Hx2j2KKc/4375017-js-logo-node-icon.png" alt="Node.js" width="20" heigth="20"/> Node.js <img src="https://i.postimg.cc/rm1jV8Hd/icons8-express-js-500.png" alt="Express.js" width="20" heigth="20"/> Express.js
 - **Base de datos:** <img src="https://i.postimg.cc/MprfQhB9/mongodb-original-logo-icon-146424.png" alt="MongoDB" width="20" heigth="20"/> MongoDB
 - **Gestión de estado:** <img src="https://i.postimg.cc/WbYfd15C/react-redux-removebg-preview.png" alt="Redux" width="20" heigth="20"/> Redux - Redux Toolkit

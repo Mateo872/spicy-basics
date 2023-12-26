@@ -1,4 +1,4 @@
-function useConvertBlobToBase64(blob) {
+function useConvertBlobToBase64(blob: any) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;

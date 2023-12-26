@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton";
 
-const CardSkeleton = ({ products }) => {
+const CardSkeleton = ({ products }: { products: number }) => {
   return Array(products)
     .fill(0)
     .map((_, index) => (

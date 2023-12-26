@@ -10,10 +10,22 @@ import Swal from "sweetalert2";
 import useConvertBlobToBase64 from "../../hooks/useConvertBase64";
 import { createUser, getUsers, login } from "../../helpers/userApi";
 import { jwtDecode } from "jwt-decode";
-
 import { GoogleLogin } from "@react-oauth/google";
+import { ThemeState } from "../../types/types.themes";
+import { Login, User as UserType } from "../../types/types.users";
+
+interface Prop {
+  email: string;
+  name: string;
+  picture: string;
+}
+
+interface Form extends UserType {
+  confirmPassword: string;
+}
+
 const User = () => {
-  const themeState = useSelector((state) => state.theme);
+  const themeState = useSelector((state: ThemeState) => state.theme);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loginEmail, setLoginEmail] = useState(false);
@@ -27,7 +39,7 @@ const User = () => {
     formState: { errors },
     getValues,
     reset,
-  } = useForm();
+  } = useForm<Form>();
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
@@ -36,108 +48,112 @@ const User = () => {
     reset();
   }, [location.pathname]);
 
-  const decode = async (token) => {
+  const decode = async (token: string) => {
     try {
-      const userDecoded = jwtDecode(token);
+      const userDecoded: Prop = jwtDecode(token);
       const body = {
         email: userDecoded.email,
       };
 
-      const usersResponse = await getUsers(token);
+      const usersResponse = await getUsers();
 
-      const existingUser = usersResponse.find(
-        (user) => user.email === body.email
-      );
+      if (usersResponse) {
+        const existingUser = usersResponse.find(
+          (user) => user.email === body.email
+        );
+        if (existingUser) {
+          const userSession = {
+            state: existingUser.state,
+          };
 
-      if (existingUser) {
-        const userSession = {
-          state: existingUser.state,
-        };
-
-        if (userSession.state === false) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "El usuario se encuentra suspendido",
-          });
-        } else {
-          const loginResponse = await login(body);
-
-          if (loginResponse.token) {
-            sessionStorage.setItem("token", loginResponse.token);
-            dispatch(
-              addUser({
-                ...existingUser,
-              })
-            );
-
-            Swal.fire({
-              icon: "success",
-              title: `Bienvenido de nuevo, ${existingUser.name}`,
-              text: "Ingreso exitoso",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                navigate("/");
-              }
-            });
-          } else if (loginResponse.message) {
+          if (userSession.state === false) {
             Swal.fire({
               icon: "error",
               title: "Oops...",
-              text: loginResponse.message,
-            });
-          }
-        }
-      } else {
-        createUser({
-          name: userDecoded.name,
-          email: userDecoded.email,
-          image: userDecoded.picture,
-          favorites: [],
-          role: "user",
-          state: true,
-          cart: [],
-          history: [],
-          theme: "light",
-        }).then((res) => {
-          if (res.name) {
-            sessionStorage.setItem("token", token);
-            dispatch(
-              users({
-                ...res,
-              })
-            );
-            Swal.fire({
-              icon: "success",
-              title: `Bienvenido, ${res.name}`,
-              text: "Ingreso exitoso",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                navigate("/");
-              }
+              text: "El usuario se encuentra suspendido",
             });
           } else {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: res.message,
-            });
+            const loginResponse = await login(body);
+
+            if (loginResponse) {
+              if (loginResponse.token) {
+                sessionStorage.setItem("token", loginResponse.token);
+                dispatch(
+                  addUser({
+                    ...existingUser,
+                  })
+                );
+
+                Swal.fire({
+                  icon: "success",
+                  title: `Bienvenido de nuevo, ${existingUser.name}`,
+                  text: "Ingreso exitoso",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    navigate("/");
+                  }
+                });
+              } else if (loginResponse.message) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: loginResponse.message,
+                });
+              }
+            }
           }
-        });
+        } else {
+          createUser({
+            name: userDecoded.name,
+            email: userDecoded.email,
+            image: userDecoded.picture,
+            favorites: [],
+            role: "user",
+            state: true,
+            cart: [],
+            history: [],
+            theme: "light",
+          }).then((res) => {
+            if (res) {
+              if (res.name) {
+                sessionStorage.setItem("token", token);
+                dispatch(
+                  users({
+                    ...res,
+                  })
+                );
+                Swal.fire({
+                  icon: "success",
+                  title: `Bienvenido, ${res.name}`,
+                  text: "Ingreso exitoso",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    navigate("/");
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: res.message,
+                });
+              }
+            }
+          });
+        }
       }
 
       return userDecoded;
     } catch (error) {
       console.error(error);
-      // Manejar errores según sea necesario
       throw error;
     }
   };
 
-  const submit = async (data) => {
+  const submit = async (data: UserType) => {
     try {
       if (location.pathname === "/usuario/registrarse") {
-        const image = await useConvertBlobToBase64(data.image[0]);
+        const image: any = await useConvertBlobToBase64(data.image[0]);
         const body = {
           name: data.name,
           email: data.email,
@@ -176,12 +192,11 @@ const User = () => {
           }
         });
       } else {
-        login(data).then((res) => {
-          console.log(res);
-          if (res.token) {
-            sessionStorage.setItem("token", res.token);
+        login(data).then((res: Login | null) => {
+          if (res?.token) {
+            sessionStorage.setItem("token", res?.token);
             getUsers().then((res) => {
-              res.forEach((user) => {
+              res?.forEach((user) => {
                 if (user.email === data.email) {
                   const userSession = {
                     state: user.state,
@@ -213,11 +228,11 @@ const User = () => {
                 }
               });
             });
-          } else if (res.message) {
+          } else if (res?.message) {
             Swal.fire({
               icon: "error",
               title: "Oops...",
-              text: res.message,
+              text: res?.message,
             });
           }
         });
@@ -428,7 +443,9 @@ const User = () => {
           </div>
         ) : (
           <div className="container_user-buttons">
-            <GoogleLogin onSuccess={(res) => decode(res.credential)} />
+            <GoogleLogin
+              onSuccess={(res) => res.credential && decode(res.credential)}
+            />
             <div className="container_separator">
               <div></div>
               <p>o</p>
